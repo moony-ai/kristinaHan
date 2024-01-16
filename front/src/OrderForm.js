@@ -132,15 +132,29 @@ const OrderForm = () => {
                 }
             });
         } else if (e.target.name === 'contractAmount') {
-            const contractAmount = e.target.value === '' ? 0 : parseFloat(e.target.value); // 빈 문자열일 경우 0으로 처리
+            const contractAmount = parseFloat(e.target.value);
             const totalAmount = paymentInfo.totalAmount;
-            const balanceAmount = totalAmount - contractAmount;
-            setPaymentInfo({
-                ...paymentInfo,
-                [e.target.name]: contractAmount,
-                balanceAmount,
-                depositMethod: '',
-            });
+            
+            if (!isNaN(contractAmount)) { // 계약금액이 유효한 숫자인지 확인
+                const maxContractAmount = totalAmount;
+                if (contractAmount <= maxContractAmount) {
+                    const balanceAmount = totalAmount - contractAmount;
+                    setPaymentInfo({
+                        ...paymentInfo,
+                        [e.target.name]: contractAmount,
+                        balanceAmount,
+                        depositMethod: '',
+                    });
+                } else {
+                    alert('계약금액은 결제총액을 초과할 수 없습니다.');
+                }
+            } else {
+                // 계약금액이 유효한 숫자가 아닌 경우, 즉 빈 문자열 또는 NaN일 경우에는 경고를 표시하지 않습니다.
+                setPaymentInfo({
+                    ...paymentInfo,
+                    [e.target.name]: '',
+                });
+            }
         } else {
             setPaymentInfo({
                 ...paymentInfo,
@@ -319,7 +333,7 @@ const OrderForm = () => {
                     <h3>기타</h3>
                     {Object.keys(accessories).map((key) => (
                         <label key={key}>
-                            {key}
+                            {itemNames[key]}
                             <input
                                 type="checkbox"
                                 name={key}
@@ -433,7 +447,62 @@ const OrderForm = () => {
                                 <td>
                                     <p>원화계좌: 우리은행 1005-004-40463</p>
                                     <p>외화계좌: WOORI BANK A/C No. 1081-400-980267</p>
-
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Memo:</td>
+                                <td>
+                                    <label>
+                                        드레스 기장 토글
+                                        <input
+                                            type="checkbox"
+                                            name="dressLengthToggle"
+                                            checked={weddingSuit.dressLengthToggle}
+                                            onChange={handleWeddingSuitChange}
+                                        />
+                                    </label>
+                                    {weddingSuit.dressLengthToggle && (
+                                        <input
+                                            name="dressLength"
+                                            placeholder="cm"
+                                            value={weddingSuit.dressLength}
+                                            onChange={handleWeddingSuitChange}
+                                        />
+                                    )}
+                                    <label>
+                                        턱시도 소매 토글
+                                        <input
+                                            type="checkbox"
+                                            name="sleeveLengthToggle"
+                                            checked={weddingSuit.sleeveLengthToggle}
+                                            onChange={handleWeddingSuitChange}
+                                        />
+                                    </label>
+                                    {weddingSuit.sleeveLengthToggle && (
+                                        <input
+                                            name="sleeveLength"
+                                            placeholder="cm"
+                                            value={weddingSuit.sleeveLength}
+                                            onChange={handleWeddingSuitChange}
+                                        />
+                                    )}
+                                    <label>
+                                        턱시도 기장 토글
+                                        <input
+                                            type="checkbox"
+                                            name="suitLengthToggle"
+                                            checked={weddingSuit.suitLengthToggle}
+                                            onChange={handleWeddingSuitChange}
+                                        />
+                                    </label>
+                                    {weddingSuit.suitLengthToggle && (
+                                        <input
+                                            name="suitLength"
+                                            placeholder="cm"
+                                            value={weddingSuit.suitLength}
+                                            onChange={handleWeddingSuitChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                         </tbody>
