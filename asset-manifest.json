@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/cristinaHan/static/css/main.e6c13ad2.css",
+    "main.js": "/cristinaHan/static/js/main.e6b9dfeb.js",
+    "static/js/787.25471cf6.chunk.js": "/cristinaHan/static/js/787.25471cf6.chunk.js",
+    "index.html": "/cristinaHan/index.html",
+    "main.e6c13ad2.css.map": "/cristinaHan/static/css/main.e6c13ad2.css.map",
+    "main.e6b9dfeb.js.map": "/cristinaHan/static/js/main.e6b9dfeb.js.map",
+    "787.25471cf6.chunk.js.map": "/cristinaHan/static/js/787.25471cf6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.e6b9dfeb.js"
+  ]
+}
