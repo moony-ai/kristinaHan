@@ -41,7 +41,6 @@ function OrderForm() {
             <OrderInformationForm updateOrderInfo={updateOrderInfo} />
             <PaymentInformationForm orderInfo={orderData.orderInfo} updatePaymentInfo={updatePaymentInfo} />
             <AlterationInformationForm updateAlterationInfo={updateAlterationInfo} />
-
             <button type="submit">주문 제출</button>
         </form>
     );

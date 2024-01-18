@@ -44,9 +44,21 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
     }, [orderInfo, paymentInfo.deposit]);
 
     const handleDepositChange = (e) => {
-        const depositValue = e.target.value;
-        setPaymentInfo(prev => ({ ...prev, deposit: depositValue, balance: prev.totalAmount - depositValue }));
+        let depositValue = e.target.value;
+    
+        // 입력값을 숫자로 변환한 후 다시 문자열로 변환하여 선두의 '0' 제거
+        depositValue = String(Number(depositValue));
+    
+        // 선수금이 결제 총액을 초과하는지 확인하고 조정
+        depositValue = Math.min(Number(depositValue), paymentInfo.totalAmount).toString();
+    
+        setPaymentInfo(prev => ({
+            ...prev,
+            deposit: depositValue,
+            balance: prev.totalAmount - Number(depositValue)
+        }));
     };
+
     useEffect(() => {
         updatePaymentInfo(paymentInfo);
     }, [paymentInfo, updatePaymentInfo]);
@@ -114,7 +126,8 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
             <label>
                 선수금:
                 <input 
-                    type="text" 
+                    type="number"
+                    min="0"
                     name="deposit" 
                     value={paymentInfo.deposit} 
                     onChange={handleDepositChange} 
