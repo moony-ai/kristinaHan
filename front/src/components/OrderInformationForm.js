@@ -38,7 +38,8 @@ function OrderInformationForm({ updateOrderInfo }) {
     };
 
     const handleChange = (e) => {
-        setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        setOrderInfo({ ...orderInfo, [e.target.name]: value });
     };
 
     useEffect(() => {
@@ -98,27 +99,32 @@ function OrderInformationForm({ updateOrderInfo }) {
             <label>
                 자켓 사이즈:
                 <select name="jacketSize" value={orderInfo.jacketSize} onChange={handleChange}>
-                    {sizeOptions[orderInfo.tuxedoType].map(size => (
+                    {(orderInfo.tuxedoType === "구매안함" ? "" : sizeOptions[orderInfo.tuxedoType].map(size => (
                         <option key={size} value={size}>{size}</option>
-                    ))}
-                </select>
-            </label>
-
-            <label>
-                팬츠 사이즈:
-                <select name="pantsSize" value={orderInfo.pantsSize} onChange={handleChange}>
-                    {sizeOptions[`팬츠 (${getPantsShirtSizeOptions()})`].map(size => (
-                        <option key={size} value={size}>{size}</option>
-                    ))}
+                    )))}
+                    <option value="">구매안함</option>
                 </select>
             </label>
             
+            {/* 바지 사이즈 */}
+            <label>
+                팬츠 사이즈:
+                <select name="pantsSize" value={orderInfo.pantsSize} onChange={handleChange}>
+                    {(orderInfo.tuxedoType === "구매안함" ? "" : sizeOptions[`팬츠 (${getPantsShirtSizeOptions()})`].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    )))}
+                    <option value="">구매안함</option>
+                </select>
+            </label>
+            
+            {/* 셔츠 사이즈 */}
             <label>
                 셔츠 사이즈:
                 <select name="shirtSize" value={orderInfo.shirtSize} onChange={handleChange}>
-                    {sizeOptions[`셔츠 (${getPantsShirtSizeOptions()})`].map(size => (
+                    {(orderInfo.tuxedoType === "구매안함" ? "" : sizeOptions[`셔츠 (${getPantsShirtSizeOptions()})`].map(size => (
                         <option key={size} value={size}>{size}</option>
-                    ))}
+                    )))}
+                    <option value="">구매안함</option>
                 </select>
             </label>
 
@@ -137,9 +143,10 @@ function OrderInformationForm({ updateOrderInfo }) {
             <label>
                 드레스 사이즈:
                 <select name="dressSize" value={orderInfo.dressSize} onChange={handleChange}>
-                    {sizeOptions[orderInfo.dressType].map(size => (
+                    {(orderInfo.dressType === "구매안함" ? "" : sizeOptions[orderInfo.dressType].map(size => (
                         <option key={size} value={size}>{size}</option>
-                    ))}
+                    )))}
+                    <option value="">구매안함</option>
                 </select>
             </label>
             
@@ -147,6 +154,7 @@ function OrderInformationForm({ updateOrderInfo }) {
             <label>
                 남성 반지 사이즈:
                 <select name="ringSizeMen" value={orderInfo.ringSizeMen} onChange={handleChange}>
+                    <option value="">구매안함</option>
                     {sizeOptions["반지 (남)"].map(size => (
                         <option key={size} value={size}>{size}</option>
                     ))}
@@ -157,12 +165,14 @@ function OrderInformationForm({ updateOrderInfo }) {
             <label>
                 여성 반지 사이즈:
                 <select name="ringSizeWomen" value={orderInfo.ringSizeWomen} onChange={handleChange}>
+                    <option value="">구매안함</option>
                     {sizeOptions["반지 (여)"].map(size => (
                         <option key={size} value={size}>{size}</option>
                     ))}
                 </select>
             </label>
 
+            {/* 목걸이 */}
             <label>
                 목걸이 사이즈:
                 <select name="necklaceSize" value={orderInfo.necklaceSize} onChange={handleChange}>
@@ -171,6 +181,8 @@ function OrderInformationForm({ updateOrderInfo }) {
                     <option value="M">M</option>
                 </select>
             </label>
+
+            {/* 귀걸이 */}
             <label>
                 귀걸이 종류:
                 <select name="earringType" value={orderInfo.earringType} onChange={handleChange}>
@@ -179,9 +191,16 @@ function OrderInformationForm({ updateOrderInfo }) {
                     <option value="귀걸이">귀걸이</option>
                 </select>
             </label>
+
+            {/* 보타이 */}
             <label>
                 보타이 여부:
-                <input type="checkbox" name="bowtie" checked={orderInfo.bowtie} onChange={handleChange} />
+                <input 
+                    type="checkbox" 
+                    name="bowtie" 
+                    checked={orderInfo.bowtie || false} // 체크박스 상태를 명시적으로 관리
+                    onChange={handleChange} 
+                />
             </label>
         </div>
     );
