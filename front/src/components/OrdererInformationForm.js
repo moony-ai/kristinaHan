@@ -5,7 +5,7 @@ function OrdererInformationForm({ updateOrdererInfo }) {
         name: '',
         contact: '',
         affiliation: '',
-        deliveryMethod: '배송',
+        // deliveryMethod: '배송',
         address: ''
     });
 
@@ -32,15 +32,14 @@ function OrdererInformationForm({ updateOrdererInfo }) {
                 소속:
                 <input type="text" name="affiliation" value={ordererInfo.affiliation} onChange={handleChange} />
             </label>
-            <label>
+            {/* <label>
                 수령 방법:
                 <select name="deliveryMethod" value={ordererInfo.deliveryMethod} onChange={handleChange}>
-                    <option value="배
-송">배송</option>
+                    <option value="배송">배송</option>
                     <option value="직접수령">직접 수령</option>
                     <option value="방문수령">방문 수령</option>
                 </select>
-            </label>
+            </label> */}
             {ordererInfo.deliveryMethod === '배송' && (
                 <label>
                     배송지 주소:
