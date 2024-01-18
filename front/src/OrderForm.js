@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import OrdererInformationForm from '../src/components/OrdererInformationForm';
 import OrderInformationForm from '../src/components/OrderInformationForm';
+import PaymentInformationForm from '../src/components/PaymentInformationForm';
+import AlterationInformationForm from '../src/components/AlterationInformationForm';
 
 function OrderForm() {
     const [orderData, setOrderData] = useState({
-        ordererInfo: {}, // 주문자 정보
-        orderInfo: {},   // 주문 정보
-        // paymentInfo: {}, // 결제 정보
-        // alterationInfo: {} // 수선 정보
+        ordererInfo: {},
+        orderInfo: {},
+        paymentInfo: {},
+        alterationInfo: {}
     });
 
     const updateOrdererInfo = (info) => {
@@ -16,6 +18,14 @@ function OrderForm() {
 
     const updateOrderInfo = (info) => {
         setOrderData({ ...orderData, orderInfo: info });
+    };
+
+    const updatePaymentInfo = (info) => {
+        setOrderData({ ...orderData, paymentInfo: info });
+    };
+
+    const updateAlterationInfo = (info) => {
+        setOrderData({ ...orderData, alterationInfo: info });
     };
 
     const handleSubmit = (e) => {
@@ -29,9 +39,8 @@ function OrderForm() {
         <form onSubmit={handleSubmit}>
             <OrdererInformationForm updateOrdererInfo={updateOrdererInfo} />
             <OrderInformationForm updateOrderInfo={updateOrderInfo} />
-            {/* 다른 폼 컴포넌트들 추가 예정 */}
-            {/* <PaymentInformationForm ... />
-               <AlterationInformationForm ... /> */}
+            <PaymentInformationForm orderInfo={orderData.orderInfo} updatePaymentInfo={updatePaymentInfo} />
+            <AlterationInformationForm updateAlterationInfo={updateAlterationInfo} />
 
             <button type="submit">주문 제출</button>
         </form>

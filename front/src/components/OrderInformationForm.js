@@ -8,29 +8,46 @@ function OrderInformationForm({ updateOrderInfo }) {
         creator: '',
         lastModificationTime: '',
         modifier: '',
-        tuxedoType: 'R-peaked', // 턱시도 종류
+        tuxedoType: '자켓 (R-Peaked)', // 턱시도 종류
         jacketSize: '',
         pantsSize: '',
         shirtSize: '',
-        dressSize: 'S', // 드레스 사이즈
+        dressType: '드레스 (R)', // 드레스 타입 
+        dressSize: '', // 드레스 사이즈
         ringSizeMen: '',
         ringSizeWomen: '',
-        necklaceSize: 'S', // 목걸이 사이즈
-        earringType: '귀찌', // 귀걸이 종류
+        necklaceSize: '', // 목걸이 사이즈
+        earringType: '', // 귀걸이 종류
         bowtie: false // 보타이 유무
     });
 
+    const sizeOptions = {
+        "자켓 (R-Peaked)": ["100", "105", "110", "*115", "*120"],
+        "자켓 (R-Shaw)": ["85", "90", "95", "100", "*105", "*110", "*115", "*120"],
+        "자켓 (S-Peaked)": ["85", "90", "95", "100", "105", "*115", "*120"],
+        "팬츠 (R)": ["*28", "30", "32", "34", "36", "38", "*40"],
+        "셔츠 (R)": ["*85", "*90", "95", "100", "105", "110", "*115"],
+        "팬츠 (S)": ["28", "29", "30", "31", "33", "35", "37", "39"],
+        "셔츠 (S)": ["85", "90", "95", "100", "105", "110", "115"],
+        "드레스 (R)": ["*44", "55", "66", "77", "88"],
+        "드레스 (S)": ["43", "44", "54", "55", "65", "76"],
+        "드레스 (RM)": ["*44", "*55", "*55반", "66", "77", "88", "99", "100", "105", "110"],
+        "반지 (남)": ["*5", "*6", "*7", "*8", "*9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "*27", "*28", "*29", "*30"],
+        "반지 (여)": ["*5", "*6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "*18", "*19", "*20", "*21", "*22", "*23", "*24", "*25", "26", "*27", "*28", "*29", "*30"],
+        "구매안함": [""],
+    };
+
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setOrderInfo({
-            ...orderInfo,
-            [name]: type === 'checkbox' ? checked : value
-        });
+        setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
     };
 
     useEffect(() => {
         updateOrderInfo(orderInfo);
     }, [orderInfo, updateOrderInfo]);
+
+    const getPantsShirtSizeOptions = () => {
+        return orderInfo.tuxedoType.includes("S-Peaked") ? "S" : "R";
+    };
 
     return (
         <div>
@@ -66,45 +83,90 @@ function OrderInformationForm({ updateOrderInfo }) {
                 수정자:
                 <input type="text" name="modifier" value={orderInfo.modifier} onChange={handleChange} />
             </label>
+            {/* 턱시도 유형 선택 */}
             <label>
-                턱시도 종류:
+                턱시도 유형:
                 <select name="tuxedoType" value={orderInfo.tuxedoType} onChange={handleChange}>
-                    <option value="R-peaked">R-peaked</option>
-                    <option value="S-shawl">S-shawl</option>
-                    <option value="S-peaked">S-peaked</option>
+                    <option value="자켓 (R-Peaked)">자켓 (R-Peaked)</option>
+                    <option value="자켓 (R-Shaw)">자켓 (R-Shaw)</option>
+                    <option value="자켓 (S-Peaked)">자켓 (S-Peaked)</option>
+                    <option value="구매안함">구매안함</option>
                 </select>
             </label>
+
+            {/* 선택된 턱시도 유형에 따른 자켓 사이즈 선택 */}
             <label>
                 자켓 사이즈:
-                <input type="text" name="jacketSize" value={orderInfo.jacketSize} onChange={handleChange} />
+                <select name="jacketSize" value={orderInfo.jacketSize} onChange={handleChange}>
+                    {sizeOptions[orderInfo.tuxedoType].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    ))}
+                </select>
             </label>
+
             <label>
-                바지 사이즈:
-                <input type="text" name="pantsSize" value={orderInfo.pantsSize} onChange={handleChange} />
+                팬츠 사이즈:
+                <select name="pantsSize" value={orderInfo.pantsSize} onChange={handleChange}>
+                    {sizeOptions[`팬츠 (${getPantsShirtSizeOptions()})`].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    ))}
+                </select>
             </label>
+            
             <label>
                 셔츠 사이즈:
-                <input type="text" name="shirtSize" value={orderInfo.shirtSize} onChange={handleChange} />
+                <select name="shirtSize" value={orderInfo.shirtSize} onChange={handleChange}>
+                    {sizeOptions[`셔츠 (${getPantsShirtSizeOptions()})`].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    ))}
+                </select>
             </label>
+
+            {/* 드레스 타입 선택 */}
+            <label>
+                드레스 타입:
+                <select name="dressType" value={orderInfo.dressType} onChange={handleChange}>
+                    <option value="드레스 (R)">드레스 (R)</option>
+                    <option value="드레스 (S)">드레스 (S)</option>
+                    <option value="드레스 (RM)">드레스 (RM)</option>
+                    <option value="구매안함">구매안함</option>
+                </select>
+            </label>
+
+            {/* 선택된 드레스 타입에 따른 드레스 사이즈 선택 */}
             <label>
                 드레스 사이즈:
                 <select name="dressSize" value={orderInfo.dressSize} onChange={handleChange}>
-                    <option value="S">S</option>
-                    <option value="R">R</option>
-                    <option value="RM">RM</option>
+                    {sizeOptions[orderInfo.dressType].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    ))}
                 </select>
             </label>
+            
+            {/* 남성 반지 사이즈 선택 */}
             <label>
-                반지(남) 사이즈:
-                <input type="text" name="ringSizeMen" value={orderInfo.ringSizeMen} onChange={handleChange} />
+                남성 반지 사이즈:
+                <select name="ringSizeMen" value={orderInfo.ringSizeMen} onChange={handleChange}>
+                    {sizeOptions["반지 (남)"].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    ))}
+                </select>
             </label>
+
+            {/* 여성 반지 사이즈 선택 */}
             <label>
-                반지(여) 사이즈:
-                <input type="text" name="ringSizeWomen" value={orderInfo.ringSizeWomen} onChange={handleChange} />
+                여성 반지 사이즈:
+                <select name="ringSizeWomen" value={orderInfo.ringSizeWomen} onChange={handleChange}>
+                    {sizeOptions["반지 (여)"].map(size => (
+                        <option key={size} value={size}>{size}</option>
+                    ))}
+                </select>
             </label>
+
             <label>
                 목걸이 사이즈:
                 <select name="necklaceSize" value={orderInfo.necklaceSize} onChange={handleChange}>
+                    <option value="">구매안함</option>
                     <option value="S">S</option>
                     <option value="M">M</option>
                 </select>
@@ -112,6 +174,7 @@ function OrderInformationForm({ updateOrderInfo }) {
             <label>
                 귀걸이 종류:
                 <select name="earringType" value={orderInfo.earringType} onChange={handleChange}>
+                    <option value="">구매안함</option>
                     <option value="귀찌">귀찌</option>
                     <option value="귀걸이">귀걸이</option>
                 </select>
