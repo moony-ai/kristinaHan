@@ -1,17 +1,30 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import OrderForm from './OrderForm.js'; // OrderForm 컴포넌트의 경로를 정확히 지정해야 합니다.
+import React, { lazy } from 'react'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import AccessibleNavigationAnnouncer from './components/AccessibleNavigationAnnouncer'
 
-const App = () => {
+const Layout = lazy(() => import('./containers/Layout'))
+const Login = lazy(() => import('./pages/Login'))
+const CreateAccount = lazy(() => import('./pages/CreateAccount'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
+
+function App() {
   return (
-    <Router>
-      <OrderForm />
-      <Routes>
-        {/* <Route path="/order-form" element={<OrderForm />} /> */}
-        {/* 여기에 추가적인 라우트들을 정의할 수 있습니다 */}
-      </Routes>
-    </Router>
-  );
-};
+    <>
+      <Router>
+        <AccessibleNavigationAnnouncer />
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/create-account" component={CreateAccount} />
+          <Route path="/forgot-password" component={ForgotPassword} />
 
-export default App;
+          {/* Place new routes over this */}
+          <Route path="/app" component={Layout} />
+          {/* If you have an index page, you can remothis Redirect */}
+          <Redirect exact from="/" to="/login" />
+        </Switch>
+      </Router>
+    </>
+  )
+}
+
+export default App

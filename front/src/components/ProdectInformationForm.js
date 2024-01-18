@@ -37,16 +37,16 @@ function ProdectInformationForm({ updateOrderInfo }) {
         setOrderInfo({ ...orderInfo, [e.target.name]: value });
     };
 
-    useEffect(() => {
+    const handleBlur = () => {
         updateOrderInfo(orderInfo);
-    }, [orderInfo, updateOrderInfo]);
+    };
 
     const getPantsShirtSizeOptions = () => {
         return orderInfo.tuxedoType.includes("S-Peaked") ? "S" : "R";
     };
 
     return (
-        <table>
+        <table onBlur={handleBlur}>
             <tbody>
                 {/* 턱시도 섹션 */}
                 <tr>

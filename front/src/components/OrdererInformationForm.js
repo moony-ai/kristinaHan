@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/OrdererInformationForm.css'
 
 function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
@@ -13,14 +13,13 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
         setOrdererInfo({ ...ordererInfo, [e.target.name]: e.target.value });
     }
 
-    // 상위 컴포넌트에 상태 변경 사항을 즉시 알림
-    useEffect(() => {
+    const handleBlur = () => {
         updateOrdererInfo(ordererInfo);
-    }, [ordererInfo, updateOrdererInfo]);
+    }
 
     return (
         <div className="orderer-info-table">
-            <table >
+            <table>
                 <tbody>
                     {/* 주문자 이름 */}
                     <tr>
@@ -31,6 +30,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 name="name"
                                 value={ordererInfo.name}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
                         </td>
                         <td>연락처:</td>
@@ -40,6 +40,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 name="contact"
                                 value={ordererInfo.contact}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
                         </td>
                     </tr>
@@ -53,6 +54,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 name="affiliation"
                                 value={ordererInfo.affiliation}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
                         </td>
                     </tr>
@@ -65,7 +67,9 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 <input
                                     type="text"
                                     name="address"
-                                // 상태 및 이벤트 핸들러 설정
+                                    value={ordererInfo.address}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                 />
                             </td>
                         </tr>

@@ -24,11 +24,7 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         bowtie: 300000,
     };
 
-    const handleChange = (e) => {
-        setPaymentInfo({ ...paymentInfo, [e.target.name]: e.target.value });
-    };
-
-    useEffect(() => {
+    const calculateTotalAmount = () => {
         let total = 0;
         if (orderInfo.jacketSize) total += productPrices.jacket;
         if (orderInfo.pantsSize) total += productPrices.pants;
@@ -40,8 +36,17 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         if (orderInfo.earringType) total += productPrices.earring;
         if (orderInfo.bowtie) total += productPrices.bowtie;
 
+        return total;
+    };
+
+    useEffect(() => {
+        const total = calculateTotalAmount();
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
-    }, [orderInfo, paymentInfo.deposit]);
+    }, [orderInfo]);
+    
+    const handleChange = (e) => {
+        setPaymentInfo({ ...paymentInfo, [e.target.name]: e.target.value });
+    };
 
     const handleDepositChange = (e) => {
         let depositValue = e.target.value;
@@ -59,12 +64,12 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         }));
     };
 
-    useEffect(() => {
+    const handleBlur = () => {
         updatePaymentInfo(paymentInfo);
-    }, [paymentInfo, updatePaymentInfo]);
+    };
 
     return (
-        <table className="payment-info-table">
+        <table className="payment-info-table" onBlur={handleBlur}>
             <tbody>
                 {/* 결제자 이름 */}
                 <tr>

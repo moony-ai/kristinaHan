@@ -14,13 +14,13 @@ function AlterationInformationForm({ updateAlterationInfo }) {
         setAlterationInfo({ ...alterationInfo, [e.target.name]: e.target.value });
     };
 
-    useEffect(() => {
+    const handleBlur = () => {
         updateAlterationInfo(alterationInfo);
-    }, [alterationInfo, updateAlterationInfo]);
+    };
 
     return (
         <div>
-            <table>
+            <table onBlur={handleBlur}>
                 <tbody>
                     {/* 드레스 뒷품 */}
                     <tr>
