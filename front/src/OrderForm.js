@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import '../src/styles/OrderForm.css';
+
 import OrdererInformationForm from '../src/components/OrdererInformationForm';
-import OrderInformationForm from '../src/components/OrderInformationForm';
+import ProdectInformationForm from './components/ProdectInformationForm';
 import PaymentInformationForm from '../src/components/PaymentInformationForm';
 import AlterationInformationForm from '../src/components/AlterationInformationForm';
 
@@ -19,7 +21,7 @@ function OrderForm({ loggedInUserInfo }) {
         modifier: '',           // 수정자
         orderNumber: '',        // 주문서 번호
         orderStatus: '상담',    // 주문 상태
-        deliveryMethod: '', // 배송 방법
+        deliveryMethod: '배송', // 배송 방법
     });
 
     // 주문 상태 옵션
@@ -54,7 +56,7 @@ function OrderForm({ loggedInUserInfo }) {
         setOrderData({ ...orderData, ordererInfo: info });
     };
 
-    const updateOrderInfo = (info) => {
+    const updateProductInfo = (info) => {
         setOrderData({ ...orderData, orderInfo: info });
     };
 
@@ -74,46 +76,71 @@ function OrderForm({ loggedInUserInfo }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>작성자: {orderData.creator}</div>
-            <div>최초 작성 시간: {orderData.creationTime}</div>
-            <div>최근 수정 시간: {orderData.lastModifiedTime}</div>
-            <div>수정자: {orderData.modifier}</div>
-            <div>주문서 번호: {orderData.orderNumber}</div>
+        <form className="form-container" onSubmit={handleSubmit}>
+            <fieldset>
+                <legend>주문 정보</legend>
+                <div>작성자: {orderData.creator}</div>
+                <div>최초 작성 시간: {orderData.creationTime}</div>
+                <div>최근 수정 시간: {orderData.lastModifiedTime}</div>
+                <div>수정자: {orderData.modifier}</div>
+                <div>주문서 번호: {orderData.orderNumber}</div>
 
-            <div>
-                주문 상태:
-                {orderStatusOptions.map((status, index) => (
-                    <label key={index}>
-                        <input 
-                            type="radio" 
-                            name="orderStatus" 
-                            value={status} 
-                            checked={orderData.orderStatus === status}
-                            onChange={() => handleStatusChange(status)} 
-                        />
-                        {status}
-                    </label>
-                ))}
-            </div>
+                <div>
+                    주문 상태:
+                    {orderStatusOptions.map((status, index) => (
+                        <label key={index}>
+                            <input
+                                type="radio"
+                                name="orderStatus"
+                                value={status}
+                                checked={orderData.orderStatus === status}
+                                onChange={() => handleStatusChange(status)}
+                            />
+                            {status}
+                        </label>
+                    ))}
+                </div>
+                <label className="form-label">
+                    수령 방법:
+                    <select className="form-select" name="deliveryMethod" value={orderData.deliveryMethod} onChange={handleChange}>
+                        <option value="배송">배송</option>
+                        <option value="직접수령">직접 수령</option>
+                        <option value="방문수령">방문 수령</option>
+                    </select>
+                </label>
+            </fieldset>
 
-            <OrdererInformationForm updateOrdererInfo={updateOrdererInfo} />
+            <fieldset>
+                <legend>고객 정보</legend>
+                <div>
+                    <OrdererInformationForm updateOrdererInfo={updateOrdererInfo} deliveryMethod={orderData.deliveryMethod} />
+                </div>
+            </fieldset>
 
-            <label>
-                수령 방법:
-                <select name="deliveryMethod" value={orderData.deliveryMethod} onChange={handleChange}>
-                    <option value="배송">배송</option>
-                    <option value="직접수령">직접 수령</option>
-                    <option value="방문수령">방문 수령</option>
-                </select>
-            </label>
-            
-            <OrderInformationForm updateOrderInfo={updateOrderInfo} />
-            <PaymentInformationForm orderInfo={orderData.orderInfo} updatePaymentInfo={updatePaymentInfo} />
-            <AlterationInformationForm updateAlterationInfo={updateAlterationInfo} />
-            <button type="submit">주문 제출</button>
+            <fieldset>
+                <legend>제품 정보</legend>
+                <div>
+                    <ProdectInformationForm updateOrderInfo={updateProductInfo} />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>결제 정보</legend>
+                <div>
+                    <PaymentInformationForm orderInfo={orderData.orderInfo} updatePaymentInfo={updatePaymentInfo} />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>수선 정보</legend>
+                <div>
+                    <AlterationInformationForm updateAlterationInfo={updateAlterationInfo} />
+                </div>
+            </fieldset>
+            <button className="form-button" type="submit">주문 제출</button>
         </form>
     );
+
 }
 
 export default OrderForm;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/OrdererInformationForm.css'
 
-function OrdererInformationForm({ updateOrdererInfo }) {
+function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
     const [ordererInfo, setOrdererInfo] = useState({
         name: '',
         contact: '',
         affiliation: '',
-        // deliveryMethod: '배송',
         address: ''
     });
 
@@ -19,33 +19,59 @@ function OrdererInformationForm({ updateOrdererInfo }) {
     }, [ordererInfo, updateOrdererInfo]);
 
     return (
-        <div>
-            <label>
-                이름:
-                <input type="text" name="name" value={ordererInfo.name} onChange={handleChange} />
-            </label>
-            <label>
-                연락처:
-                <input type="text" name="contact" value={ordererInfo.contact} onChange={handleChange} />
-            </label>
-            <label>
-                소속:
-                <input type="text" name="affiliation" value={ordererInfo.affiliation} onChange={handleChange} />
-            </label>
-            {/* <label>
-                수령 방법:
-                <select name="deliveryMethod" value={ordererInfo.deliveryMethod} onChange={handleChange}>
-                    <option value="배송">배송</option>
-                    <option value="직접수령">직접 수령</option>
-                    <option value="방문수령">방문 수령</option>
-                </select>
-            </label> */}
-            {ordererInfo.deliveryMethod === '배송' && (
-                <label>
-                    배송지 주소:
-                    <input type="text" name="address" value={ordererInfo.address} onChange={handleChange} />
-                </label>
-            )}
+        <div className="orderer-info-table">
+            <table >
+                <tbody>
+                    {/* 주문자 이름 */}
+                    <tr>
+                        <td>주문자 이름:</td>
+                        <td>
+                            <input
+                                type="text"
+                                name="name"
+                                value={ordererInfo.name}
+                                onChange={handleChange}
+                            />
+                        </td>
+                        <td>연락처:</td>
+                        <td>
+                            <input
+                                type="text"
+                                name="contact"
+                                value={ordererInfo.contact}
+                                onChange={handleChange}
+                            />
+                        </td>
+                    </tr>
+
+                    {/* 소속 */}
+                    <tr>
+                        <td>소속:</td>
+                        <td>
+                            <input
+                                type="text"
+                                name="affiliation"
+                                value={ordererInfo.affiliation}
+                                onChange={handleChange}
+                            />
+                        </td>
+                    </tr>
+
+                    {/* 배송지 주소 - 수령 방법이 '배송'인 경우에만 표시 */}
+                    {deliveryMethod === "배송" && (
+                        <tr>
+                            <td>배송지 주소:</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="address"
+                                // 상태 및 이벤트 핸들러 설정
+                                />
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 }
