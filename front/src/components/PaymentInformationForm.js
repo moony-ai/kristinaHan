@@ -5,10 +5,12 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         payerName: '',            // 결제자 이름
         relationToOrderer: '본인', // 주문자와의 관계
         paymentMethod: '현금',     // 결제 방법
-        currency: '원화',          // 결제 화폐
-        selectedProducts: {},       // 결제할 상품 리스트
-        totalAmount: 0,          // 결제 총액
-        deposit: '',              // 선수금
+        selectedProducts: {},     // 결제할 상품 리스트
+        totalAmount: 0,           // 결제 총액
+        depositKRW: '',           // 선수금 (원화)
+        depositJPY: '',           // 선수금 (엔화)
+        depositUSD: '',           // 선수금 (달러)
+        totalDeposit: 0,          // 선수금 총액 (환전된 원화)
         balance: ''               // 잔금
     });
 
@@ -24,10 +26,49 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         bowtie: 300000,
     };
 
+    //환율 관련 
+    const [exchangeRates, setExchangeRates] = useState({
+        USD: 1300, // 원/달러 초기값
+        JPY: 900,  // 원/엔 초기값
+    });
+
+    const handleExchangeRateChange = (e) => {
+        setExchangeRates({ ...exchangeRates, [e.target.name]: e.target.value });
+    };
+
     const handleChange = (e) => {
         setPaymentInfo({ ...paymentInfo, [e.target.name]: e.target.value });
     };
 
+    const handleDepositChange = (e) => {
+        const { name, value } = e.target;
+        let numValue = Number(value) || 0;
+    
+        // 갱신된 선수금을 계산
+        let updatedDeposits = {
+            ...paymentInfo,
+            [name]: numValue
+        };
+    
+        // 선수금 총액 계산
+        const depositKRW = Number(updatedDeposits.depositKRW) || 0;
+        const depositJPY = (Number(updatedDeposits.depositJPY) || 0) * Number(exchangeRates.JPY);
+        const depositUSD = (Number(updatedDeposits.depositUSD) || 0) * Number(exchangeRates.USD);
+        const totalDeposit = depositKRW + depositJPY + depositUSD;
+    
+        // 선수금 총액이 결제 총액을 초과하는 경우 조정
+        if (totalDeposit > paymentInfo.totalAmount) {
+            numValue = numValue - (totalDeposit - paymentInfo.totalAmount) / (name === 'depositKRW' ? 1 : (name === 'depositJPY' ? Number(exchangeRates.JPY) : Number(exchangeRates.USD)));
+        }
+    
+        // 상태 업데이트
+        setPaymentInfo(prev => ({
+            ...prev,
+            [name]: numValue.toString()
+        }));
+    };
+    
+    //결제 총액 자동계
     useEffect(() => {
         let total = 0;
         if (orderInfo.jacketSize) total += productPrices.jacket;
@@ -43,21 +84,18 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
     }, [orderInfo]);
 
-    const handleDepositChange = (e) => {
-        let depositValue = e.target.value;
-
-        // 입력값을 숫자로 변환한 후 다시 문자열로 변환하여 선두의 '0' 제거
-        depositValue = String(Number(depositValue));
-
-        // 선수금이 결제 총액을 초과하는지 확인하고 조정
-        depositValue = Math.min(Number(depositValue), paymentInfo.totalAmount).toString();
+    useEffect(() => {
+        const depositKRW = Number(paymentInfo.depositKRW) || 0;
+        const depositJPY = (Number(paymentInfo.depositJPY) || 0) * Number(exchangeRates.JPY);
+        const depositUSD = (Number(paymentInfo.depositUSD) || 0) * Number(exchangeRates.USD);
+        const totalDeposit = Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount);
 
         setPaymentInfo(prev => ({
             ...prev,
-            deposit: depositValue,
-            balance: prev.totalAmount - Number(depositValue)
+            totalDeposit,
+            balance: prev.totalAmount - totalDeposit
         }));
-    };
+    }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount, exchangeRates]);
 
     useEffect(() => {
         updatePaymentInfo(paymentInfo);
@@ -113,24 +151,9 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
                         </select>
                     </td>
                 </tr>
-
-                {/* 결제 화폐 */}
                 <tr>
-                    <td>결제 화폐:</td>
-                    <td>
-                        <select
-                            name="currency"
-                            value={paymentInfo.currency}
-                            onChange={handleChange}
-                        >
-                            <option value="원화">원화</option>
-                            <option value="엔화">엔화</option>
-                            <option value="달러">달러</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </td>
+                    <td colSpan="3"><hr /></td>
                 </tr>
-
                 {/* 결제 총액 */}
                 <tr>
                     <td>결제 총액:</td>
@@ -142,22 +165,96 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
                             readOnly
                         />
                     </td>
+                    <td>원</td>
                 </tr>
-
-                {/* 선수금 */}
                 <tr>
-                    <td>선수금:</td>
+                    <td colSpan="3"><hr /></td>
+                </tr>
+                {/* 선수금 (원화) */}
+                <tr>
+                    <td>선수금 (원화):</td>
                     <td>
                         <input
                             type="number"
                             min="0"
-                            name="deposit"
-                            value={paymentInfo.deposit}
+                            name="depositKRW"
+                            value={paymentInfo.depositKRW}
                             onChange={handleDepositChange}
                         />
                     </td>
+                    <td>원</td>
                 </tr>
 
+                {/* 선수금 (엔화) */}
+                <tr>
+                    <td>선수금 (엔화):</td>
+                    <td>
+                        <input
+                            type="number"
+                            min="0"
+                            name="depositJPY"
+                            value={paymentInfo.depositJPY}
+                            onChange={handleDepositChange}
+                        />
+                    </td>
+                    <td>엔</td>
+                    <td>엔화 환율:</td>
+                    <td>
+                        <input
+                            type="number"
+                            min="0"
+                            name="JPY"
+                            value={exchangeRates.JPY}
+                            onChange={handleExchangeRateChange}
+                        />
+                    </td>
+                    <td>원</td>
+                </tr>
+
+                {/* 선수금 (달러) */}
+                <tr>
+                    <td>선수금 (달러):</td>
+                    <td>
+                        <input
+                            type="number"
+                            min="0"
+                            name="depositUSD"
+                            value={paymentInfo.depositUSD}
+                            onChange={handleDepositChange}
+                        />
+                    </td>
+                    <td>달러</td>
+                    <td>달러 환율:</td>
+                    <td>
+                        <input
+                            type="number"
+                            min="0"
+                            name="USD"
+                            value={exchangeRates.USD}
+                            onChange={handleExchangeRateChange}
+                        />
+                    </td>
+                    <td>원</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr /></td>
+                </tr>
+                {/* 선수금 총액 */}
+                <tr>
+                    <td>선수금 총액:</td>
+                    <td>
+                        <input
+                            type="text"
+                            name="totalDeposit"
+                            value={paymentInfo.totalDeposit}
+                            readOnly
+                        />
+                    </td>
+                    <td>원</td>
+                </tr>
+                <tr>
+                    <td colSpan="3"><hr /></td>
+                </tr>
                 {/* 잔금 */}
                 <tr>
                     <td>잔금:</td>
@@ -169,10 +266,15 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
                             readOnly
                         />
                     </td>
+                    <td>원</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr /></td>
                 </tr>
             </tbody>
         </table>
     );
+
 }
 
 export default PaymentInformationForm;
