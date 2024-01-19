@@ -41,7 +41,7 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         if (orderInfo.bowtie) total += productPrices.bowtie;
 
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
-    }, [orderInfo, paymentInfo.deposit]);
+    }, [orderInfo]);
 
     const handleDepositChange = (e) => {
         let depositValue = e.target.value;

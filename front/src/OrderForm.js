@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../src/styles/OrderForm.css';
 
 import OrdererInformationForm from '../src/components/OrdererInformationForm';
-import ProdectInformationForm from './components/ProdectInformationForm';
+import ProductInformationForm from './components/ProductInformationForm';
 import PaymentInformationForm from '../src/components/PaymentInformationForm';
 import AlterationInformationForm from '../src/components/AlterationInformationForm';
 
@@ -53,7 +54,7 @@ function OrderForm({ loggedInUserInfo }) {
     };
 
     const updateOrdererInfo = (info) => {
-        setOrderData({ ...orderData, ordererInfo: info });
+        setOrderData(prevData => ({ ...prevData, ordererInfo: info }));
     };
 
     const updateProductInfo = (info) => {
@@ -70,9 +71,19 @@ function OrderForm({ loggedInUserInfo }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // 서버로 orderData 전송 로직
+
+        // // 서버에 데이터를 POST하는 로직
+        // axios.post('https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/', orderData)
+        //     .then(response => {
+        //         console.log('주문이 성공적으로 제출되었습니다:', response.data);
+        //         // 성공적인 제출 후 처리 로직 (예: 폼 초기화, 사용자에게 알림 등)
+        //     })
+        //     .catch(error => {
+        //         console.error('주문 제출 중 오류 발생:', error);
+        //         // 오류 처리 로직 (예: 사용자에게 오류 메시지 표시 등)
+        //     });
+
         console.log('Order Data:', orderData);
-        // 예: axios.post('/api/orders', orderData);
     };
 
     return (
@@ -120,7 +131,7 @@ function OrderForm({ loggedInUserInfo }) {
             <fieldset>
                 <legend>제품 정보</legend>
                 <div>
-                    <ProdectInformationForm updateOrderInfo={updateProductInfo} />
+                    <ProductInformationForm updateOrderInfo={updateProductInfo} />
                 </div>
             </fieldset>
 
@@ -137,7 +148,7 @@ function OrderForm({ loggedInUserInfo }) {
                     <AlterationInformationForm updateAlterationInfo={updateAlterationInfo} />
                 </div>
             </fieldset>
-            <button className="form-button" type="submit">주문 제출</button>
+            <button className="form-button" type="submit"> 주문 제출</button>
         </form>
     );
 

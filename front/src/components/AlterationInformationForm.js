@@ -4,9 +4,9 @@ function AlterationInformationForm({ updateAlterationInfo }) {
     const [alterationInfo, setAlterationInfo] = useState({
         dressBackWidth: '', // 드레스 뒷품
         dressLength: '',    // 드레스 기장
-        jacketSleeve: '',   // 자켓 소매
+        jacketSleeveLength: '',   // 자켓 소매
         jacketLength: '',   // 자켓 기장
-        pantsWaist: '',     // 바지 허리
+        pantsWaistLength: '',     // 바지 허리
         pantsLength: ''     // 바지 기장
     });
 
@@ -50,8 +50,8 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                         <td>
                             <input 
                                 type="text" 
-                                name="jacketSleeve" 
-                                value={alterationInfo.jacketSleeve} 
+                                name="jacketSleeveLength" 
+                                value={alterationInfo.jacketSleeveLength} 
                                 onChange={handleChange} 
                             />
                         </td>
@@ -72,8 +72,8 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                         <td>
                             <input 
                                 type="text" 
-                                name="pantsWaist" 
-                                value={alterationInfo.pantsWaist} 
+                                name="pantsWaistLength" 
+                                value={alterationInfo.pantsWaistLength} 
                                 onChange={handleChange} 
                             />
                         </td>

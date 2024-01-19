@@ -3,7 +3,7 @@ import '../styles/OrdererInformationForm.css'
 
 function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
     const [ordererInfo, setOrdererInfo] = useState({
-        name: '',
+        ordererName: '',
         contact: '',
         affiliation: '',
         address: ''
@@ -28,8 +28,8 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                         <td>
                             <input
                                 type="text"
-                                name="name"
-                                value={ordererInfo.name}
+                                name="ordererName"
+                                value={ordererInfo.ordererName}
                                 onChange={handleChange}
                             />
                         </td>
@@ -65,7 +65,8 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 <input
                                     type="text"
                                     name="address"
-                                // 상태 및 이벤트 핸들러 설정
+                                    value={ordererInfo.address}
+                                    onChange={handleChange}
                                 />
                             </td>
                         </tr>

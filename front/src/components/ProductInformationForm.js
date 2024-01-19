@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/OrderInformationForm.css'
 
-function ProdectInformationForm({ updateOrderInfo }) {
+function ProductInformationForm({ updateOrderInfo }) {
     const [orderInfo, setOrderInfo] = useState({
         tuxedoType: '자켓 (R-Peaked)', // 턱시도 종류
         jacketSize: '',
@@ -34,12 +34,10 @@ function ProdectInformationForm({ updateOrderInfo }) {
 
     const handleChange = (e) => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-        setOrderInfo({ ...orderInfo, [e.target.name]: value });
+        const updatedOrderInfo = { ...orderInfo, [e.target.name]: value };
+        setOrderInfo(updatedOrderInfo);
+        updateOrderInfo(updatedOrderInfo); // 상태 업데이트 후 상위 컴포넌트에 전달
     };
-
-    useEffect(() => {
-        updateOrderInfo(orderInfo);
-    }, [orderInfo, updateOrderInfo]);
 
     const getPantsShirtSizeOptions = () => {
         return orderInfo.tuxedoType.includes("S-Peaked") ? "S" : "R";
@@ -176,4 +174,4 @@ function ProdectInformationForm({ updateOrderInfo }) {
     );    
 }
 
-export default ProdectInformationForm;
+export default ProductInformationForm;
