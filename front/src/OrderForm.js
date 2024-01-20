@@ -29,6 +29,14 @@ function OrderForm({ loggedInUserInfo }) {
         deliveryMethod: '배송', // 배송 방법
     });
 
+    const handleCreatorChange = (event) => {
+        const newCreator = event.target.value; // 입력된 새로운 작성자 이름
+        setOrderData({
+            ...orderData, // 기존 데이터를 복사
+            creator: newCreator // 새로운 작성자 이름으로 업데이트
+        });
+    };
+
     // 주문 상태 옵션
     const orderStatusOptions = [
         '상담', '주문', '수선', '수선입고', '배송중', '배송완료', '수령완료'
@@ -157,10 +165,14 @@ function OrderForm({ loggedInUserInfo }) {
         <form className="form-container" onSubmit={handleSubmit}>
             <fieldset>
                 <legend>주문 정보</legend>
-                <div>작성자: {orderData.creator}</div>
+                <div>작성자: <input
+                    type="text"
+                    value={orderData.creator}
+                    onChange={handleCreatorChange}
+                /></div>
                 <div>최초 작성 시간: {orderData.creationTime}</div>
-                <div>최근 수정 시간: {orderData.lastModifiedTime}</div>
-                <div>수정자: {orderData.modifier}</div>
+                {/* <div>수정자: {orderData.modifier}</div>
+                <div>최근 수정 시간: {orderData.lastModifiedTime}</div> */}
                 <div>주문서 번호: {orderData.orderNumber}</div>
 
                 <div>

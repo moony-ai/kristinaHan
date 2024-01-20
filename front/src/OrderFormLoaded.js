@@ -7,15 +7,15 @@ function OrderForm({ loggedInUserInfo }) {
 
     const { orderNumber } = useParams(); // URL에서 주문 번호 추출
 
-    const [orderData, setOrderData] = useState({
-        buyerInfo: {},
-        productInfo: {},
-        paymentInfo: {},
-        alterationInfo: {},
-        orderInfo: {},
-    });
+    // const [orderData, setOrderData] = useState({
+    //     ordererInfo: {},
+    //     productInfo: {},
+    //     paymentInfo: {},
+    //     alterationInfo: {},
+    //     orderInfo: {},
+    // });
 
-    
+
     // 주문 정보 상태
     const [orderInfo, SetOrderInfo] = useState({
         creator: '작성자',            // 작성자
@@ -29,6 +29,14 @@ function OrderForm({ loggedInUserInfo }) {
 
     const orderInfoHandleChange = (e) => {
         SetOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
+    };
+
+    const handleModifierChange = (event) => {
+        const newModifier = event.target.value; // 입력된 새로운 작성자 이름
+        SetOrderInfo({
+            ...orderInfo, // 기존 데이터를 복사
+            modifier: newModifier // 새로운 작성자 이름으로 업데이트
+        });
     };
 
     // 주문자 정보 상태
@@ -209,56 +217,56 @@ function OrderForm({ loggedInUserInfo }) {
     function setInfo(data) {
         // 각 상태 변수에 해당하는 데이터를 직접 대입합니다.
         SetOrderInfo({
-          creator: data.creator,
-          creationTime: data.creationTime,
-          lastModifiedTime: data.lastModifiedTime,
-          modifier: data.modifier,
-          orderNumber: data.orderNumber,
-          orderStatus: data.orderStatus,
-          deliveryMethod: data.deliveryMethod,
+            creator: data.creator,
+            creationTime: data.creationTime,
+            lastModifiedTime: data.lastModifiedTime,
+            modifier: data.modifier,
+            orderNumber: data.orderNumber,
+            orderStatus: data.orderStatus,
+            deliveryMethod: data.deliveryMethod,
         });
-      
+
         setOrdererInfo({
-          ordererName: data.ordererName,
-          contact: data.contact,
-          affiliation: data.affiliation,
-          address: data.address,
+            ordererName: data.ordererName,
+            contact: data.contact,
+            affiliation: data.affiliation,
+            address: data.address,
         });
-      
+
         setProductInfo({
-          tuxedoType: data.tuxedoType,
-          jacketSize: data.jacketSize,
-          pantsSize: data.pantsSize,
-          shirtSize: data.shirtSize,
-          dressType: data.dressType,
-          dressSize: data.dressSize,
-          ringSizeMen: data.ringSizeMen,
-          ringSizeWomen: data.ringSizeWomen,
-          necklaceSize: data.necklaceSize,
-          earringType: data.earringType,
-          bowtie: data.bowtie,
+            tuxedoType: data.tuxedoType,
+            jacketSize: data.jacketSize,
+            pantsSize: data.pantsSize,
+            shirtSize: data.shirtSize,
+            dressType: data.dressType,
+            dressSize: data.dressSize,
+            ringSizeMen: data.ringSizeMen,
+            ringSizeWomen: data.ringSizeWomen,
+            necklaceSize: data.necklaceSize,
+            earringType: data.earringType,
+            bowtie: data.bowtie,
         });
-      
+
         setPaymentInfo({
-          payerName: data.payerName,
-          relationToOrderer: data.relationToOrderer,
-          totalAmount: data.totalAmount,
-          depositKRW: data.depositKRW,
-          depositJPY: data.depositJPY,
-          depositUSD: data.depositUSD,
-          totalDeposit: data.totalDeposit,
-          balance: data.balance,
-          depositDate: data.depositDate,
-          balanceDate: data.balanceDate,
+            payerName: data.payerName,
+            relationToOrderer: data.relationToOrderer,
+            totalAmount: data.totalAmount,
+            depositKRW: data.depositKRW,
+            depositJPY: data.depositJPY,
+            depositUSD: data.depositUSD,
+            totalDeposit: data.totalDeposit,
+            balance: data.balance,
+            depositDate: data.depositDate,
+            balanceDate: data.balanceDate,
         });
-      
+
         setAlterationInfo({
-          dressBackWidth: data.dressBackWidth,
-          dressLength: data.dressLength,
-          jacketSleeveLength: data.jacketSleeveLength,
-          jacketLength: data.jacketLength,
-          pantsWaistLength: data.pantsWaistLength,
-          pantsLength: data.pantsLength,
+            dressBackWidth: data.dressBackWidth,
+            dressLength: data.dressLength,
+            jacketSleeveLength: data.jacketSleeveLength,
+            jacketLength: data.jacketLength,
+            pantsWaistLength: data.pantsWaistLength,
+            pantsLength: data.pantsLength,
         });
     }
 
@@ -276,7 +284,7 @@ function OrderForm({ loggedInUserInfo }) {
                 .catch(error => {
                     console.error('주문 데이터 불러오기 실패:', error);
                 });
-        } 
+        }
     }, [orderNumber]);
 
     // 수정요청 
@@ -284,64 +292,61 @@ function OrderForm({ loggedInUserInfo }) {
         e.preventDefault();
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
-        // 12자리 무작위 문자열 생성
-        const randomString = Math.random().toString(36).substring(2, 14);
 
-        orderData.creationTime = currentTime
-        orderData.orderNumber = randomString
+        orderInfo.lastModifiedTime = currentTime
 
-        const depositKRW = parseFloat(orderData.paymentInfo.depositKRW) || 0;
-        const depositJPY = parseFloat(orderData.paymentInfo.depositJPY) || 0;
-        const depositUSD = parseFloat(orderData.paymentInfo.depositUSD) || 0;
+        const depositKRW = parseFloat(paymentInfo.depositKRW) || 0;
+        const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
+        const depositUSD = parseFloat(paymentInfo.depositUSD) || 0;
 
         // 클라이언트 상태를 서버 모델에 맞게 매핑
         const mappedData = {
-            ordererName: orderData.ordererInfo.ordererName,
-            affiliation: orderData.ordererInfo.affiliation,
-            contact: orderData.ordererInfo.contact,
-            address: orderData.ordererInfo.address,
-            orderStatus: orderData.orderStatus,
-            orderNumber: orderData.orderNumber,
-            creator: orderData.creator,
-            creationTime: orderData.creationTime,
-            modifier: orderData.modifier,
-            lastModifiedTime: orderData.lastModifiedTime,
-            deliveryMethod: orderData.deliveryMethod,
-            tuxedoType: orderData.productInfo.tuxedoType,
-            jacketSize: orderData.productInfo.jacketSize,
-            pantsSize: orderData.productInfo.pantsSize,
-            shirtSize: orderData.productInfo.shirtSize,
-            dressType: orderData.productInfo.dressType,
-            dressSize: orderData.productInfo.dressSize,
-            ringSizeMen: orderData.productInfo.ringSizeMen,
-            ringSizeWomen: orderData.productInfo.ringSizeWomen,
-            necklaceSize: orderData.productInfo.necklaceSize,
-            earringType: orderData.productInfo.earringType,
-            bowtie: orderData.productInfo.bowtie,
-            payerName: orderData.paymentInfo.payerName,
-            relationToOrderer: orderData.paymentInfo.relationToOrderer,
-            totalAmount: orderData.paymentInfo.totalAmount,
+            ordererName: ordererInfo.ordererName,
+            affiliation: ordererInfo.affiliation,
+            contact: ordererInfo.contact,
+            address: ordererInfo.address,
+            orderStatus: orderInfo.orderStatus,
+            orderNumber: orderInfo.orderNumber,
+            creator: orderInfo.creator,
+            creationTime: orderInfo.creationTime,
+            modifier: orderInfo.modifier,
+            lastModifiedTime: orderInfo.lastModifiedTime,
+            deliveryMethod: orderInfo.deliveryMethod,
+            tuxedoType: productInfo.tuxedoType,
+            jacketSize: productInfo.jacketSize,
+            pantsSize: productInfo.pantsSize,
+            shirtSize: productInfo.shirtSize,
+            dressType: productInfo.dressType,
+            dressSize: productInfo.dressSize,
+            ringSizeMen: productInfo.ringSizeMen,
+            ringSizeWomen: productInfo.ringSizeWomen,
+            necklaceSize: productInfo.necklaceSize,
+            earringType: productInfo.earringType,
+            bowtie: productInfo.bowtie,
+            payerName: paymentInfo.payerName,
+            relationToOrderer: paymentInfo.relationToOrderer,
+            totalAmount: paymentInfo.totalAmount,
             depositKRW: depositKRW,
             depositJPY: depositJPY,
             depositUSD: depositUSD,
-            totalDeposit: orderData.paymentInfo.totalDeposit,
-            balance: orderData.paymentInfo.balance,
-            depositDate: orderData.paymentInfo.depositDate,
-            balanceDate: orderData.paymentInfo.balanceDate,
-            dressBackWidth: orderData.alterationInfo.dressBackWidth,
-            dressLength: orderData.alterationInfo.dressLength,
-            jacketSleeveLength: orderData.alterationInfo.jacketSleeveLength,
-            jacketLength: orderData.alterationInfo.jacketLength,
-            pantsWaistLength: orderData.alterationInfo.pantsWaistLength,
-            pantsLength: orderData.alterationInfo.pantsLength,
+            totalDeposit: paymentInfo.totalDeposit,
+            balance: paymentInfo.balance,
+            depositDate: paymentInfo.depositDate,
+            balanceDate: paymentInfo.balanceDate,
+            dressBackWidth: alterationInfo.dressBackWidth,
+            dressLength: alterationInfo.dressLength,
+            jacketSleeveLength: alterationInfo.jacketSleeveLength,
+            jacketLength: alterationInfo.jacketLength,
+            pantsWaistLength: alterationInfo.pantsWaistLength,
+            pantsLength: alterationInfo.pantsLength,
         };
 
         console.log(mappedData)
 
-        // 서버에 POST 요청 보내기
-        axios.post('https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/', mappedData)
+        // 서버에 PUT 요청 보내기
+        axios.put(`https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/${orderNumber}/`, mappedData)
             .then(response => {
-                console.log('주문이 성공적으로 제출되었습니다:', response.data);
+                console.log('주문이 성공적으로 수정되었습니다:', response.data);
                 // 성공적인 제출 후 처리 로직
             })
             .catch(error => {
@@ -355,11 +360,15 @@ function OrderForm({ loggedInUserInfo }) {
             {/* 주문 정보 */}
             <fieldset>
                 <legend>주문 정보</legend>
-                <div>작성자: {orderData.creator}</div>
-                <div>최초 작성 시간: {orderData.creationTime}</div>
-                <div>최근 수정 시간: {orderData.lastModifiedTime}</div>
-                <div>수정자: {orderData.modifier}</div>
-                <div>주문서 번호: {orderData.orderNumber}</div>
+                <div>작성자: {orderInfo.creator}</div>
+                <div>최초 작성 시간: {orderInfo.creationTime}</div>
+                <div>수정자: <input
+                    type="text"
+                    value={orderInfo.modifier}
+                    onChange={handleModifierChange}
+                /></div>
+                <div>최근 수정 시간: {orderInfo.lastModifiedTime}</div>
+                <div>주문서 번호: {orderInfo.orderNumber}</div>
 
                 <div>
                     주문 상태:
@@ -838,7 +847,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
 
-            <button className="form-button" type="submit"> 주문 제출</button>
+            <button className="form-button" type="submit"> 주문 수정</button>
         </form>
     );
 
