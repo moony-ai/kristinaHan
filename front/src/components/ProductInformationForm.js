@@ -32,6 +32,7 @@ function ProductInformationForm({ updateOrderInfo }) {
         "구매안함": [""],
     };
 
+
     const handleChange = (e) => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         const updatedOrderInfo = { ...orderInfo, [e.target.name]: value };

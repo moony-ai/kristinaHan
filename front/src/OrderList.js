@@ -34,6 +34,8 @@ class OrderList extends Component {
 
     return (
         <div>
+          <h2>
+          <Link to={'/orders/new'}>새로운 주문 넣기</Link></h2>
           <h2>주문 목록</h2>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             {orders.map(order => (

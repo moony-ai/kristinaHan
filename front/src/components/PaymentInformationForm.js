@@ -14,7 +14,6 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
         balanceDate: null, // 잔금 결제일
     });
     
-
     const productPrices = {
         jacket: 1500000, // 예시 가격
         pants: 1000000,
