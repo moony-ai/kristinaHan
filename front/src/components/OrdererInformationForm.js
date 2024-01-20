@@ -3,20 +3,20 @@ import '../styles/OrdererInformationForm.css'
 
 function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
     const [ordererInfo, setOrdererInfo] = useState({
-        ordererName: '',
-        contact: '',
-        affiliation: '',
-        address: ''
+        ordererName: null,
+        contact: null,
+        affiliation: null,
+        address: null
     });
 
     const handleChange = (e) => {
         setOrdererInfo({ ...ordererInfo, [e.target.name]: e.target.value });
     }
 
-    // 상위 컴포넌트에 상태 변경 사항을 즉시 알림
-    useEffect(() => {
+    // 사용자가 정보를 입력하고 완료했을 때 상위 컴포넌트의 상태를 업데이트
+    const handleBlur = () => {
         updateOrdererInfo(ordererInfo);
-    }, [ordererInfo, updateOrdererInfo]);
+    }
 
     return (
         <div className="orderer-info-table">
@@ -31,6 +31,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 name="ordererName"
                                 value={ordererInfo.ordererName}
                                 onChange={handleChange}
+                                onBlur={handleBlur} 
                             />
                         </td>
                         <td>연락처:</td>
@@ -40,6 +41,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 name="contact"
                                 value={ordererInfo.contact}
                                 onChange={handleChange}
+                                onBlur={handleBlur} 
                             />
                         </td>
                     </tr>
@@ -53,6 +55,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 name="affiliation"
                                 value={ordererInfo.affiliation}
                                 onChange={handleChange}
+                                onBlur={handleBlur} 
                             />
                         </td>
                     </tr>
@@ -67,6 +70,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                     name="address"
                                     value={ordererInfo.address}
                                     onChange={handleChange}
+                                    onBlur={handleBlur} 
                                 />
                             </td>
                         </tr>

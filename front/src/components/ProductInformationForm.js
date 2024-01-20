@@ -4,15 +4,15 @@ import '../styles/OrderInformationForm.css'
 function ProductInformationForm({ updateOrderInfo }) {
     const [orderInfo, setOrderInfo] = useState({
         tuxedoType: '자켓 (R-Peaked)', // 턱시도 종류
-        jacketSize: '',
-        pantsSize: '',
-        shirtSize: '',
+        jacketSize: null,
+        pantsSize: null,
+        shirtSize: null,
         dressType: '드레스 (R)', // 드레스 타입 
-        dressSize: '', // 드레스 사이즈
-        ringSizeMen: '',
-        ringSizeWomen: '',
-        necklaceSize: '', // 목걸이 사이즈
-        earringType: '', // 귀걸이 종류
+        dressSize: null, // 드레스 사이즈
+        ringSizeMen: null,
+        ringSizeWomen: null,
+        necklaceSize: null, // 목걸이 사이즈
+        earringType: null, // 귀걸이 종류
         bowtie: false // 보타이 유무
     });
 

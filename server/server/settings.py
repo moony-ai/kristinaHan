@@ -27,14 +27,22 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 모든 출처 허용 (개발용)
+CORS_ALLOW_ALL_ORIGINS = True
+
+# # 또는 특정 출처만 허용
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://sub.example.com",
+#     "http://localhost:8080",
+#     "http://127.0.0.1:9000",
+# ]
 
 # Application definition
-
-
-
 CUSTOM_APPS = [
     "orders",
-    'rest_framework',
+    "rest_framework",
+    "corsheaders"
 ]
 
 SYSTEM_APPS = ["django.contrib.admin",
@@ -56,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "server.urls"

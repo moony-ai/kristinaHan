@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
+function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
     const [paymentInfo, setPaymentInfo] = useState({
-        payerName: '',            // 결제자 이름
+        payerName: null,            // 결제자 이름
         relationToOrderer: '본인', // 주문자와의 관계
-        paymentMethod: '현금',     // 결제 방법
-        selectedProducts: {},     // 결제할 상품 리스트
         totalAmount: 0,           // 결제 총액
-        depositKRW: '',           // 선수금 (원화)
-        depositJPY: '',           // 선수금 (엔화)
-        depositUSD: '',           // 선수금 (달러)
+        depositKRW: null,           // 선수금 (원화)
+        depositJPY: null,           // 선수금 (엔화)
+        depositUSD: null,           // 선수금 (달러)
         totalDeposit: 0,          // 선수금 총액 (환전된 원화)
-        balance: ''               // 잔금
+        balance: null,               // 잔금
+        depositDate: null, // 선수금 결제일
+        balanceDate: null, // 잔금 결제일
     });
+    
 
     const productPrices = {
         jacket: 1500000, // 예시 가격
@@ -24,6 +25,11 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         necklace: 200000,
         earring: 200000,
         bowtie: 300000,
+    };
+
+    // 결제일
+    const handleDateChange = (e) => {
+        setPaymentInfo({ ...paymentInfo, [e.target.name]: e.target.value });
     };
 
     //환율 관련 
@@ -42,7 +48,7 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
 
     const handleDepositChange = (e) => {
         const { name, value } = e.target;
-        let numValue = Number(value) || 0;
+        let numValue = Math.round(Number(value)) || 0; // 소수점 이하를 반올림
     
         // 갱신된 선수금을 계산
         let updatedDeposits = {
@@ -54,11 +60,12 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
         const depositKRW = Number(updatedDeposits.depositKRW) || 0;
         const depositJPY = (Number(updatedDeposits.depositJPY) || 0) * Number(exchangeRates.JPY);
         const depositUSD = (Number(updatedDeposits.depositUSD) || 0) * Number(exchangeRates.USD);
-        const totalDeposit = depositKRW + depositJPY + depositUSD;
+        const totalDeposit = Math.round(depositKRW + depositJPY + depositUSD);
     
         // 선수금 총액이 결제 총액을 초과하는 경우 조정
         if (totalDeposit > paymentInfo.totalAmount) {
             numValue = numValue - (totalDeposit - paymentInfo.totalAmount) / (name === 'depositKRW' ? 1 : (name === 'depositJPY' ? Number(exchangeRates.JPY) : Number(exchangeRates.USD)));
+            numValue = Math.round(numValue); // 반올림 처리
         }
     
         // 상태 업데이트
@@ -67,22 +74,22 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
             [name]: numValue.toString()
         }));
     };
-    
+
     //결제 총액 자동계
     useEffect(() => {
         let total = 0;
-        if (orderInfo.jacketSize) total += productPrices.jacket;
-        if (orderInfo.pantsSize) total += productPrices.pants;
-        if (orderInfo.shirtSize) total += productPrices.shirt;
-        if (orderInfo.dressSize) total += productPrices.dress;
-        if (orderInfo.ringSizeMen) total += productPrices.ringMen;
-        if (orderInfo.ringSizeWomen) total += productPrices.ringWomen;
-        if (orderInfo.necklaceSize) total += productPrices.necklace;
-        if (orderInfo.earringType) total += productPrices.earring;
-        if (orderInfo.bowtie) total += productPrices.bowtie;
+        if (productInfo.jacketSize) total += productPrices.jacket;
+        if (productInfo.pantsSize) total += productPrices.pants;
+        if (productInfo.shirtSize) total += productPrices.shirt;
+        if (productInfo.dressSize) total += productPrices.dress;
+        if (productInfo.ringSizeMen) total += productPrices.ringMen;
+        if (productInfo.ringSizeWomen) total += productPrices.ringWomen;
+        if (productInfo.necklaceSize) total += productPrices.necklace;
+        if (productInfo.earringType) total += productPrices.earring;
+        if (productInfo.bowtie) total += productPrices.bowtie;
 
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
-    }, [orderInfo]);
+    }, [productInfo]);
 
     useEffect(() => {
         const depositKRW = Number(paymentInfo.depositKRW) || 0;
@@ -135,22 +142,6 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
                         </select>
                     </td>
                 </tr>
-
-                {/* 결제 방법 */}
-                <tr>
-                    <td>결제 방법:</td>
-                    <td>
-                        <select
-                            name="paymentMethod"
-                            value={paymentInfo.paymentMethod}
-                            onChange={handleChange}
-                        >
-                            <option value="현금">현금</option>
-                            <option value="카드">카드</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </td>
-                </tr>
                 <tr>
                     <td colSpan="3"><hr /></td>
                 </tr>
@@ -169,6 +160,18 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
                 </tr>
                 <tr>
                     <td colSpan="3"><hr /></td>
+                </tr>
+                {/* 선수금 결제일 입력 필드 */}
+                <tr>
+                    <td>선수금 결제일:</td>
+                    <td>
+                        <input
+                            type="date"
+                            name="depositDate"
+                            value={paymentInfo.depositDate}
+                            onChange={handleDateChange}
+                        />
+                    </td>
                 </tr>
                 {/* 선수금 (원화) */}
                 <tr>
@@ -254,6 +257,18 @@ function PaymentInformationForm({ orderInfo, updatePaymentInfo }) {
                 </tr>
                 <tr>
                     <td colSpan="3"><hr /></td>
+                </tr>
+                {/* 잔금 결제일 입력 필드 */}
+                <tr>
+                    <td>잔금 결제일:</td>
+                    <td>
+                        <input
+                            type="date"
+                            name="balanceDate"
+                            value={paymentInfo.balanceDate}
+                            onChange={handleDateChange}
+                        />
+                    </td>
                 </tr>
                 {/* 잔금 */}
                 <tr>
