@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import OrderList from './OrderList';
 import OrderForm from './OrderForm';
 import OrderFormLoaded from './OrderFormLoaded';
