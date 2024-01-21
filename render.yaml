@@ -11,7 +11,7 @@ services:
     region: singapore
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mysite.wsgi:application"
+    startCommand: "gunicorn cristina_server.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
