@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "server"
+version = "0.1.0"
+description = ""
+authors = ["짱짱맨 <60203153+kksjjm@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^5.0.1"
+djangorestframework = "^3.14.0"
+whitenoise = {extras = ["brotli"], version = "^6.6.0"}
+dj-database-url = "^2.1.0"
+psycopg2-binary = "^2.9.9"
+gunicorn = "^21.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

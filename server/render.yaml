@@ -1,0 +1,23 @@
+databases:
+  - name: cristina_server
+    databaseName: cristina_server
+    user: cristina_server
+    region: singapore
+
+services:
+  - type: web
+    name: cristina_server
+    env: python
+    region: singapore
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mysite.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cristina_server
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
