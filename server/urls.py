@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/orders/', include('orders.urls')),
-    path('sentry-debug', views.trigger_error),
+    path('sentry-debug/', views.trigger_error),
 ]
