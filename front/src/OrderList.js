@@ -16,7 +16,7 @@ class OrderList extends Component {
   }
 
   fetchOrders() {
-    axios.get('https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/')
+    axios.get('https://server-6kol.onrender.com/api/v1/orders/')
       .then(response => {
         this.setState({ orders: response.data });
       })

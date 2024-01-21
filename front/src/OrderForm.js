@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderForm.css';
 
@@ -11,6 +11,7 @@ import AlterationInformationForm from '../src/components/AlterationInformationFo
 function OrderForm({ loggedInUserInfo }) {
 
     const { orderNumber } = useParams(); // URL에서 주문 번호 추출
+    const navigate = useNavigate(); // 끝나고 목록으로 돌어가기 위해.
 
     const [orderData, setOrderData] = useState({
         // 주문상세 정보 
@@ -20,7 +21,7 @@ function OrderForm({ loggedInUserInfo }) {
         alterationInfo: {},
 
         // 주문 정보
-        creator: '주문자',            // 작성자
+        creator: '작성자를 입력하세요.',            // 작성자
         creationTime: null,       // 최초 작성 시간
         lastModifiedTime: null,   // 최근 수정 시간
         modifier: null,           // 수정자
@@ -92,6 +93,7 @@ function OrderForm({ loggedInUserInfo }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
         // 12자리 무작위 문자열 생성
@@ -149,13 +151,14 @@ function OrderForm({ loggedInUserInfo }) {
         console.log(mappedData)
 
         // 서버에 POST 요청 보내기
-        axios.post('https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/', mappedData)
+        axios.post('https://server-6kol.onrender.com/api/v1/orders/', mappedData)
             .then(response => {
-                console.log('주문이 성공적으로 제출되었습니다:', response.data);
+                alert('주문이 성공적으로 제출되었습니다:', response.data);
                 // 성공적인 제출 후 처리 로직
+                navigate('/');
             })
             .catch(error => {
-                console.error('주문 제출 중 오류 발생:', error);
+                alert('주문 제출 중 오류 발생:', error);
                 // 오류 처리 로직
             });
     };

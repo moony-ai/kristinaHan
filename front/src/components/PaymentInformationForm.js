@@ -4,7 +4,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
     const [paymentInfo, setPaymentInfo] = useState({
         payerName: null,            // 결제자 이름
         relationToOrderer: '본인', // 주문자와의 관계
-        totalAmount: 0,           // 결제 총액
+        totalAmount: 4600000,           // 결제 총액
         depositKRW: null,           // 선수금 (원화)
         depositJPY: null,           // 선수금 (엔화)
         depositUSD: null,           // 선수금 (달러)

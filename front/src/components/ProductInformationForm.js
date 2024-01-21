@@ -4,11 +4,11 @@ import '../styles/OrderInformationForm.css'
 function ProductInformationForm({ updateOrderInfo }) {
     const [orderInfo, setOrderInfo] = useState({
         tuxedoType: '자켓 (R-Peaked)', // 턱시도 종류
-        jacketSize: null,
-        pantsSize: null,
-        shirtSize: null,
+        jacketSize: '100',
+        pantsSize: '*28',
+        shirtSize: '*85',
         dressType: '드레스 (R)', // 드레스 타입 
-        dressSize: null, // 드레스 사이즈
+        dressSize: '*44', // 드레스 사이즈
         ringSizeMen: null,
         ringSizeWomen: null,
         necklaceSize: null, // 목걸이 사이즈
@@ -52,7 +52,7 @@ function ProductInformationForm({ updateOrderInfo }) {
                     <td colSpan="4"><strong>턱시도</strong></td>
                 </tr>
                 <tr>
-                    <td>턱시도 유형:</td>
+                    <td>턱시도 유형: </td>
                     <td>
                         <select name="tuxedoType" value={orderInfo.tuxedoType} onChange={handleChange}>
                             <option value="자켓 (R-Peaked)">자켓 (R-Peaked)</option>

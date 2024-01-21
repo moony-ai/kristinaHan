@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderForm.css';
 
 function OrderForm({ loggedInUserInfo }) {
 
     const { orderNumber } = useParams(); // URL에서 주문 번호 추출
+    const navigate = useNavigate(); // 끝나고 목록으로 돌어가기 위해.
 
     // const [orderData, setOrderData] = useState({
     //     ordererInfo: {},
@@ -274,7 +275,7 @@ function OrderForm({ loggedInUserInfo }) {
     useEffect(() => {
         // 주문 번호가 존재하면 서버에서 주문 데이터 불러오기
         if (orderNumber) {
-            axios.get(`https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/${orderNumber}/`)
+            axios.get(`https://server-6kol.onrender.com/api/v1/orders/${orderNumber}/`)
                 .then(response => {
                     const data = response.data;
                     console.log(data)
@@ -344,13 +345,14 @@ function OrderForm({ loggedInUserInfo }) {
         console.log(mappedData)
 
         // 서버에 PUT 요청 보내기
-        axios.put(`https://supreme-space-fiesta-657q57pxqxg3r6px-8000.app.github.dev/api/v1/orders/${orderNumber}/`, mappedData)
+        axios.put(`https://server-6kol.onrender.com/api/v1/orders/${orderNumber}/`, mappedData)
             .then(response => {
-                console.log('주문이 성공적으로 수정되었습니다:', response.data);
+                alert('주문이 성공적으로 수정되었습니다:', response.data);
                 // 성공적인 제출 후 처리 로직
+                navigate('/');
             })
             .catch(error => {
-                console.error('주문 제출 중 오류 발생:', error);
+                alert('주문 수정 중 오류 발생:', error);
                 // 오류 처리 로직
             });
     };
@@ -788,6 +790,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={alterationInfoHandleChange}
                                     />
                                 </td>
+                                <td>CM</td>
                                 <td>드레스 기장:</td>
                                 <td>
                                     <input
@@ -797,6 +800,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={alterationInfoHandleChange}
                                     />
                                 </td>
+                                <td>CM</td>
                             </tr>
 
                             {/* 자켓 소매 */}
@@ -810,6 +814,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={alterationInfoHandleChange}
                                     />
                                 </td>
+                                <td>CM</td>
                                 <td>자켓 기장:</td>
                                 <td>
                                     <input
@@ -819,6 +824,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={alterationInfoHandleChange}
                                     />
                                 </td>
+                                <td>CM</td>
                             </tr>
 
                             {/* 바지 허리 */}
@@ -832,6 +838,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={alterationInfoHandleChange}
                                     />
                                 </td>
+                                <td>CM</td>
                                 <td>바지 기장:</td>
                                 <td>
                                     <input
@@ -841,6 +848,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={alterationInfoHandleChange}
                                     />
                                 </td>
+                                <td>CM</td>
                             </tr>
                         </tbody>
                     </table>

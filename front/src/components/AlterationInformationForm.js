@@ -33,6 +33,7 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                                 onChange={handleChange} 
                             />
                         </td>
+                        <td>CM</td>
                         <td>드레스 기장:</td>
                         <td>
                             <input 
@@ -42,6 +43,7 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                                 onChange={handleChange} 
                             />
                         </td>
+                        <td>CM</td>
                     </tr>
     
                     {/* 자켓 소매 */}
@@ -55,6 +57,7 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                                 onChange={handleChange} 
                             />
                         </td>
+                        <td>CM</td>
                         <td>자켓 기장:</td>
                         <td>
                             <input 
@@ -64,6 +67,7 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                                 onChange={handleChange} 
                             />
                         </td>
+                        <td>CM</td>
                     </tr>
     
                     {/* 바지 허리 */}
@@ -77,6 +81,7 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                                 onChange={handleChange} 
                             />
                         </td>
+                        <td>CM</td>
                         <td>바지 기장:</td>
                         <td>
                             <input 
@@ -86,6 +91,7 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                                 onChange={handleChange} 
                             />
                         </td>
+                        <td>CM</td>
                     </tr>
                 </tbody>
             </table>
