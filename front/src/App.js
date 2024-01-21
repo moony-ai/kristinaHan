@@ -8,7 +8,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<OrderList />} />
+        <Route path="/" element={<OrderList />} />
         <Route path="/orders/new" element={<OrderForm />} />
         <Route path="/orders/:orderNumber" element={<OrderFormLoaded />} />
       </Routes>
