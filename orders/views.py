@@ -25,8 +25,8 @@ class OrderDetail(APIView):
             raise status.HTTP_404_NOT_FOUND
 
     def get(self, request, pk, format=None):
-        order = self.get_object(pk)
-        serializer = OrderDetailSerializer(order)
+        orders = Order.objects.filter(is_deleted=False) # 소프트 삭제된 객체를 제외하고 쿼리
+        serializer = OrderListSerializer(orders, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -39,8 +39,10 @@ class OrderDetail(APIView):
 
     def delete(self, request, pk, format=None):
         order = self.get_object(pk)
-        order.delete()
+        order.is_deleted = True # 소프트 삭제 
+        order.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # 필요한 패키지 임포트
 from openpyxl import Workbook

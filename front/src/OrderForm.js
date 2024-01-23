@@ -206,10 +206,6 @@ function OrderForm({ loggedInUserInfo }) {
                     value={orderData.creator}
                     onChange={handleCreatorChange}
                 /></div>
-                {/* <div>최초 작성 시간: {orderData.creationTime}</div> */}
-                {/* <div>수정자: {orderData.modifier}</div>
-                <div>최근 수정 시간: {orderData.lastModifiedTime}</div> */}
-                {/* <div>주문서 번호: {orderData.orderNumber}</div> */}
 
                 <div>
                     주문 상태*:

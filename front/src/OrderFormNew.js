@@ -8,15 +8,6 @@ function OrderForm({ loggedInUserInfo }) {
     const { orderNumber } = useParams(); // URL에서 주문 번호 추출
     const navigate = useNavigate(); // 끝나고 목록으로 돌어가기 위해.
 
-    // const [orderData, setOrderData] = useState({
-    //     ordererInfo: {},
-    //     productInfo: {},
-    //     paymentInfo: {},
-    //     alterationInfo: {},
-    //     orderInfo: {},
-    // });
-
-
     // 주문 정보 상태
     const [orderInfo, SetOrderInfo] = useState({
         creator: '작성자',            // 작성자
@@ -88,10 +79,10 @@ function OrderForm({ loggedInUserInfo }) {
         balance: null,               // 잔금
         depositDate: null, // 선수금 결제일
         balanceDate: null, // 잔금 결제일
-        paymentMethodKRW: "현금", 
+        paymentMethodKRW: "현금",
         paymentMethodJPY: "현금",
         paymentMethodUSD: "현금",
-
+        // 추가적인 결제 정보 상태 초기화
     });
 
     const paymentInfoHandleChange = (e) => {
@@ -107,7 +98,6 @@ function OrderForm({ loggedInUserInfo }) {
         pantsWaistLength: '',     // 바지 허리
         pantsLength: '',     // 바지 기장
         alterationMemo: '' // 기장 메모
-
     });
 
     const alterationInfoHandleChange = (e) => {
@@ -219,86 +209,16 @@ function OrderForm({ loggedInUserInfo }) {
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
     }, [productInfo]);
 
-    function setInfo(data) {
-        // 각 상태 변수에 해당하는 데이터를 직접 대입합니다.
-        SetOrderInfo({
-            creator: data.creator,
-            creationTime: data.creationTime,
-            lastModifiedTime: data.lastModifiedTime,
-            modifier: data.modifier,
-            orderNumber: data.orderNumber,
-            orderStatus: data.orderStatus,
-            deliveryMethod: data.deliveryMethod,
-        });
-
-        setOrdererInfo({
-            ordererName: data.ordererName,
-            contact: data.contact,
-            affiliation: data.affiliation,
-            address: data.address,
-        });
-
-        setProductInfo({
-            tuxedoType: data.tuxedoType,
-            jacketSize: data.jacketSize,
-            pantsSize: data.pantsSize,
-            shirtSize: data.shirtSize,
-            dressType: data.dressType,
-            dressSize: data.dressSize,
-            ringSizeMen: data.ringSizeMen,
-            ringSizeWomen: data.ringSizeWomen,
-            necklaceSize: data.necklaceSize,
-            earringType: data.earringType,
-            bowtie: data.bowtie,
-        });
-
-        setPaymentInfo({
-            payerName: data.payerName,
-            relationToOrderer: data.relationToOrderer,
-            totalAmount: data.totalAmount,
-            depositKRW: data.depositKRW,
-            depositJPY: data.depositJPY,
-            depositUSD: data.depositUSD,
-            totalDeposit: data.totalDeposit,
-            balance: data.balance,
-            depositDate: data.depositDate,
-            balanceDate: data.balanceDate,
-        });
-
-        setAlterationInfo({
-            dressBackWidth: data.dressBackWidth,
-            dressLength: data.dressLength,
-            jacketSleeveLength: data.jacketSleeveLength,
-            jacketLength: data.jacketLength,
-            pantsWaistLength: data.pantsWaistLength,
-            pantsLength: data.pantsLength,
-        });
-    }
-
-    // DB 불러오기
-    useEffect(() => {
-        // 주문 번호가 존재하면 서버에서 주문 데이터 불러오기
-        if (orderNumber) {
-            axios.get(`https://server-6kol.onrender.com/api/v1/orders/${orderNumber}/`)
-                .then(response => {
-                    const data = response.data;
-                    console.log(data)
-                    // 데이터 넣기
-                    setInfo(data)
-                })
-                .catch(error => {
-                    console.error('주문 데이터 불러오기 실패:', error);
-                });
-        }
-    }, [orderNumber]);
-
-    // 수정요청 
+    // 저장요청 
     const handleSubmit = (e) => {
         e.preventDefault();
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
+        // 12자리 무작위 문자열 생성
+        const randomString = Math.random().toString(36).substring(2, 14);
 
-        orderInfo.lastModifiedTime = currentTime
+        orderInfo.creationTime = currentTime
+        orderInfo.orderNumber = randomString
 
         const depositKRW = parseFloat(paymentInfo.depositKRW) || 0;
         const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
@@ -310,7 +230,7 @@ function OrderForm({ loggedInUserInfo }) {
             'ordererInfo.affiliation': '소속',
             'ordererInfo.contact': '연락처',
             'orderInfo.creator': '작성자',
-            'orderInfo.modifier': '수정자',
+            'paymentInfo.payerName': '결제자 이름',
         };
 
         // 필수 항목 검사
@@ -379,15 +299,15 @@ function OrderForm({ loggedInUserInfo }) {
 
         console.log(mappedData)
 
-        // 서버에 PUT 요청 보내기
-        axios.put(`https://server-6kol.onrender.com/api/v1/orders/${orderNumber}/`, mappedData)
+        // 서버에 POST 요청 보내기
+        axios.post('https://server-6kol.onrender.com/api/v1/orders/', mappedData)
             .then(response => {
-                alert('주문이 성공적으로 수정되었습니다:', response.data);
+                alert('주문이 성공적으로 제출되었습니다:', response.data);
                 // 성공적인 제출 후 처리 로직
                 navigate('/');
             })
             .catch(error => {
-                alert('주문 수정 중 오류 발생:', error);
+                alert('주문 제출 중 오류 발생:', error);
                 // 오류 처리 로직
             });
     };
@@ -398,16 +318,12 @@ function OrderForm({ loggedInUserInfo }) {
             <fieldset>
                 <legend>주문 정보</legend>
                 <div>주문서 번호: {orderInfo.orderNumber}</div>
-                <div>작성자: {orderInfo.creator}</div>
-                <div>최초 작성 시간: {orderInfo.creationTime}</div>
-                <div>수정자: <input
+                <div>작성자*: <input
                     type="text"
-                    value={orderInfo.modifier}
-                    onChange={handleModifierChange}
+                    placeholder='작성자를 입력하세요.'
+                    value={orderInfo.creator}
+                    onChange={orderInfoHandleChange}
                 /></div>
-                <div>최근 수정 시간: {orderInfo.lastModifiedTime}</div>
-                <div>주문서 번호: {orderInfo.orderNumber}</div>
-
                 <div>
                     주문 상태:
                     {orderStatusOptions.map((status, index) => (
@@ -949,7 +865,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
 
-            <button className="form-button" type="submit"> 주문 수정</button>
+            <button className="form-button" type="submit"> 주문 제출</button>
         </form>
     );
 
