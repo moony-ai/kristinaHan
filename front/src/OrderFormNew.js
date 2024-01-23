@@ -283,7 +283,7 @@ function OrderForm({ loggedInUserInfo }) {
             totalAmount: paymentInfo.totalAmount,
             paymentMethodKRW: paymentInfo.paymentMethodKRW,
             paymentMethodJPY: paymentInfo.paymentMethodJPY,
-            aymentMethodUSD: paymentInfo.paymentMethodUSD,
+            paymentMethodUSD: paymentInfo.paymentMethodUSD,
             depositKRW: depositKRW,
             depositJPY: depositJPY,
             depositUSD: depositUSD,
