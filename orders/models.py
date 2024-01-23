@@ -9,6 +9,9 @@ class Order(models.Model):
     affiliation = models.CharField(max_length=100, blank=False)
     contact = models.CharField(max_length=100, blank=False)
     address = models.TextField(blank=True, null=True)
+    spouseName = models.CharField(max_length=100, blank=True, null=True)
+    spouseContact = models.CharField(max_length=100, blank=True, null=True)
+    spouseAffiliation = models.CharField(max_length=100, blank=True, null=True)
 
     # 주문 정보
     orderStatus = models.CharField(max_length=50, blank=False)

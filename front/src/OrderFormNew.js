@@ -35,12 +35,16 @@ function OrderForm({ loggedInUserInfo }) {
         ordererName: null,
         contact: null,
         affiliation: null,
-        address: null
+        address: null,
+        spouseName: null, 
+        spouseContact: null,
+        spouseAffiliation: null,
     });
 
     const ordererInfoHandleChange = (e) => {
         setOrdererInfo({ ...ordererInfo, [e.target.name]: e.target.value });
     }
+
 
     // 제품 정보 상태
     const [productInfo, setProductInfo] = useState({
@@ -260,6 +264,9 @@ function OrderForm({ loggedInUserInfo }) {
             affiliation: ordererInfo.affiliation, // 필수
             contact: ordererInfo.contact, // 필수
             address: ordererInfo.address,
+            spouseName: ordererInfo.spouseName,
+            spouseContact: ordererInfo.spouseContact,
+            spouseAffiliation: ordererInfo.spouseAffiliation,
             orderStatus: orderInfo.orderStatus,
             orderNumber: orderInfo.orderNumber,
             creator: orderInfo.creator,
@@ -341,14 +348,6 @@ function OrderForm({ loggedInUserInfo }) {
                         </label>
                     ))}
                 </div>
-                <label className="form-label">
-                    수령 방법:
-                    <select className="form-select" name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
-                        <option value="배송">배송</option>
-                        <option value="직접수령">현장 수령</option>
-                        <option value="방문수령">매장 수령</option>
-                    </select>
-                </label>
             </fieldset>
             {/* 고객 정보 */}
             <fieldset>
@@ -367,7 +366,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={ordererInfoHandleChange}
                                     />
                                 </td>
-                                <td>연락처:</td>
+                                <td>주문자 연락처:</td>
                                 <td>
                                     <input
                                         type="text"
@@ -377,10 +376,8 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-
-                            {/* 소속 */}
                             <tr>
-                                <td>소속:</td>
+                                <td>주문자 소속:</td>
                                 <td>
                                     <input
                                         type="text"
@@ -390,21 +387,43 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-
-                            {/* 배송지 주소 - 수령 방법이 '배송'인 경우에만 표시 */}
-                            {orderInfo.deliveryMethod === "배송" && (
-                                <tr>
-                                    <td>배송지 주소:</td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="address"
-                                            value={ordererInfo.address}
-                                            onChange={ordererInfoHandleChange}
-                                        />
-                                    </td>
-                                </tr>
-                            )}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="orderer-info-table">
+                    <table >
+                        <tbody>
+                            <tr>
+                                <td>배우자 이름:</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="spouseName"
+                                        value={ordererInfo.spouseName}
+                                        onChange={ordererInfoHandleChange}
+                                    />
+                                </td>
+                                <td>배우자 연락처:</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="spouseContact"
+                                        value={ordererInfo.spouseContact}
+                                        onChange={ordererInfoHandleChange}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>배우자 소속:</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="spouseAffiliation"
+                                        value={ordererInfo.spouseAffiliation}
+                                        onChange={ordererInfoHandleChange}
+                                    />
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -415,6 +434,48 @@ function OrderForm({ loggedInUserInfo }) {
                 <div>
                     <table>
                         <tbody>
+                            {/* 예물 섹션 */}
+                            <tr>
+                                <td colSpan="4"><strong>예물</strong></td>
+                            </tr>
+                            <tr>
+                                <td>남성 반지 사이즈:</td>
+                                <td>
+                                    <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
+                                        <option value="">구매안함</option>
+                                        {sizeOptions["반지 (남)"].map(size => (
+                                            <option key={size} value={size}>{size}</option>
+                                        ))}
+                                    </select>
+                                </td>
+                                <td>여성 반지 사이즈:</td>
+                                <td>
+                                    <select name="ringSizeWomen" value={productInfo.ringSizeWomen} onChange={productInfoHandleChange}>
+                                        <option value="">구매안함</option>
+                                        {sizeOptions["반지 (여)"].map(size => (
+                                            <option key={size} value={size}>{size}</option>
+                                        ))}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>목걸이 사이즈:</td>
+                                <td>
+                                    <select name="necklaceSize" value={productInfo.necklaceSize} onChange={productInfoHandleChange}>
+                                        <option value="">구매안함</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                    </select>
+                                </td>
+                                <td>귀걸이 종류:</td>
+                                <td>
+                                    <select name="earringType" value={productInfo.earringType} onChange={productInfoHandleChange}>
+                                        <option value="">구매안함</option>
+                                        <option value="귀찌">귀찌</option>
+                                        <option value="귀걸이">귀걸이</option>
+                                    </select>
+                                </td>
+                            </tr>
                             {/* 턱시도 섹션 */}
                             <tr>
                                 <td colSpan="4"><strong>턱시도</strong></td>
@@ -482,60 +543,6 @@ function OrderForm({ loggedInUserInfo }) {
                                         )))}
                                         <option value="">구매안함</option>
                                     </select>
-                                </td>
-                            </tr>
-
-                            {/* 기타 섹션 */}
-                            <tr>
-                                <td colSpan="4"><strong>기타</strong></td>
-                            </tr>
-                            <tr>
-                                <td>남성 반지 사이즈:</td>
-                                <td>
-                                    <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
-                                        <option value="">구매안함</option>
-                                        {sizeOptions["반지 (남)"].map(size => (
-                                            <option key={size} value={size}>{size}</option>
-                                        ))}
-                                    </select>
-                                </td>
-                                <td>여성 반지 사이즈:</td>
-                                <td>
-                                    <select name="ringSizeWomen" value={productInfo.ringSizeWomen} onChange={productInfoHandleChange}>
-                                        <option value="">구매안함</option>
-                                        {sizeOptions["반지 (여)"].map(size => (
-                                            <option key={size} value={size}>{size}</option>
-                                        ))}
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>목걸이 사이즈:</td>
-                                <td>
-                                    <select name="necklaceSize" value={productInfo.necklaceSize} onChange={productInfoHandleChange}>
-                                        <option value="">구매안함</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                    </select>
-                                </td>
-                                <td>귀걸이 종류:</td>
-                                <td>
-                                    <select name="earringType" value={productInfo.earringType} onChange={productInfoHandleChange}>
-                                        <option value="">구매안함</option>
-                                        <option value="귀찌">귀찌</option>
-                                        <option value="귀걸이">귀걸이</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>보타이 여부:</td>
-                                <td colSpan="3">
-                                    <input
-                                        type="checkbox"
-                                        name="bowtie"
-                                        checked={productInfo.bowtie || false}
-                                        onChange={productInfoHandleChange}
-                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -771,6 +778,28 @@ function OrderForm({ loggedInUserInfo }) {
                         </tbody>
                     </table>
                 </div>
+                {/* 배송지 주소 - 수령 방법이 '배송'인 경우에만 표시 */}
+                {orderInfo.deliveryMethod === "배송" && (
+                    <tr>
+                        <label className="">
+                            수령 방법:
+                            <select name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
+                                <option value="배송">배송</option>
+                                <option value="직접수령">현장 수령</option>
+                                <option value="방문수령">매장 수령</option>
+                            </select>
+                        </label>
+                        <td>배송지 주소:</td>
+                        <td>
+                            <input
+                                type="text"
+                                name="address"
+                                value={ordererInfo.address}
+                                onChange={ordererInfoHandleChange}
+                            />
+                        </td>
+                    </tr>
+                )}
             </fieldset>
             {/* 수선정보 */}
             <fieldset>

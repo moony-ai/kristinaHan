@@ -7,7 +7,9 @@ class OrderList extends Component {
     super(props);
     this.state = {
       orders: [],
+      deletedOrders: [],  // 삭제된 주문 목록을 저장할 상태 추가
       error: null,
+      viewingDeleted: false, // 휴지통 보기 상태 관리
     };
   }
 
@@ -15,6 +17,7 @@ class OrderList extends Component {
     this.fetchOrders();
   }
 
+  // 일반목록
   fetchOrders() {
     axios.get('https://server-6kol.onrender.com/api/v1/orders/')
       .then(response => {
@@ -23,6 +26,21 @@ class OrderList extends Component {
       .catch(error => {
         this.setState({ error });
       });
+  }
+
+  // 삭제목록
+  fetchDeletedOrders = () => {
+    axios.get('https://server-6kol.onrender.com/api/v1/orders/deleted/')
+      .then(response => {
+        this.setState({ deletedOrders: response.data, viewingDeleted: true });
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+  }
+  // 일반목록으로 돌아가기
+  switchToNormalView = () => {
+    this.setState({ viewingDeleted: false });
   }
 
   handleDownloadExcel = () => {
@@ -42,40 +60,58 @@ class OrderList extends Component {
     });
   }
 
+  deleteOrder = (orderId) => {
+    axios.delete(`https://server-6kol.onrender.com/api/v1/orders/${orderId}/`)
+      .then(response => {
+        // 삭제 후 주문 목록 업데이트
+        this.fetchOrders();
+      })
+      .catch(error => {
+        console.error('주문 삭제 중 오류 발생:', error);
+      });
+  }
+
   render() {
-    const { orders, error } = this.state;
+    const { orders, deletedOrders, error, viewingDeleted } = this.state;
 
     if (error) {
       return <div>오류가 발생했습니다: {error.message}</div>;
     }
 
     return (
-        <div>
-          <h2>
+      <div>
+        <h2>
           <Link to={'/orders/new'}>새로운 주문 넣기</Link></h2>
-          <h2>주문 목록</h2>
-          <button onClick={this.handleDownloadExcel}>엑셀로 다운로드</button>
-          <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {orders.map(order => (
-              <li key={order.orderNumber} style={{ display: 'flex', marginBottom: '10px' }}>
-                <div style={{ marginRight: '20px' }}>
-                  <Link to={`/orders/${order.id}`}>주문 번호: {order.orderNumber}</Link>
-                </div>
-                <div style={{ marginRight: '20px' }}>주문자 이름: {order.ordererName}</div>
-                <div style={{ marginRight: '20px' }}>소속: {order.affiliation}</div>
-                <div style={{ marginRight: '20px' }}>연락처: {order.contact}</div>
-                <div style={{ marginRight: '20px' }}>주문 상태: {order.orderStatus}</div>
-                <div style={{ marginRight: '20px' }}>생성자: {order.creator}</div>
-                <div style={{ marginRight: '20px' }}>생성 시간: {order.creationTime}</div>
-                <div style={{ marginRight: '20px' }}>총액: {order.totalAmount}</div>
-                <div>잔액: {order.balance}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-      
-      
+        <h2>주문 목록</h2>
+        <button onClick={this.handleDownloadExcel}>엑셀로 다운로드</button>
+        {!viewingDeleted && <button onClick={this.fetchDeletedOrders}>휴지통</button>}
+        {viewingDeleted && <button onClick={this.switchToNormalView}>돌아가기</button>}
+        <ul style={{ listStyleType: 'none', padding: 0 }}>
+          {(viewingDeleted ? deletedOrders : orders).map(order => (
+            <li key={order.orderNumber} style={{ display: 'flex', marginBottom: '10px' }}>
+              <div style={{ marginRight: '20px' }}>
+                <Link to={`/orders/${order.id}`}>주문 번호: {order.orderNumber}</Link>
+              </div>
+              <div style={{ marginRight: '20px' }}>주문자 이름: {order.ordererName}</div>
+              <div style={{ marginRight: '20px' }}>소속: {order.affiliation}</div>
+              <div style={{ marginRight: '20px' }}>연락처: {order.contact}</div>
+              <div style={{ marginRight: '20px' }}>주문 상태: {order.orderStatus}</div>
+              <div style={{ marginRight: '20px' }}>생성자: {order.creator}</div>
+              <div style={{ marginRight: '20px' }}>생성 시간: {order.creationTime}</div>
+              <div style={{ marginRight: '20px' }}>총액: {order.totalAmount}</div>
+              <div>잔액: {order.balance}</div>
+              {!viewingDeleted && (
+                <button onClick={() => this.deleteOrder(order.id)} style={{ marginLeft: '20px' }}>
+                  삭제
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+
   }
 }
 
