@@ -263,6 +263,9 @@ function OrderForm({ loggedInUserInfo }) {
             balance: data.balance,
             depositDate: data.depositDate,
             balanceDate: data.balanceDate,
+            paymentMethodKRW: data.paymentMethodKRW,
+            paymentMethodJPY: data.paymentMethodJPY,
+            aymentMethodUSD: data.aymentMethodUSD,
         });
 
         setAlterationInfo({

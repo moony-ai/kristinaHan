@@ -131,6 +131,8 @@ class Order(models.Model):
         choices=[("현금", "현금"), ("신용카드", "신용카드")],
         default="현금",
         verbose_name="선수금 결제 방법 (원화)",
+        blank=True, 
+        null=True,
     )
 
     paymentMethodJPY = models.CharField( # 선수금 결제 방법 - 엔화
@@ -138,6 +140,8 @@ class Order(models.Model):
         choices=[("현금", "현금"), ("신용카드", "신용카드")],
         default="현금",
         verbose_name="선수금 결제 방법 (엔화)",
+        blank=True, 
+        null=True,
     )
 
     paymentMethodUSD = models.CharField( # 선수금 결제 방법 - 달러
@@ -145,6 +149,8 @@ class Order(models.Model):
         choices=[("현금", "현금"), ("신용카드", "신용카드")],
         default="현금",
         verbose_name="선수금 결제 방법 (달러)",
+        blank=True, 
+        null=True,
     )
 
     # 수선 정보

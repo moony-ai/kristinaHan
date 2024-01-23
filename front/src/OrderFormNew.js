@@ -5,12 +5,11 @@ import '../src/styles/OrderForm.css';
 
 function OrderForm({ loggedInUserInfo }) {
 
-    const { orderNumber } = useParams(); // URL에서 주문 번호 추출
     const navigate = useNavigate(); // 끝나고 목록으로 돌어가기 위해.
 
     // 주문 정보 상태
     const [orderInfo, SetOrderInfo] = useState({
-        creator: '작성자',            // 작성자
+        creator: '',            // 작성자
         creationTime: null,       // 최초 작성 시간
         lastModifiedTime: null,   // 최근 수정 시간
         modifier: null,           // 수정자
@@ -23,11 +22,11 @@ function OrderForm({ loggedInUserInfo }) {
         SetOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
     };
 
-    const handleModifierChange = (event) => {
-        const newModifier = event.target.value; // 입력된 새로운 작성자 이름
+    const handleCreatorChange = (event) => {
+        const newCreator = event.target.value; // 입력된 새로운 작성자 이름
         SetOrderInfo({
             ...orderInfo, // 기존 데이터를 복사
-            modifier: newModifier // 새로운 작성자 이름으로 업데이트
+            creator: newCreator // 새로운 작성자 이름으로 업데이트
         });
     };
 
@@ -282,6 +281,9 @@ function OrderForm({ loggedInUserInfo }) {
             payerName: paymentInfo.payerName,
             relationToOrderer: paymentInfo.relationToOrderer,
             totalAmount: paymentInfo.totalAmount,
+            paymentMethodKRW: paymentInfo.paymentMethodKRW,
+            paymentMethodJPY: paymentInfo.paymentMethodJPY,
+            aymentMethodUSD: paymentInfo.paymentMethodUSD,
             depositKRW: depositKRW,
             depositJPY: depositJPY,
             depositUSD: depositUSD,
@@ -322,7 +324,7 @@ function OrderForm({ loggedInUserInfo }) {
                     type="text"
                     placeholder='작성자를 입력하세요.'
                     value={orderInfo.creator}
-                    onChange={orderInfoHandleChange}
+                    onChange={handleCreatorChange}
                 /></div>
                 <div>
                     주문 상태:
