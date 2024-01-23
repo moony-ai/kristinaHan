@@ -86,7 +86,6 @@ function OrderForm({ loggedInUserInfo }) {
         paymentMethodKRW: "현금",
         paymentMethodJPY: "현금",
         paymentMethodUSD: "현금",
-
     });
 
     const paymentInfoHandleChange = (e) => {
@@ -150,20 +149,20 @@ function OrderForm({ loggedInUserInfo }) {
         JPY: 80 / 9,  // 원/엔 초기값
     });
 
-    // const handleExchangeRateChange = (e) => {
-    //     setExchangeRates({ ...exchangeRates, [e.target.name]: e.target.value });
-    // };
+    //천단위 
+    const formatNumberWithComma = (num) => {
+        if (num === null || num === undefined || isNaN(num)) {
+            return "";
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
 
-    // 천단위 계산 표시
-    function formatNumber(num) {
-        return new Intl.NumberFormat('ko-KR').format(num);
-    }
 
     // 선수금 계산
     const handleDepositChange = (e) => {
         const { name, value } = e.target;
         // 쉼표를 제거하고 숫자로 변환
-        let numValue = Math.round(Number(value.replace(/,/g, ''))) || 0; // 소수점 이하를 반올림
+        let numValue = value ? Math.round(Number(value.replace(/,/g, ''))) : 0;
 
         // 갱신된 선수금을 계산
         let updatedDeposits = {
@@ -185,22 +184,19 @@ function OrderForm({ loggedInUserInfo }) {
             numValue = Math.max(0, numValue); // numValue가 0 이하가 되지 않도록 보장
         }
 
-        // 상태 업데이트 (쉼표 없이 숫자만 저장)
+        // 상태 업데이트 (포맷팅된 값으로 저장)
         setPaymentInfo(prev => ({
             ...prev,
-            [name]: numValue
+            [name]: formatNumberWithComma(numValue)
         }));
-
-        // 입력 필드에 포맷팅된 값을 표시
-        e.target.value = formatNumber(numValue);
     };
 
     // 선수금 계산 반영
     useEffect(() => {
-        const depositKRW = Number(paymentInfo.depositKRW) || 0;
-        const depositJPY = (Number(paymentInfo.depositJPY) || 0) * Number(exchangeRates.JPY);
-        const depositUSD = (Number(paymentInfo.depositUSD) || 0) * Number(exchangeRates.USD);
-        const totalDeposit = Math.round(Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount));
+        const depositKRW = Number((paymentInfo.depositKRW || '0').replace(/,/g, '')) || 0;
+        const depositJPY = (Number((paymentInfo.depositJPY || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.JPY);
+        const depositUSD = (Number((paymentInfo.depositUSD || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.USD);
+        const totalDeposit = Math.round(depositKRW + depositJPY + depositUSD);
 
         setPaymentInfo(prev => ({
             ...prev,
@@ -708,7 +704,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="totalAmount"
-                                        value={formatNumber(paymentInfo.totalAmount)}
+                                        value={formatNumberWithComma(paymentInfo.totalAmount)}
                                         readOnly
                                     />
                                 </td>
@@ -734,7 +730,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>선수금 (원화):</td>
                                 <td>
                                     <input
-                                        type="number"
+                                        type="text"
                                         min="0"
                                         name="depositKRW"
                                         value={paymentInfo.depositKRW}
@@ -771,7 +767,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>선수금 (엔화):</td>
                                 <td>
                                     <input
-                                        type="number"
+                                        type="text"
                                         min="0"
                                         name="depositJPY"
                                         value={paymentInfo.depositJPY}
@@ -808,7 +804,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>선수금 (달러):</td>
                                 <td>
                                     <input
-                                        type="number"
+                                        type="text"
                                         min="0"
                                         name="depositUSD"
                                         value={paymentInfo.depositUSD}
@@ -850,7 +846,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="totalDeposit"
-                                        value={formatNumber(paymentInfo.totalDeposit)}
+                                        value={formatNumberWithComma(paymentInfo.totalDeposit)}
                                         readOnly
                                     />
                                 </td>
@@ -878,7 +874,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="balance"
-                                        value={formatNumber(paymentInfo.balance)}
+                                        value={formatNumberWithComma(paymentInfo.balance)}
                                         readOnly
                                     />
                                 </td>
