@@ -25,6 +25,23 @@ class OrderList extends Component {
       });
   }
 
+  handleDownloadExcel = () => {
+    axios({
+      url: 'https://server-6kol.onrender.com/api/v1/orders/downloads/',
+      method: 'GET',
+      responseType: 'blob', // 중요: 서버에서 blob 형태로 응답을 받음
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', '주문data.xlsx'); // 파일 다운로드 이름 설정
+      document.body.appendChild(link);
+      link.click();
+    }).catch(error => {
+      console.error('다운로드 중 오류 발생:', error);
+    });
+  }
+
   render() {
     const { orders, error } = this.state;
 
@@ -37,6 +54,7 @@ class OrderList extends Component {
           <h2>
           <Link to={'/orders/new'}>새로운 주문 넣기</Link></h2>
           <h2>주문 목록</h2>
+          <button onClick={this.handleDownloadExcel}>엑셀로 다운로드</button>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             {orders.map(order => (
               <li key={order.orderNumber} style={{ display: 'flex', marginBottom: '10px' }}>
