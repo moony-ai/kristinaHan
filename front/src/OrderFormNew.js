@@ -75,9 +75,9 @@ function OrderForm({ loggedInUserInfo }) {
         payerName: null,            // 결제자 이름
         relationToOrderer: '본인', // 주문자와의 관계
         totalAmount: 0,           // 결제 총액
-        depositKRW: null,           // 선수금 (원화)
-        depositJPY: null,           // 선수금 (엔화)
-        depositUSD: null,           // 선수금 (달러)
+        depositKRW: 0,           // 선수금 (원화)
+        depositJPY: 0,           // 선수금 (엔화)
+        depositUSD: 0,           // 선수금 (달러)
         totalDeposit: 0,          // 선수금 총액 (환전된 원화)
         balance: null,               // 잔금
         depositDate: null, // 선수금 결제일
@@ -148,33 +148,29 @@ function OrderForm({ loggedInUserInfo }) {
         JPY: 80 / 9,  // 원/엔 초기값
     });
 
-    const handleExchangeRateChange = (e) => {
-        setExchangeRates({ ...exchangeRates, [e.target.name]: e.target.value });
-    };
-
     // 선수금 계산
     const handleDepositChange = (e) => {
         const { name, value } = e.target;
         let numValue = Math.round(Number(value)) || 0; // 소수점 이하를 반올림
-
+    
         // 갱신된 선수금을 계산
         let updatedDeposits = {
             ...paymentInfo,
             [name]: numValue
         };
-
+    
         // 선수금 총액 계산
         const depositKRW = Number(updatedDeposits.depositKRW) || 0;
         const depositJPY = (Number(updatedDeposits.depositJPY) || 0) * Number(exchangeRates.JPY);
         const depositUSD = (Number(updatedDeposits.depositUSD) || 0) * Number(exchangeRates.USD);
         const totalDeposit = Math.round(depositKRW + depositJPY + depositUSD);
-
+    
         // 선수금 총액이 결제 총액을 초과하는 경우 조정
         if (totalDeposit > paymentInfo.totalAmount) {
             numValue = numValue - (totalDeposit - paymentInfo.totalAmount) / (name === 'depositKRW' ? 1 : (name === 'depositJPY' ? Number(exchangeRates.JPY) : Number(exchangeRates.USD)));
             numValue = Math.round(numValue); // 반올림 처리
         }
-
+    
         // 상태 업데이트
         setPaymentInfo(prev => ({
             ...prev,
@@ -182,21 +178,12 @@ function OrderForm({ loggedInUserInfo }) {
         }));
     };
 
-    // 선수금 계산 반영
-    useEffect(() => {
-        const depositKRW = Number(paymentInfo.depositKRW) || 0;
-        const depositJPY = (Number(paymentInfo.depositJPY) || 0) * Number(exchangeRates.JPY);
-        const depositUSD = (Number(paymentInfo.depositUSD) || 0) * Number(exchangeRates.USD);
-        const totalDeposit = Math.round(Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount));
+    // 천단위 계산 표시
+    function formatNumber(num) {
+        return new Intl.NumberFormat('ko-KR').format(num);
+    }
 
-        setPaymentInfo(prev => ({
-            ...prev,
-            totalDeposit,
-            balance: prev.totalAmount - totalDeposit
-        }));
-    }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount, exchangeRates]);
-
-    //결제 총액 자동계산
+    //결제 총액 자동계
     useEffect(() => {
         let total = 0;
         if (productInfo.jacketSize) total += productPrices.jacket;
@@ -211,6 +198,20 @@ function OrderForm({ loggedInUserInfo }) {
 
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
     }, [productInfo]);
+
+    // 잔금 계산
+    useEffect(() => {
+        const depositKRW = Number(paymentInfo.depositKRW) || 0;
+        const depositJPY = (Number(paymentInfo.depositJPY) || 0) * Number(exchangeRates.JPY);
+        const depositUSD = (Number(paymentInfo.depositUSD) || 0) * Number(exchangeRates.USD);
+        const totalDeposit = Math.round(Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount));
+
+        setPaymentInfo(prev => ({
+            ...prev,
+            totalDeposit,
+            balance: prev.totalAmount - totalDeposit
+        }));
+    }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount, exchangeRates]);
 
     // 저장요청 
     const handleSubmit = (e) => {
@@ -596,7 +597,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="totalAmount"
-                                        value={paymentInfo.totalAmount}
+                                        value={formatNumber(paymentInfo.totalAmount)}
                                         readOnly
                                     />
                                 </td>
@@ -738,7 +739,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="totalDeposit"
-                                        value={paymentInfo.totalDeposit}
+                                        value={formatNumber(paymentInfo.totalDeposit)}
                                         readOnly
                                     />
                                 </td>
@@ -766,7 +767,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="balance"
-                                        value={paymentInfo.balance}
+                                        value={formatNumber(paymentInfo.balance)}
                                         readOnly
                                     />
                                 </td>

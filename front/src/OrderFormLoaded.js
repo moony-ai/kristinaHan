@@ -83,7 +83,7 @@ function OrderForm({ loggedInUserInfo }) {
         balance: null,               // 잔금
         depositDate: null, // 선수금 결제일
         balanceDate: null, // 잔금 결제일
-        paymentMethodKRW: "현금", 
+        paymentMethodKRW: "현금",
         paymentMethodJPY: "현금",
         paymentMethodUSD: "현금",
 
@@ -150,14 +150,20 @@ function OrderForm({ loggedInUserInfo }) {
         JPY: 80 / 9,  // 원/엔 초기값
     });
 
-    const handleExchangeRateChange = (e) => {
-        setExchangeRates({ ...exchangeRates, [e.target.name]: e.target.value });
-    };
+    // const handleExchangeRateChange = (e) => {
+    //     setExchangeRates({ ...exchangeRates, [e.target.name]: e.target.value });
+    // };
+
+    // 천단위 계산 표시
+    function formatNumber(num) {
+        return new Intl.NumberFormat('ko-KR').format(num);
+    }
 
     // 선수금 계산
     const handleDepositChange = (e) => {
         const { name, value } = e.target;
-        let numValue = Math.round(Number(value)) || 0; // 소수점 이하를 반올림
+        // 쉼표를 제거하고 숫자로 변환
+        let numValue = Math.round(Number(value.replace(/,/g, ''))) || 0; // 소수점 이하를 반올림
 
         // 갱신된 선수금을 계산
         let updatedDeposits = {
@@ -173,15 +179,20 @@ function OrderForm({ loggedInUserInfo }) {
 
         // 선수금 총액이 결제 총액을 초과하는 경우 조정
         if (totalDeposit > paymentInfo.totalAmount) {
-            numValue = numValue - (totalDeposit - paymentInfo.totalAmount) / (name === 'depositKRW' ? 1 : (name === 'depositJPY' ? Number(exchangeRates.JPY) : Number(exchangeRates.USD)));
-            numValue = Math.round(numValue); // 반올림 처리
+            const excessAmount = totalDeposit - paymentInfo.totalAmount;
+            const exchangeRate = name === 'depositKRW' ? 1 : (name === 'depositJPY' ? Number(exchangeRates.JPY) : Number(exchangeRates.USD));
+            numValue = numValue - Math.round(excessAmount / exchangeRate);
+            numValue = Math.max(0, numValue); // numValue가 0 이하가 되지 않도록 보장
         }
 
-        // 상태 업데이트
+        // 상태 업데이트 (쉼표 없이 숫자만 저장)
         setPaymentInfo(prev => ({
             ...prev,
-            [name]: numValue.toString()
+            [name]: numValue
         }));
+
+        // 입력 필드에 포맷팅된 값을 표시
+        e.target.value = formatNumber(numValue);
     };
 
     // 선수금 계산 반영
@@ -697,7 +708,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="totalAmount"
-                                        value={paymentInfo.totalAmount}
+                                        value={formatNumber(paymentInfo.totalAmount)}
                                         readOnly
                                     />
                                 </td>
@@ -839,7 +850,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="totalDeposit"
-                                        value={paymentInfo.totalDeposit}
+                                        value={formatNumber(paymentInfo.totalDeposit)}
                                         readOnly
                                     />
                                 </td>
@@ -867,7 +878,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     <input
                                         type="text"
                                         name="balance"
-                                        value={paymentInfo.balance}
+                                        value={formatNumber(paymentInfo.balance)}
                                         readOnly
                                     />
                                 </td>
