@@ -265,7 +265,7 @@ function OrderForm({ loggedInUserInfo }) {
             balanceDate: data.balanceDate,
             paymentMethodKRW: data.paymentMethodKRW,
             paymentMethodJPY: data.paymentMethodJPY,
-            aymentMethodUSD: data.aymentMethodUSD,
+            paymentMethodUSD: data.paymentMethodUSD,
         });
 
         setAlterationInfo({
@@ -285,6 +285,8 @@ function OrderForm({ loggedInUserInfo }) {
             axios.get(`https://server-6kol.onrender.com/api/v1/orders/${orderNumber}/`)
                 .then(response => {
                     const data = response.data;
+                    console.log("이게 data")
+                    console.log(orderNumber)
                     console.log(data)
                     // 데이터 넣기
                     setInfo(data)
@@ -365,6 +367,9 @@ function OrderForm({ loggedInUserInfo }) {
             payerName: paymentInfo.payerName,
             relationToOrderer: paymentInfo.relationToOrderer,
             totalAmount: paymentInfo.totalAmount,
+            paymentMethodKRW: paymentInfo.paymentMethodKRW,
+            paymentMethodJPY: paymentInfo.paymentMethodJPY,
+            paymentMethodUSD: paymentInfo.paymentMethodUSD,
             depositKRW: depositKRW,
             depositJPY: depositJPY,
             depositUSD: depositUSD,
@@ -807,7 +812,7 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
 
                             <tr>
-                                <td colspan="3"><hr /></td>
+                                <td colSpan="3"><hr /></td>
                             </tr>
                             {/* 선수금 총액 */}
                             <tr>
@@ -851,7 +856,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>원</td>
                             </tr>
                             <tr>
-                                <td colspan="3"><hr /></td>
+                                <td colSpan="3"><hr /></td>
                             </tr>
                         </tbody>
                     </table>

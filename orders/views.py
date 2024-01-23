@@ -6,7 +6,7 @@ from .serializers import OrderListSerializer, OrderDetailSerializer
 
 class OrderList(APIView):
     def get(self, request, format=None):
-        orders = Order.objects.all()
+        orders = Order.objects.filter(is_deleted=False) # 소프트 삭제된 객체를 제외하고 쿼리
         serializer = OrderListSerializer(orders, many=True)
         return Response(serializer.data)
 
@@ -20,13 +20,13 @@ class OrderList(APIView):
 class OrderDetail(APIView):
     def get_object(self, pk):
         try:
-            return Order.objects.get(pk=pk)
+            return Order.objects.get(pk=pk, is_deleted=False)
         except Order.DoesNotExist:
             raise status.HTTP_404_NOT_FOUND
 
     def get(self, request, pk, format=None):
-        orders = Order.objects.filter(is_deleted=False) # 소프트 삭제된 객체를 제외하고 쿼리
-        serializer = OrderListSerializer(orders, many=True)
+        order = self.get_object(pk) 
+        serializer = OrderDetailSerializer(order)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -43,6 +43,30 @@ class OrderDetail(APIView):
         order.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class DeletedList(APIView):
+    def get(self, request, format=None):
+        orders = Order.objects.filter(is_deleted=True) # 소프트 삭제된 객체를 제외하고 쿼리
+        serializer = OrderListSerializer(orders, many=True)
+        return Response(serializer.data)
+
+class DeletedDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Order.objects.get(pk=pk, is_deleted=True)
+        except Order.DoesNotExist:
+            raise status.HTTP_404_NOT_FOUND
+    
+    def get(self, request, pk, format=None):
+        order = self.get_object(pk) 
+        serializer = OrderDetailSerializer(order)
+        return Response(serializer.data)
+    
+    def delete(self, request, pk, format=None):
+        order = self.get_object(pk)
+        order.is_deleted = False # 소프트 삭제 
+        order.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
 # 필요한 패키지 임포트
 from openpyxl import Workbook

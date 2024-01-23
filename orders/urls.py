@@ -1,9 +1,11 @@
 # orders/urls.py
 from django.urls import path
-from .views import OrderList, OrderDetail, export_orders_to_excel
+from . import views 
 
 urlpatterns = [
-    path('', OrderList.as_view(), name='order-list'),
-    path('<int:pk>/', OrderDetail.as_view(), name='order-detail'),
-    path('downloads/', export_orders_to_excel, name='export_orders_to_excel'),
+    path('', views.OrderList.as_view(), name='order-list'),
+    path('<int:pk>/', views.OrderDetail.as_view(), name='order-detail'),
+    path('downloads/', views.export_orders_to_excel, name='export_orders_to_excel'),
+    path('deleted/', views.DeletedList.as_view(), name='deleted-list'),
+    path('deleted/<int:pk>', views.DeletedDetail.as_view(), name='deleted-detail')
 ]
