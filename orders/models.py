@@ -124,6 +124,7 @@ class Order(models.Model):
     jacketLength = models.CharField(max_length=50, blank=True, null=True)
     pantsWaistLength = models.CharField(max_length=50, blank=True, null=True)
     pantsLength = models.CharField(max_length=50, blank=True, null=True)
-
+    alterationMemo = models.TextField(blank=True, null=True)
+    
     def __str__(self):
         return self.orderNumber

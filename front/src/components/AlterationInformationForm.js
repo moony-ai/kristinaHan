@@ -7,7 +7,8 @@ function AlterationInformationForm({ updateAlterationInfo }) {
         jacketSleeveLength: '',   // 자켓 소매
         jacketLength: '',   // 자켓 기장
         pantsWaistLength: '',     // 바지 허리
-        pantsLength: ''     // 바지 기장
+        pantsLength: '',     // 바지 기장
+        alterationMemo: '' // 기장 메모
     });
 
     const handleChange = (e) => {
@@ -92,6 +93,19 @@ function AlterationInformationForm({ updateAlterationInfo }) {
                             />
                         </td>
                         <td>CM</td>
+                    </tr>
+                    {/* 기장 메모 */}
+                    <tr>
+                        <td>기장 메모:</td>
+                        <td colSpan="5">
+                            <textarea
+                                name="alterationMemo"
+                                value={alterationInfo.alterationMemo}
+                                onChange={handleChange}
+                                rows="4"
+                                style={{ width: '100%' }}
+                            />
+                        </td>
                     </tr>
                 </tbody>
             </table>

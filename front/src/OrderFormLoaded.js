@@ -102,8 +102,9 @@ function OrderForm({ loggedInUserInfo }) {
         jacketSleeveLength: '',   // 자켓 소매
         jacketLength: '',   // 자켓 기장
         pantsWaistLength: '',     // 바지 허리
-        pantsLength: ''     // 바지 기장
-        // 추가적인 수선 정보 상태 초기화
+        pantsLength: '',     // 바지 기장
+        alterationMemo: '' // 기장 메모
+
     });
 
     const alterationInfoHandleChange = (e) => {
@@ -134,21 +135,21 @@ function OrderForm({ loggedInUserInfo }) {
 
     // 가격 정보
     const productPrices = {
-        jacket: 1500000, // 예시 가격
-        pants: 1000000,
-        shirt: 100000,
-        dress: 2000000,
-        ringMen: 150000,
-        ringWomen: 150000,
-        necklace: 200000,
-        earring: 200000,
-        bowtie: 300000,
+        jacket: 440000,
+        pants: 240000,
+        shirt: 80000,
+        dress: 700000,
+        ringMen: 750000,
+        ringWomen: 750000,
+        necklace: 800000,
+        earring: 500000,
+        bowtie: 40000,
     };
 
     //환율 정보
     const [exchangeRates, setExchangeRates] = useState({
-        USD: 1300, // 원/달러 초기값
-        JPY: 900,  // 원/엔 초기값
+        USD: 800000 / 620, // 원/달러 초기값
+        JPY: 80 / 9,  // 원/엔 초기값
     });
 
     const handleExchangeRateChange = (e) => {
@@ -190,7 +191,7 @@ function OrderForm({ loggedInUserInfo }) {
         const depositKRW = Number(paymentInfo.depositKRW) || 0;
         const depositJPY = (Number(paymentInfo.depositJPY) || 0) * Number(exchangeRates.JPY);
         const depositUSD = (Number(paymentInfo.depositUSD) || 0) * Number(exchangeRates.USD);
-        const totalDeposit = Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount);
+        const totalDeposit = Math.round(Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount));
 
         setPaymentInfo(prev => ({
             ...prev,
@@ -300,17 +301,48 @@ function OrderForm({ loggedInUserInfo }) {
         const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
         const depositUSD = parseFloat(paymentInfo.depositUSD) || 0;
 
+        // 필수 항목 목록
+        const requiredFields = {
+            'ordererInfo.ordererName': '주문자 이름',
+            'ordererInfo.affiliation': '소속',
+            'ordererInfo.contact': '연락처',
+            'orderInfo.creator': '작성자',
+            'orderInfo.modifier': '수정자',
+        };
+
+        // 필수 항목 검사
+        const missingFieldNames = Object.keys(requiredFields).filter(fieldKey => {
+            const keys = fieldKey.split('.');
+            let value = eval(keys.shift());
+            for (let key of keys) {
+                value = value[key];
+                if (value === undefined || value === '' || value === null) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        // 누락된 필수 항목의 설명들을 배열로 추출
+        const missingFieldDescriptions = missingFieldNames.map(fieldName => requiredFields[fieldName]);
+
+        // 필수 항목 누락 시 경고 메시지
+        if (missingFieldDescriptions.length > 0) {
+            alert('다음 필수 항목이 누락되었습니다: ' + missingFieldDescriptions.join(', '));
+            return; // 폼 제출 중단
+        }
+
         // 클라이언트 상태를 서버 모델에 맞게 매핑
         const mappedData = {
-            ordererName: ordererInfo.ordererName,
-            affiliation: ordererInfo.affiliation,
-            contact: ordererInfo.contact,
+            ordererName: ordererInfo.ordererName, // 필수 
+            affiliation: ordererInfo.affiliation, // 필수
+            contact: ordererInfo.contact, // 필수
             address: ordererInfo.address,
             orderStatus: orderInfo.orderStatus,
             orderNumber: orderInfo.orderNumber,
             creator: orderInfo.creator,
             creationTime: orderInfo.creationTime,
-            modifier: orderInfo.modifier,
+            modifier: orderInfo.modifier, // 필수
             lastModifiedTime: orderInfo.lastModifiedTime,
             deliveryMethod: orderInfo.deliveryMethod,
             tuxedoType: productInfo.tuxedoType,
@@ -391,8 +423,8 @@ function OrderForm({ loggedInUserInfo }) {
                     수령 방법:
                     <select className="form-select" name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
                         <option value="배송">배송</option>
-                        <option value="직접수령">직접 수령</option>
-                        <option value="방문수령">방문 수령</option>
+                        <option value="직접수령">현장 수령</option>
+                        <option value="방문수령">매장 수령</option>
                     </select>
                 </label>
             </fieldset>
@@ -684,7 +716,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                                 <td>엔</td>
-                                <td>엔화 환율:</td>
+                                {/* <td>엔화 환율:</td>
                                 <td>
                                     <input
                                         type="number"
@@ -694,7 +726,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={handleExchangeRateChange}
                                     />
                                 </td>
-                                <td>원</td>
+                                <td>원</td> */}
                             </tr>
 
                             {/* 선수금 (달러) */}
@@ -710,7 +742,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                                 <td>달러</td>
-                                <td>달러 환율:</td>
+                                {/* <td>달러 환율:</td>
                                 <td>
                                     <input
                                         type="number"
@@ -720,7 +752,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={handleExchangeRateChange}
                                     />
                                 </td>
-                                <td>원</td>
+                                <td>원</td> */}
                             </tr>
                             <tr>
                                 <td colspan="3"><hr /></td>
@@ -849,6 +881,19 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                                 <td>CM</td>
+                            </tr>
+                            {/* 기장 메모 */}
+                            <tr>
+                                <td>기장 메모:</td>
+                                <td colSpan="5">
+                                    <textarea
+                                        name="alterationMemo"
+                                        value={alterationInfo.alterationMemo}
+                                        onChange={alterationInfoHandleChange}
+                                        rows="4"
+                                        style={{ width: '100%' }}
+                                    />
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -21,7 +21,7 @@ function OrderForm({ loggedInUserInfo }) {
         alterationInfo: {},
 
         // 주문 정보
-        creator: '작성자를 입력하세요.',            // 작성자
+        creator: null,            // 작성자
         creationTime: null,       // 최초 작성 시간
         lastModifiedTime: null,   // 최근 수정 시간
         modifier: null,           // 수정자
@@ -93,7 +93,7 @@ function OrderForm({ loggedInUserInfo }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
         // 12자리 무작위 문자열 생성
@@ -106,19 +106,50 @@ function OrderForm({ loggedInUserInfo }) {
         const depositJPY = parseFloat(orderData.paymentInfo.depositJPY) || 0;
         const depositUSD = parseFloat(orderData.paymentInfo.depositUSD) || 0;
 
+        // 필수 항목 목록
+        const requiredFields = {
+            'ordererInfo.ordererName': '주문자 이름',
+            'ordererInfo.affiliation': '소속',
+            'ordererInfo.contact': '연락처',
+            'creator': '작성자',
+            'paymentInfo.payerName': '결제자 이름',
+        };
+
+        // 필수 항목 검사
+        const missingFieldNames = Object.keys(requiredFields).filter(fieldKey => {
+            const keys = fieldKey.split('.');
+            let value = orderData;
+            for (let key of keys) {
+                if (value[key] === undefined || value[key] === '' || value[key] === null) {
+                    return true;
+                }
+                value = value[key];
+            }
+            return false;
+        });
+
+        // 누락된 필수 항목의 설명들을 배열로 추출
+        const missingFieldDescriptions = missingFieldNames.map(fieldName => requiredFields[fieldName]);
+
+        // 필수 항목 누락 시 경고 메시지
+        if (missingFieldDescriptions.length > 0) {
+            alert('다음 필수 항목이 누락되었습니다: ' + missingFieldDescriptions.join(', '));
+            return; // 폼 제출 중단
+        }
+
         // 클라이언트 상태를 서버 모델에 맞게 매핑
         const mappedData = {
-            ordererName: orderData.ordererInfo.ordererName,
-            affiliation: orderData.ordererInfo.affiliation,
-            contact: orderData.ordererInfo.contact,
+            ordererName: orderData.ordererInfo.ordererName, // 필수
+            affiliation: orderData.ordererInfo.affiliation, // 필수
+            contact: orderData.ordererInfo.contact, // 필수
             address: orderData.ordererInfo.address,
-            orderStatus: orderData.orderStatus,
-            orderNumber: orderData.orderNumber,
-            creator: orderData.creator,
-            creationTime: orderData.creationTime,
+            orderStatus: orderData.orderStatus, // 필수
+            orderNumber: orderData.orderNumber, // 필수
+            creator: orderData.creator, // 필수
+            creationTime: orderData.creationTime, // 필수
             modifier: orderData.modifier,
             lastModifiedTime: orderData.lastModifiedTime,
-            deliveryMethod: orderData.deliveryMethod,
+            deliveryMethod: orderData.deliveryMethod, // 필수
             tuxedoType: orderData.productInfo.tuxedoType,
             jacketSize: orderData.productInfo.jacketSize,
             pantsSize: orderData.productInfo.pantsSize,
@@ -130,9 +161,9 @@ function OrderForm({ loggedInUserInfo }) {
             necklaceSize: orderData.productInfo.necklaceSize,
             earringType: orderData.productInfo.earringType,
             bowtie: orderData.productInfo.bowtie,
-            payerName: orderData.paymentInfo.payerName,
-            relationToOrderer: orderData.paymentInfo.relationToOrderer,
-            totalAmount: orderData.paymentInfo.totalAmount,
+            payerName: orderData.paymentInfo.payerName, // 필수
+            relationToOrderer: orderData.paymentInfo.relationToOrderer, // 필수
+            totalAmount: orderData.paymentInfo.totalAmount, // 필수
             depositKRW: depositKRW,
             depositJPY: depositJPY,
             depositUSD: depositUSD,
@@ -146,6 +177,7 @@ function OrderForm({ loggedInUserInfo }) {
             jacketLength: orderData.alterationInfo.jacketLength,
             pantsWaistLength: orderData.alterationInfo.pantsWaistLength,
             pantsLength: orderData.alterationInfo.pantsLength,
+            alterationMemo: orderData.alterationInfo.alterationMemo,
         };
 
         console.log(mappedData)
@@ -168,18 +200,19 @@ function OrderForm({ loggedInUserInfo }) {
         <form className="form-container" onSubmit={handleSubmit}>
             <fieldset>
                 <legend>주문 정보</legend>
-                <div>작성자: <input
+                <div>작성자*: <input
                     type="text"
+                    placeholder='작성자를 입력하세요.'
                     value={orderData.creator}
                     onChange={handleCreatorChange}
                 /></div>
-                <div>최초 작성 시간: {orderData.creationTime}</div>
+                {/* <div>최초 작성 시간: {orderData.creationTime}</div> */}
                 {/* <div>수정자: {orderData.modifier}</div>
                 <div>최근 수정 시간: {orderData.lastModifiedTime}</div> */}
-                <div>주문서 번호: {orderData.orderNumber}</div>
+                {/* <div>주문서 번호: {orderData.orderNumber}</div> */}
 
                 <div>
-                    주문 상태:
+                    주문 상태*:
                     {orderStatusOptions.map((status, index) => (
                         <label key={index}>
                             <input
@@ -194,11 +227,11 @@ function OrderForm({ loggedInUserInfo }) {
                     ))}
                 </div>
                 <label className="form-label">
-                    수령 방법:
+                    수령 방법*:
                     <select className="form-select" name="deliveryMethod" value={orderData.deliveryMethod} onChange={handleChange}>
                         <option value="배송">배송</option>
-                        <option value="직접수령">직접 수령</option>
-                        <option value="방문수령">방문 수령</option>
+                        <option value="직접수령">현장 수령</option>
+                        <option value="방문수령">매장 수령</option>
                     </select>
                 </label>
             </fieldset>

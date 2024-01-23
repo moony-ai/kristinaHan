@@ -24,7 +24,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                 <tbody>
                     {/* 주문자 이름 */}
                     <tr>
-                        <td>주문자 이름:</td>
+                        <td>주문자 이름*:</td>
                         <td>
                             <input
                                 type="text"
@@ -34,7 +34,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                                 onBlur={handleBlur} 
                             />
                         </td>
-                        <td>연락처:</td>
+                        <td>연락처*:</td>
                         <td>
                             <input
                                 type="text"
@@ -48,7 +48,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
 
                     {/* 소속 */}
                     <tr>
-                        <td>소속:</td>
+                        <td>소속*:</td>
                         <td>
                             <input
                                 type="text"
@@ -63,7 +63,7 @@ function OrdererInformationForm({ updateOrdererInfo, deliveryMethod }) {
                     {/* 배송지 주소 - 수령 방법이 '배송'인 경우에만 표시 */}
                     {deliveryMethod === "배송" && (
                         <tr>
-                            <td>배송지 주소:</td>
+                            <td>배송지 주소*:</td>
                             <td>
                                 <input
                                     type="text"

@@ -15,15 +15,15 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
     });
     
     const productPrices = {
-        jacket: 1500000, // 예시 가격
-        pants: 1000000,
-        shirt: 100000,
-        dress: 2000000,
-        ringMen: 150000,
-        ringWomen: 150000,
-        necklace: 200000,
-        earring: 200000,
-        bowtie: 300000,
+        jacket: 440000, 
+        pants: 240000,
+        shirt: 80000,
+        dress: 700000,
+        ringMen: 750000,
+        ringWomen: 750000,
+        necklace: 800000,
+        earring: 500000,
+        bowtie: 40000,
     };
 
     // 결제일
@@ -33,8 +33,8 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
 
     //환율 관련 
     const [exchangeRates, setExchangeRates] = useState({
-        USD: 1300, // 원/달러 초기값
-        JPY: 900,  // 원/엔 초기값
+        USD: 800000/620, // 원/달러 초기값
+        JPY: 80/9,  // 원/엔 초기값
     });
 
     const handleExchangeRateChange = (e) => {
@@ -94,7 +94,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
         const depositKRW = Number(paymentInfo.depositKRW) || 0;
         const depositJPY = (Number(paymentInfo.depositJPY) || 0) * Number(exchangeRates.JPY);
         const depositUSD = (Number(paymentInfo.depositUSD) || 0) * Number(exchangeRates.USD);
-        const totalDeposit = Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount);
+        const totalDeposit = Math.round(Math.min(depositKRW + depositJPY + depositUSD, paymentInfo.totalAmount));
 
         setPaymentInfo(prev => ({
             ...prev,
@@ -112,7 +112,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
             <tbody>
                 {/* 결제자 이름 */}
                 <tr>
-                    <td>결제자 이름:</td>
+                    <td>결제자 이름*:</td>
                     <td>
                         <input
                             type="text"
@@ -125,7 +125,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
 
                 {/* 주문자와의 관계 */}
                 <tr>
-                    <td>주문자와의 관계:</td>
+                    <td>주문자와의 관계*:</td>
                     <td>
                         <select
                             name="relationToOrderer"
@@ -200,7 +200,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
                         />
                     </td>
                     <td>엔</td>
-                    <td>엔화 환율:</td>
+                    {/* <td>엔화 환율:</td>
                     <td>
                         <input
                             type="number"
@@ -210,7 +210,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
                             onChange={handleExchangeRateChange}
                         />
                     </td>
-                    <td>원</td>
+                    <td>원</td> */}
                 </tr>
 
                 {/* 선수금 (달러) */}
@@ -226,7 +226,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
                         />
                     </td>
                     <td>달러</td>
-                    <td>달러 환율:</td>
+                    {/* <td>달러 환율:</td>
                     <td>
                         <input
                             type="number"
@@ -236,7 +236,7 @@ function PaymentInformationForm({ productInfo, updatePaymentInfo }) {
                             onChange={handleExchangeRateChange}
                         />
                     </td>
-                    <td>원</td>
+                    <td>원</td> */}
                 </tr>
                 <tr>
                     <td colspan="3"><hr /></td>
