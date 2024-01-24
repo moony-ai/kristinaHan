@@ -60,7 +60,7 @@ class OrderList(APIView):
         serializer = OrderDetailSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            append_to_sheet(serializer.data.values()) # Google Sheets에 데이터 추가
+            # append_to_sheet(serializer.data.values()) # Google Sheets에 데이터 추가
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

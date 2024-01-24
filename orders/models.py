@@ -41,9 +41,7 @@ class Order(models.Model):
     # 결제 정보
     payerName = models.CharField(max_length=100, blank=False)
     relationToOrderer = models.CharField(max_length=50, blank=False)
-    totalAmount = models.DecimalField(
-        max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)]
-    )
+    totalAmount = models.DecimalField(max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)])
     depositKRW = models.DecimalField(
         max_digits=10,
         decimal_places=0,
@@ -72,15 +70,20 @@ class Order(models.Model):
         null=True,
         validators=[MinValueValidator(0)],
     )
-    balance = models.DecimalField(
-        max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)]
-    )
+    balanceKRW = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
+    balanceJPY = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
+    balanceUSD = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
+    balance = models.DecimalField(max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)])
+    
     depositDate = models.DateField(blank=True, null=True)
     balanceDate = models.DateField(blank=True, null=True)
     
-    paymentMethodKRW = models.CharField(max_length=10, blank=True, null=True)
-    paymentMethodJPY = models.CharField(max_length=10, blank=True, null=True)
-    paymentMethodUSD = models.CharField(max_length=10, blank=True, null=True)
+    paymentMethodDepositKRW = models.CharField(max_length=50, blank=True, null=True)
+    paymentMethodDepositJPY = models.CharField(max_length=50, blank=True, null=True)
+    paymentMethodDepositUSD = models.CharField(max_length=50, blank=True, null=True)
+    paymentMethodBalanceKRW = models.CharField(max_length=50, blank=True, null=True)
+    paymentMethodBalanceJPY = models.CharField(max_length=50, blank=True, null=True)
+    paymentMethodBalanceUSD = models.CharField(max_length=50, blank=True, null=True)
 
     # 수선 정보
     dressBackWidth = models.CharField(max_length=50, blank=True, null=True)

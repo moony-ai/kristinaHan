@@ -36,7 +36,7 @@ function OrderForm({ loggedInUserInfo }) {
         contact: null,
         affiliation: null,
         address: null,
-        spouseName: null, 
+        spouseName: null,
         spouseContact: null,
         spouseAffiliation: null,
     });
@@ -62,9 +62,23 @@ function OrderForm({ loggedInUserInfo }) {
         // 추가적인 제품 정보 상태 초기화
     });
 
-    const productInfoHandleChange = (e) => {
-        setProductInfo({ ...productInfo, [e.target.name]: e.target.value });
-    }
+    const productInfoHandleChange = (event) => {
+        const { name, value } = event.target;
+
+        setProductInfo(prevState => {
+            let newState = { ...prevState, [name]: value };
+
+            if (name === "tuxedoType") {
+                if (value === "구매안함") {
+                    newState = { ...newState, jacketSize: "", pantsSize: "", shirtSize: "" };
+                }
+            } else if (name === "dressType") {
+                newState = { ...newState, dressSize: value === "구매안함" ? "" : prevState.dressSize };
+            }
+
+            return newState;
+        });
+    };
 
     const getPantsShirtSizeOptions = () => {
         return productInfo.tuxedoType.includes("S-Peaked") ? "S" : "R";
@@ -75,17 +89,28 @@ function OrderForm({ loggedInUserInfo }) {
         payerName: null,            // 결제자 이름
         relationToOrderer: '본인', // 주문자와의 관계
         totalAmount: 0,           // 결제 총액
+
         depositKRW: 0,           // 선수금 (원화)
         depositJPY: 0,           // 선수금 (엔화)
         depositUSD: 0,           // 선수금 (달러)
         totalDeposit: 0,          // 선수금 총액 (환전된 원화)
-        balance: null,               // 잔금
+
+        balanceKRW: 0,
+        balanceJPY: 0,
+        balanceUSD: 0,
+        totalBalance: 0,
+        balance: 0,         // 최종잔금
+
         depositDate: null, // 선수금 결제일
         balanceDate: null, // 잔금 결제일
-        paymentMethodKRW: "현금",
-        paymentMethodJPY: "현금",
-        paymentMethodUSD: "현금",
-        // 추가적인 결제 정보 상태 초기화
+
+        paymentMethodDepositKRW: "현금",
+        paymentMethodDepositJPY: "현금",
+        paymentMethodDepositUSD: "현금",
+
+        paymentMethodBalanceKRW: "현금",
+        paymentMethodBalanceJPY: "현금",
+        paymentMethodBalanceUSD: "현금",
     });
 
     const paymentInfoHandleChange = (e) => {
@@ -131,7 +156,7 @@ function OrderForm({ loggedInUserInfo }) {
 
     // 가격 정보
     const productPrices = {
-        jacket: 440000,
+        jacket: 480000,
         pants: 240000,
         shirt: 80000,
         dress: 700000,
@@ -139,7 +164,7 @@ function OrderForm({ loggedInUserInfo }) {
         ringWomen: 750000,
         necklace: 800000,
         earring: 500000,
-        bowtie: 40000,
+        // bowtie: 40000,
     };
 
     //환율 정보
@@ -147,6 +172,31 @@ function OrderForm({ loggedInUserInfo }) {
         USD: 800000 / 620, // 원/달러 초기값
         JPY: 80 / 9,  // 원/엔 초기값
     });
+
+
+    //천단위 
+    const formatNumberWithComma = (num) => {
+        if (num === null || num === undefined || isNaN(num)) {
+            return "";
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    //결제 총액 자동계
+    useEffect(() => {
+        let total = 0;
+        if (productInfo.jacketSize) total += productPrices.jacket;
+        if (productInfo.pantsSize) total += productPrices.pants;
+        if (productInfo.shirtSize) total += productPrices.shirt;
+        if (productInfo.dressSize) total += productPrices.dress;
+        if (productInfo.ringSizeMen) total += productPrices.ringMen;
+        if (productInfo.ringSizeWomen) total += productPrices.ringWomen;
+        if (productInfo.necklaceSize) total += productPrices.necklace;
+        if (productInfo.earringType) total += productPrices.earring;
+        if (productInfo.bowtie) total += productPrices.bowtie;
+
+        setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.totalDeposit || 0) - (prev.totalBalance) }));
+    }, [productInfo]);
 
     // 선수금 계산
     const handleDepositChange = (e) => {
@@ -181,58 +231,85 @@ function OrderForm({ loggedInUserInfo }) {
         }));
     };
 
-    //천단위 
-    const formatNumberWithComma = (num) => {
-        if (num === null || num === undefined || isNaN(num)) {
-            return "";
+    // 잔금 계산
+    const handleBalanceChange = (e) => {
+        const { name, value } = e.target;
+        // 쉼표를 제거하고 숫자로 변환
+        let numValue = value ? Math.round(Number(value.replace(/,/g, ''))) : 0;
+
+        // 갱신된 잔금을 계산
+        let updatedBalances = {
+            ...paymentInfo,
+            [name]: numValue
+        };
+
+        // 잔금 총액 계산
+        const balanceKRW = Number(updatedBalances.balanceKRW) || 0;
+        const balanceJPY = (Number(updatedBalances.balanceJPY) || 0) * Number(exchangeRates.JPY);
+        const balanceUSD = (Number(updatedBalances.balanceUSD) || 0) * Number(exchangeRates.USD);
+        const totalBalance = Math.round(balanceKRW + balanceJPY + balanceUSD);
+
+        // 선수금 총액이 결제 총액을 초과하는 경우 조정
+        if (totalBalance > (paymentInfo.totalAmount - paymentInfo.totalDeposit)) {
+            const excessAmount = totalBalance - (paymentInfo.totalAmount - paymentInfo.totalDeposit);
+            const exchangeRate = name === 'balanceKRW' ? 1 : (name === 'balanceJPY' ? Number(exchangeRates.JPY) : Number(exchangeRates.USD));
+            numValue = numValue - Math.round(excessAmount / exchangeRate);
+            numValue = Math.max(0, numValue); // numValue가 0 이하가 되지 않도록 보장
         }
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // 상태 업데이트 (포맷팅된 값으로 저장)
+        setPaymentInfo(prev => ({
+            ...prev,
+            [name]: formatNumberWithComma(numValue)
+        }));
     };
 
-    //결제 총액 자동계
+    // 전체 계산 반영
     useEffect(() => {
-        let total = 0;
-        if (productInfo.jacketSize) total += productPrices.jacket;
-        if (productInfo.pantsSize) total += productPrices.pants;
-        if (productInfo.shirtSize) total += productPrices.shirt;
-        if (productInfo.dressSize) total += productPrices.dress;
-        if (productInfo.ringSizeMen) total += productPrices.ringMen;
-        if (productInfo.ringSizeWomen) total += productPrices.ringWomen;
-        if (productInfo.necklaceSize) total += productPrices.necklace;
-        if (productInfo.earringType) total += productPrices.earring;
-        if (productInfo.bowtie) total += productPrices.bowtie;
-
-        setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.deposit || 0) }));
-    }, [productInfo]);
-
-    // 선수금 계산 반영
-    useEffect(() => {
+        // 선수금 총액 계산
         const depositKRW = Number((paymentInfo.depositKRW || '0').replace(/,/g, '')) || 0;
         const depositJPY = (Number((paymentInfo.depositJPY || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.JPY);
         const depositUSD = (Number((paymentInfo.depositUSD || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.USD);
         const totalDeposit = Math.round(depositKRW + depositJPY + depositUSD);
 
+        // 잔금 총액 계산
+        const balanceKRW = Number((paymentInfo.balanceKRW || '0').replace(/,/g, '')) || 0;
+        const balanceJPY = (Number((paymentInfo.balanceJPY || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.JPY);
+        const balanceUSD = (Number((paymentInfo.balanceUSD || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.USD);
+        const totalBalance = Math.round(balanceKRW + balanceJPY + balanceUSD);
+
         setPaymentInfo(prev => ({
             ...prev,
             totalDeposit,
-            balance: prev.totalAmount - totalDeposit
+            balance: prev.totalAmount - totalDeposit - totalBalance
         }));
-    }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount, exchangeRates]);
+    }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount,
+    paymentInfo.balanceKRW, paymentInfo.balanceJPY, paymentInfo.balanceUSD, exchangeRates]);
+
+    // 고유 ID 생성 함수
+    const generateUniqueID = () => {
+        // "100K"로 시작하고 뒤에 12자리 랜덤 숫자를 붙임
+        return "100K" + Math.floor(Math.random() * 1e12).toString().padStart(12, '0');
+    };
 
     // 저장요청 
     const handleSubmit = (e) => {
         e.preventDefault();
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
-        // 12자리 무작위 문자열 생성
-        const randomString = Math.random().toString(36).substring(2, 14);
-
         orderInfo.creationTime = currentTime
-        orderInfo.orderNumber = randomString
+
+        // 12자리 무작위 문자열 생성
+        if (!orderInfo.orderNumber) {
+            orderInfo.orderNumber = generateUniqueID();
+        }
 
         const depositKRW = parseFloat(paymentInfo.depositKRW) || 0;
         const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
         const depositUSD = parseFloat(paymentInfo.depositUSD) || 0;
+        const balanceKRW = parseFloat(paymentInfo.balanceKRW) || 0;
+        const balanceJPY = parseFloat(paymentInfo.balanceJPY) || 0;
+        const balanceUSD = parseFloat(paymentInfo.balanceUSD) || 0;
 
         // 필수 항목 목록
         const requiredFields = {
@@ -276,9 +353,9 @@ function OrderForm({ loggedInUserInfo }) {
             spouseAffiliation: ordererInfo.spouseAffiliation,
             orderStatus: orderInfo.orderStatus,
             orderNumber: orderInfo.orderNumber,
-            creator: orderInfo.creator,
+            creator: orderInfo.creator, // 필수
             creationTime: orderInfo.creationTime,
-            modifier: orderInfo.modifier, // 필수
+            modifier: orderInfo.modifier,
             lastModifiedTime: orderInfo.lastModifiedTime,
             deliveryMethod: orderInfo.deliveryMethod,
             tuxedoType: productInfo.tuxedoType,
@@ -292,17 +369,23 @@ function OrderForm({ loggedInUserInfo }) {
             necklaceSize: productInfo.necklaceSize,
             earringType: productInfo.earringType,
             bowtie: productInfo.bowtie,
-            payerName: paymentInfo.payerName,
-            relationToOrderer: paymentInfo.relationToOrderer,
-            totalAmount: paymentInfo.totalAmount,
-            paymentMethodKRW: paymentInfo.paymentMethodKRW,
-            paymentMethodJPY: paymentInfo.paymentMethodJPY,
-            paymentMethodUSD: paymentInfo.paymentMethodUSD,
+            payerName: paymentInfo.payerName, // 필수
+            relationToOrderer: paymentInfo.relationToOrderer, // 필수
+            totalAmount: paymentInfo.totalAmount, // 필수
+            paymentMethodDepositKRW: paymentInfo.paymentMethodDepositKRW,
+            paymentMethodDepositJPY: paymentInfo.paymentMethodDepositJPY,
+            paymentMethodDepositUSD: paymentInfo.paymentMethodDepositUSD,
+            paymentMethodBalanceKRW: paymentInfo.paymentMethodBalanceKRW,
+            paymentMethodBalanceJPY: paymentInfo.paymentMethodBalanceJPY,
+            paymentMethodBalanceUSD: paymentInfo.paymentMethodBalanceUSD,
             depositKRW: depositKRW,
             depositJPY: depositJPY,
             depositUSD: depositUSD,
+            balanceKRW: balanceKRW,
+            balanceJPY: balanceJPY,
+            balanceUSD: balanceUSD,
             totalDeposit: paymentInfo.totalDeposit,
-            balance: paymentInfo.balance,
+            balance: paymentInfo.balance, // 필수
             depositDate: paymentInfo.depositDate,
             balanceDate: paymentInfo.balanceDate,
             dressBackWidth: alterationInfo.dressBackWidth,
@@ -401,6 +484,9 @@ function OrderForm({ loggedInUserInfo }) {
                     <table >
                         <tbody>
                             <tr>
+                                <td colSpan="3"><hr /></td>
+                            </tr>
+                            <tr>
                                 <td>배우자 이름:</td>
                                 <td>
                                     <input
@@ -485,6 +571,9 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 턱시도 섹션 */}
                             <tr>
+                                <td colSpan="3"><hr /></td>
+                            </tr>
+                            <tr>
                                 <td colSpan="4"><strong>턱시도</strong></td>
                             </tr>
                             <tr>
@@ -529,6 +618,9 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
 
                             {/* 드레스 섹션 */}
+                            <tr>
+                                <td colSpan="3"><hr /></td>
+                            </tr>
                             <tr>
                                 <td colSpan="4"><strong>드레스</strong></td>
                             </tr>
@@ -641,9 +733,9 @@ function OrderForm({ loggedInUserInfo }) {
                                     <label>
                                         <input
                                             type="radio"
-                                            name="paymentMethodKRW"
+                                            name="paymentMethodDepositKRW"
                                             value="현금"
-                                            checked={paymentInfo.paymentMethodKRW === "현금"}
+                                            checked={paymentInfo.paymentMethodDepositKRW === "현금"}
                                             onChange={paymentInfoHandleChange}
                                         />
                                         현금
@@ -651,16 +743,15 @@ function OrderForm({ loggedInUserInfo }) {
                                     <label>
                                         <input
                                             type="radio"
-                                            name="paymentMethodKRW"
+                                            name="paymentMethodDepositKRW"
                                             value="신용카드"
-                                            checked={paymentInfo.paymentMethodKRW === "신용카드"}
+                                            checked={paymentInfo.paymentMethodDepositKRW === "신용카드"}
                                             onChange={paymentInfoHandleChange}
                                         />
                                         신용카드
                                     </label>
                                 </td>
                             </tr>
-
                             {/* 선수금 (엔화) */}
                             <tr>
                                 <td>선수금 (엔화):</td>
@@ -678,9 +769,9 @@ function OrderForm({ loggedInUserInfo }) {
                                     <label>
                                         <input
                                             type="radio"
-                                            name="paymentMethodJPY"
+                                            name="paymentMethodDepositJPY"
                                             value="현금"
-                                            checked={paymentInfo.paymentMethodJPY === "현금"}
+                                            checked={paymentInfo.paymentMethodDepositJPY === "현금"}
                                             onChange={paymentInfoHandleChange}
                                         />
                                         현금
@@ -688,16 +779,15 @@ function OrderForm({ loggedInUserInfo }) {
                                     <label>
                                         <input
                                             type="radio"
-                                            name="paymentMethodJPY"
+                                            name="paymentMethodDepositJPY"
                                             value="신용카드"
-                                            checked={paymentInfo.paymentMethodJPY === "신용카드"}
+                                            checked={paymentInfo.paymentMethodDepositJPY === "신용카드"}
                                             onChange={paymentInfoHandleChange}
                                         />
                                         신용카드
                                     </label>
                                 </td>
                             </tr>
-
                             {/* 선수금 (달러) */}
                             <tr>
                                 <td>선수금 (달러):</td>
@@ -715,9 +805,9 @@ function OrderForm({ loggedInUserInfo }) {
                                     <label>
                                         <input
                                             type="radio"
-                                            name="paymentMethodUSD"
+                                            name="paymentMethodDepositUSD"
                                             value="현금"
-                                            checked={paymentInfo.paymentMethodUSD === "현금"}
+                                            checked={paymentInfo.paymentMethodDepositUSD === "현금"}
                                             onChange={paymentInfoHandleChange}
                                         />
                                         현금
@@ -725,18 +815,17 @@ function OrderForm({ loggedInUserInfo }) {
                                     <label>
                                         <input
                                             type="radio"
-                                            name="paymentMethodUSD"
+                                            name="paymentMethodDepositUSD"
                                             value="신용카드"
-                                            checked={paymentInfo.paymentMethodUSD === "신용카드"}
+                                            checked={paymentInfo.paymentMethodDepositUSD === "신용카드"}
                                             onChange={paymentInfoHandleChange}
                                         />
                                         신용카드
                                     </label>
                                 </td>
                             </tr>
-
                             <tr>
-                                <td colspan="3"><hr /></td>
+                                <td colSpan="3"><hr /></td>
                             </tr>
                             {/* 선수금 총액 */}
                             <tr>
@@ -766,6 +855,114 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
+                            {/* 잔금 지급액 (원화) */}
+                            <tr>
+                                <td>잔금 지급액 (원화):</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        min="0"
+                                        name="balanceKRW"
+                                        value={paymentInfo.balanceKRW}
+                                        onChange={handleBalanceChange}
+                                    />
+                                </td>
+                                <td>원</td>
+                                <td>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="paymentMethodBalanceKRW"
+                                            value="현금"
+                                            checked={paymentInfo.paymentMethodBalanceKRW === "현금"}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                        현금
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="paymentMethodBalanceKRW"
+                                            value="신용카드"
+                                            checked={paymentInfo.paymentMethodBalanceKRW === "신용카드"}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                        신용카드
+                                    </label>
+                                </td>
+                            </tr>
+                            {/* 잔금 지급액 (엔화) */}
+                            <tr>
+                                <td>잔금 지급액 (엔화):</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        min="0"
+                                        name="balanceJPY"
+                                        value={paymentInfo.balanceJPY}
+                                        onChange={handleBalanceChange}
+                                    />
+                                </td>
+                                <td>원</td>
+                                <td>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="paymentMethodBalanceJPY"
+                                            value="현금"
+                                            checked={paymentInfo.paymentMethodBalanceJPY === "현금"}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                        현금
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="paymentMethodBalanceJPY"
+                                            value="신용카드"
+                                            checked={paymentInfo.paymentMethodBalanceJPY === "신용카드"}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                        신용카드
+                                    </label>
+                                </td>
+                            </tr>
+                            {/* 잔금 지급액 (달러) */}
+                            <tr>
+                                <td>잔금 지급액 (달러):</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        min="0"
+                                        name="balanceUSD"
+                                        value={paymentInfo.balanceUSD}
+                                        onChange={handleBalanceChange}
+                                    />
+                                </td>
+                                <td>원</td>
+                                <td>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="paymentMethodBalanceUSD"
+                                            value="현금"
+                                            checked={paymentInfo.paymentMethodBalanceUSD === "현금"}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                        현금
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="paymentMethodBalanceUSD"
+                                            value="신용카드"
+                                            checked={paymentInfo.paymentMethodBalanceUSD === "신용카드"}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                        신용카드
+                                    </label>
+                                </td>
+                            </tr>
                             {/* 잔금 */}
                             <tr>
                                 <td>잔금:</td>
@@ -780,33 +977,11 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>원</td>
                             </tr>
                             <tr>
-                                <td colspan="3"><hr /></td>
+                                <td colSpan="3"><hr /></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                {/* 배송지 주소 - 수령 방법이 '배송'인 경우에만 표시 */}
-                {orderInfo.deliveryMethod === "배송" && (
-                    <tr>
-                        <label className="">
-                            수령 방법:
-                            <select name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
-                                <option value="배송">배송</option>
-                                <option value="직접수령">현장 수령</option>
-                                <option value="방문수령">매장 수령</option>
-                            </select>
-                        </label>
-                        <td>배송지 주소:</td>
-                        <td>
-                            <input
-                                type="text"
-                                name="address"
-                                value={ordererInfo.address}
-                                onChange={ordererInfoHandleChange}
-                            />
-                        </td>
-                    </tr>
-                )}
             </fieldset>
             {/* 수선정보 */}
             <fieldset>
@@ -898,6 +1073,32 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
+                            <tr>
+                                <td colSpan="3"><hr /></td>
+                            </tr>
+                            <tr>
+                                <td>수령 방법:</td>
+                                <td>
+                                    <select name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
+                                        <option value="배송">배송</option>
+                                        <option value="직접수령">현장 수령</option>
+                                        <option value="방문수령">매장 수령</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            {orderInfo.deliveryMethod === "배송" && (
+                                <tr>
+                                    <td>배송지 주소:</td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="address"
+                                            value={ordererInfo.address}
+                                            onChange={ordererInfoHandleChange}
+                                        />
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
