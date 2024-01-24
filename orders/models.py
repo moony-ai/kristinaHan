@@ -4,15 +4,9 @@ from django.core.validators import MinValueValidator
 
 
 class Order(models.Model):
-    # 주문자 정보
-    ordererName = models.CharField(max_length=100, blank=False)
-    affiliation = models.CharField(max_length=100, blank=False)
-    contact = models.CharField(max_length=100, blank=False)
-    address = models.TextField(blank=True, null=True)
-    spouseName = models.CharField(max_length=100, blank=True, null=True)
-    spouseContact = models.CharField(max_length=100, blank=True, null=True)
-    spouseAffiliation = models.CharField(max_length=100, blank=True, null=True)
-
+    # 소프트 삭제 기능 구현
+    is_deleted = models.BooleanField(default=False)
+    
     # 주문 정보
     orderStatus = models.CharField(max_length=50, blank=False)
     orderNumber = models.CharField(max_length=50, blank=False)
@@ -21,6 +15,15 @@ class Order(models.Model):
     modifier = models.CharField(max_length=100, blank=True, null=True)
     lastModifiedTime = models.DateTimeField(default=timezone.now, blank=True, null=True)
     deliveryMethod = models.CharField(max_length=50, blank=False)
+    
+    # 주문자 정보
+    ordererName = models.CharField(max_length=100, blank=False)
+    affiliation = models.CharField(max_length=100, blank=False)
+    contact = models.CharField(max_length=100, blank=False)
+    address = models.TextField(blank=True, null=True)
+    spouseName = models.CharField(max_length=100, blank=True, null=True)
+    spouseContact = models.CharField(max_length=100, blank=True, null=True)
+    spouseAffiliation = models.CharField(max_length=100, blank=True, null=True)
 
     # 제품 정보
     tuxedoType = models.CharField(max_length=100, blank=True, null=True)
@@ -87,10 +90,6 @@ class Order(models.Model):
     pantsWaistLength = models.CharField(max_length=50, blank=True, null=True)
     pantsLength = models.CharField(max_length=50, blank=True, null=True)
     alterationMemo = models.TextField(blank=True, null=True)
-    
-    # 소프트 삭제 기능 구현
-    is_deleted = models.BooleanField(default=False)
-
 
     def __str__(self):
         return self.orderNumber

@@ -7,5 +7,6 @@ urlpatterns = [
     path('<int:pk>/', views.OrderDetail.as_view(), name='order-detail'),
     path('downloads/', views.export_orders_to_excel, name='export_orders_to_excel'),
     path('deleted/', views.DeletedList.as_view(), name='deleted-list'),
-    path('deleted/<int:pk>', views.DeletedDetail.as_view(), name='deleted-detail')
+    path('deleted/<int:pk>', views.DeletedDetail.as_view(), name='deleted-detail'),
+    path('updategs/', views.UpdateSheetView.as_view(), name='update-sheet'),
 ]

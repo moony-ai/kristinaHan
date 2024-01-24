@@ -71,6 +71,20 @@ class OrderList extends Component {
       });
   }
 
+  // sheet 업데이트
+  handleUpdateSpreadsheet = () => {
+    axios.get('https://server-6kol.onrender.com/api/v1/orders/updategs/')
+      .then(response => {
+        console.log('스프레드시트 업데이트 완료:', response);
+        alert('스프레드시트가 성공적으로 업데이트되었습니다.');
+      })
+      .catch(error => {
+        console.error('스프레드시트 업데이트 중 오류 발생:', error);
+        alert('스프레드시트 업데이트 중 오류가 발생했습니다.');
+      });
+  }
+  
+
   render() {
     const { orders, deletedOrders, error, viewingDeleted } = this.state;
 
@@ -84,6 +98,7 @@ class OrderList extends Component {
           <Link to={'/orders/new'}>새로운 주문 넣기</Link></h2>
         <h2>주문 목록</h2>
         <button onClick={this.handleDownloadExcel}>엑셀로 다운로드</button>
+        <button onClick={this.handleUpdateSpreadsheet}>스프레드시트 업데이트</button>
         {!viewingDeleted && <button onClick={this.fetchDeletedOrders}>휴지통</button>}
         {viewingDeleted && <button onClick={this.switchToNormalView}>돌아가기</button>}
         <ul style={{ listStyleType: 'none', padding: 0 }}>

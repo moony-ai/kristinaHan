@@ -4,6 +4,40 @@ from rest_framework import status
 from .models import Order
 from .serializers import OrderListSerializer, OrderDetailSerializer
 
+# 구글스프레드에 접근하기 위한 코드
+import gspread
+from django.conf import settings
+
+sheet_url = "https://docs.google.com/spreadsheets/d/1JWVhe0TBAt024VKabqTXZX7VMDAESReu1GonVGJMVGU/edit?usp=drive_link"
+
+def update_sheet_with_db(sheet_url):
+    # Google Sheets API 인증
+    gc = gspread.service_account(filename=settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
+    sh = gc.open_by_url(sheet_url)
+    worksheet = sh.sheet1
+
+    # 스프레드시트의 모든 내용 삭제
+    worksheet.clear()
+
+    # 데이터베이스에서 Order 모델의 모든 데이터 가져오기
+    orders = Order.objects.all()
+
+    # 스프레드시트 업데이트를 위한 데이터 준비
+    all_data = []
+    for order in orders:
+        serializer = OrderDetailSerializer(order)
+        all_data.append(list(serializer.data.values()))
+
+    # 스프레드시트 업데이트
+    worksheet.append_rows(all_data)
+        
+# 구글 sheet 데이터 추가
+def append_to_sheet(data, sheet_url=sheet_url):
+    gc = gspread.service_account(filename=settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
+    sh = gc.open_by_url(sheet_url)
+    worksheet = sh.sheet1
+    worksheet.append_row(data)
+
 class OrderList(APIView):
     def get(self, request, format=None):
         orders = Order.objects.filter(is_deleted=False) # 소프트 삭제된 객체를 제외하고 쿼리
@@ -14,6 +48,7 @@ class OrderList(APIView):
         serializer = OrderDetailSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            append_to_sheet(serializer.data.values()) # Google Sheets에 데이터 추가
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -67,6 +102,15 @@ class DeletedDetail(APIView):
         order.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+# 구글 sheet를 DB와 연동
+class UpdateSheetView(APIView):
+    def get(self, request, format=None):
+        try:
+            update_sheet_with_db('Your Sheet Name')
+            return Response({"message": "Sheet updated successfully"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # 필요한 패키지 임포트
 from openpyxl import Workbook
@@ -127,3 +171,4 @@ def export_orders_to_excel(request):
     wb.save(response)
 
     return response
+
