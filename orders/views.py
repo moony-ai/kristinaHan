@@ -14,19 +14,25 @@ credentials = json.loads(settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
 
 def update_sheet_with_db(sheet_url=sheet_url, credentials=credentials):
     # Google Sheets API 인증
-    print("before connect", print(credentials))
     gc = gspread.service_account_from_dict(credentials)
     sh = gc.open_by_url(sheet_url)
     worksheet = sh.sheet1
-    print("connected!")
+
     # 스프레드시트의 모든 내용 삭제
     worksheet.clear()
 
     # 데이터베이스에서 Order 모델의 모든 데이터 가져오기
     orders = Order.objects.all()
-
-    print(orders)
     
+    # 열 이름 추출
+    if orders:
+        first_order = orders[0]
+        serializer = OrderDetailSerializer(first_order)
+        column_names = list(serializer.data.keys())
+
+        # 스프레드시트에 열 이름 추가
+        worksheet.append_row(column_names)
+
     # 스프레드시트 업데이트를 위한 데이터 준비
     all_data = []
     for order in orders:
@@ -35,6 +41,7 @@ def update_sheet_with_db(sheet_url=sheet_url, credentials=credentials):
 
     # 스프레드시트 업데이트
     worksheet.append_rows(all_data)
+
         
 # 구글 sheet 데이터 추가
 def append_to_sheet(data, sheet_url=sheet_url, credentials=credentials):
