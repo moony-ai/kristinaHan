@@ -7,21 +7,26 @@ from .serializers import OrderListSerializer, OrderDetailSerializer
 # 구글스프레드에 접근하기 위한 코드
 import gspread
 from django.conf import settings
+import json
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1JWVhe0TBAt024VKabqTXZX7VMDAESReu1GonVGJMVGU/edit?usp=drive_link"
+credentials = json.loads(settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
 
-def update_sheet_with_db(sheet_url):
+def update_sheet_with_db(sheet_url=sheet_url, credentials=credentials):
     # Google Sheets API 인증
-    gc = gspread.service_account(filename=settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
+    print("before connect", print(credentials))
+    gc = gspread.service_account_from_dict(credentials)
     sh = gc.open_by_url(sheet_url)
     worksheet = sh.sheet1
-
+    print("connected!")
     # 스프레드시트의 모든 내용 삭제
     worksheet.clear()
 
     # 데이터베이스에서 Order 모델의 모든 데이터 가져오기
     orders = Order.objects.all()
 
+    print(orders)
+    
     # 스프레드시트 업데이트를 위한 데이터 준비
     all_data = []
     for order in orders:
@@ -32,8 +37,8 @@ def update_sheet_with_db(sheet_url):
     worksheet.append_rows(all_data)
         
 # 구글 sheet 데이터 추가
-def append_to_sheet(data, sheet_url=sheet_url):
-    gc = gspread.service_account(filename=settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
+def append_to_sheet(data, sheet_url=sheet_url, credentials=credentials):
+    gc = gspread.service_account_from_dict(credentials)
     sh = gc.open_by_url(sheet_url)
     worksheet = sh.sheet1
     worksheet.append_row(data)
@@ -106,7 +111,7 @@ class DeletedDetail(APIView):
 class UpdateSheetView(APIView):
     def get(self, request, format=None):
         try:
-            update_sheet_with_db('Your Sheet Name')
+            update_sheet_with_db()
             return Response({"message": "Sheet updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
