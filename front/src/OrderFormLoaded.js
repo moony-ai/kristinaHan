@@ -352,6 +352,7 @@ function OrderForm({ loggedInUserInfo }) {
             jacketLength: data.jacketLength,
             pantsWaistLength: data.pantsWaistLength,
             pantsLength: data.pantsLength,
+            alterationMemo: data.alterationMemo,
         });
     }
 
@@ -382,12 +383,12 @@ function OrderForm({ loggedInUserInfo }) {
 
         orderInfo.lastModifiedTime = currentTime
 
-        const depositKRW = parseFloat(paymentInfo.depositKRW) || 0;
-        const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
-        const depositUSD = parseFloat(paymentInfo.depositUSD) || 0;
-        const balanceKRW = parseFloat(paymentInfo.balanceKRW) || 0;
-        const balanceJPY = parseFloat(paymentInfo.balanceJPY) || 0;
-        const balanceUSD = parseFloat(paymentInfo.balanceUSD) || 0;
+        // const depositKRW = parseFloat(paymentInfo.depositKRW) || 0;
+        // const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
+        // const depositUSD = parseFloat(paymentInfo.depositUSD) || 0;
+        // const balanceKRW = parseFloat(paymentInfo.balanceKRW) || 0;
+        // const balanceJPY = parseFloat(paymentInfo.balanceJPY) || 0;
+        // const balanceUSD = parseFloat(paymentInfo.balanceUSD) || 0;
 
         // 필수 항목 목록
         const requiredFields = {
@@ -456,12 +457,12 @@ function OrderForm({ loggedInUserInfo }) {
             paymentMethodBalanceKRW: paymentInfo.paymentMethodBalanceKRW,
             paymentMethodBalanceJPY: paymentInfo.paymentMethodBalanceJPY,
             paymentMethodBalanceUSD: paymentInfo.paymentMethodBalanceUSD,
-            depositKRW: depositKRW,
-            depositJPY: depositJPY,
-            depositUSD: depositUSD,
-            balanceKRW: balanceKRW,
-            balanceJPY: balanceJPY,
-            balanceUSD: balanceUSD,
+            depositKRW: paymentInfo.depositKRW,
+            depositJPY: paymentInfo.depositJPY,
+            depositUSD: paymentInfo.depositUSD,
+            balanceKRW: paymentInfo.balanceKRW,
+            balanceJPY: paymentInfo.balanceJPY,
+            balanceUSD: paymentInfo.balanceUSD,
             totalBalance: paymentInfo.totalBalance,
             totalDeposit: paymentInfo.totalDeposit,
             balance: paymentInfo.balance,
@@ -473,6 +474,7 @@ function OrderForm({ loggedInUserInfo }) {
             jacketLength: alterationInfo.jacketLength,
             pantsWaistLength: alterationInfo.pantsWaistLength,
             pantsLength: alterationInfo.pantsLength,
+            alterationMemo: alterationInfo.alterationMemo,
         };
 
         console.log(mappedData)

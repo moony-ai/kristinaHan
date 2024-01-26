@@ -41,39 +41,48 @@ class Order(models.Model):
     # 결제 정보
     payerName = models.CharField(max_length=100, blank=False)
     relationToOrderer = models.CharField(max_length=50, blank=False)
-    totalAmount = models.DecimalField(max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)])
-    depositKRW = models.DecimalField(
-        max_digits=10,
-        decimal_places=0,
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(0)],
-    )
-    depositJPY = models.DecimalField(
-        max_digits=10,
-        decimal_places=0,
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(0)],
-    )
-    depositUSD = models.DecimalField(
-        max_digits=10,
-        decimal_places=0,
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(0)],
-    )
-    totalDeposit = models.DecimalField(
-        max_digits=10,
-        decimal_places=0,
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(0)],
-    )
-    balanceKRW = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
-    balanceJPY = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
-    balanceUSD = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
-    balance = models.DecimalField(max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)])
+    totalAmount = models.CharField(max_length=10, blank=False, validators=[MinValueValidator(0)])
+    depositKRW = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    depositJPY = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    depositUSD = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    totalDeposit = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    balanceKRW = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    balanceJPY = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    balanceUSD = models.CharField(max_length=10, blank=True, null=True, validators=[MinValueValidator(0)])
+    balance = models.CharField(max_length=10, blank=False, validators=[MinValueValidator(0)])
+    # totalAmount = models.DecimalField(max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)])
+    # depositKRW = models.DecimalField(
+    #     max_digits=10,
+    #     decimal_places=0,
+    #     blank=True,
+    #     null=True,
+    #     validators=[MinValueValidator(0)],
+    # )
+    # depositJPY = models.DecimalField(
+    #     max_digits=10,
+    #     decimal_places=0,
+    #     blank=True,
+    #     null=True,
+    #     validators=[MinValueValidator(0)],
+    # )
+    # depositUSD = models.DecimalField(
+    #     max_digits=10,
+    #     decimal_places=0,
+    #     blank=True,
+    #     null=True,
+    #     validators=[MinValueValidator(0)],
+    # )
+    # totalDeposit = models.DecimalField(
+    #     max_digits=10,
+    #     decimal_places=0,
+    #     blank=True,
+    #     null=True,
+    #     validators=[MinValueValidator(0)],
+    # )
+    # balanceKRW = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
+    # balanceJPY = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
+    # balanceUSD = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, validators=[MinValueValidator(0)])
+    # balance = models.DecimalField(max_digits=10, decimal_places=0, blank=False, validators=[MinValueValidator(0)])
     
     depositDate = models.DateField(blank=True, null=True)
     balanceDate = models.DateField(blank=True, null=True)
