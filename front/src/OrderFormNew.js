@@ -88,18 +88,18 @@ function OrderForm({ loggedInUserInfo }) {
     const [paymentInfo, setPaymentInfo] = useState({
         payerName: null,            // 결제자 이름
         relationToOrderer: '본인', // 주문자와의 관계
-        totalAmount: 0,           // 결제 총액
+        totalAmount: "0",           // 결제 총액
 
-        depositKRW: 0,           // 선수금 (원화)
-        depositJPY: 0,           // 선수금 (엔화)
-        depositUSD: 0,           // 선수금 (달러)
-        totalDeposit: 0,          // 선수금 총액 (환전된 원화)
+        depositKRW: "0",           // 선수금 (원화)
+        depositJPY: "0",           // 선수금 (엔화)
+        depositUSD: "0",           // 선수금 (달러)
+        totalDeposit: "0",          // 선수금 총액 (환전된 원화)
 
-        balanceKRW: 0,
-        balanceJPY: 0,
-        balanceUSD: 0,
-        totalBalance: 0,
-        balance: 0,         // 최종잔금
+        balanceKRW: "0",
+        balanceJPY: "0",
+        balanceUSD: "0",
+        totalBalance: "0",
+        balance: "0",         // 최종잔금
 
         depositDate: null, // 선수금 결제일
         balanceDate: null, // 잔금 결제일
@@ -304,12 +304,12 @@ function OrderForm({ loggedInUserInfo }) {
             orderInfo.orderNumber = generateUniqueID();
         }
 
-        // const depositKRW = parseFloat(paymentInfo.depositKRW) || 0;
-        // const depositJPY = parseFloat(paymentInfo.depositJPY) || 0;
-        // const depositUSD = parseFloat(paymentInfo.depositUSD) || 0;
-        // const balanceKRW = parseFloat(paymentInfo.balanceKRW) || 0;
-        // const balanceJPY = parseFloat(paymentInfo.balanceJPY) || 0;
-        // const balanceUSD = parseFloat(paymentInfo.balanceUSD) || 0;
+        const depositKRW = parseInt(paymentInfo.depositKRW.replace(/,/g, '')) || 0; // 쉽표제거후 숫자로 변환
+        const depositJPY = parseInt(paymentInfo.depositJPY.replace(/,/g, '')) || 0;
+        const depositUSD = parseInt(paymentInfo.depositUSD.replace(/,/g, '')) || 0;
+        const balanceKRW = parseInt(paymentInfo.balanceKRW.replace(/,/g, '')) || 0;
+        const balanceJPY = parseInt(paymentInfo.balanceJPY.replace(/,/g, '')) || 0;
+        const balanceUSD = parseInt(paymentInfo.balanceUSD.replace(/,/g, '')) || 0;
 
         // 필수 항목 목록
         const requiredFields = {
@@ -378,12 +378,12 @@ function OrderForm({ loggedInUserInfo }) {
             paymentMethodBalanceKRW: paymentInfo.paymentMethodBalanceKRW,
             paymentMethodBalanceJPY: paymentInfo.paymentMethodBalanceJPY,
             paymentMethodBalanceUSD: paymentInfo.paymentMethodBalanceUSD,
-            depositKRW: paymentInfo.depositKRW,
-            depositJPY: paymentInfo.depositJPY,
-            depositUSD: paymentInfo.depositUSD,
-            balanceKRW: paymentInfo.balanceKRW,
-            balanceJPY: paymentInfo.balanceJPY,
-            balanceUSD: paymentInfo.balanceUSD,
+            depositKRW: depositKRW,
+            depositJPY: depositJPY,
+            depositUSD: depositUSD,
+            balanceKRW: balanceKRW,
+            balanceJPY: balanceJPY,
+            balanceUSD: balanceUSD,
             totalDeposit: paymentInfo.totalDeposit,
             balance: paymentInfo.balance, // 필수
             depositDate: paymentInfo.depositDate,
@@ -397,7 +397,7 @@ function OrderForm({ loggedInUserInfo }) {
             alterationMemo: alterationInfo.alterationMemo,
         };
 
-        console.log(mappedData)
+        console.log("제출된 데이터", mappedData)
 
         // 서버에 POST 요청 보내기
         axios.post('https://server-6kol.onrender.com/api/v1/orders/', mappedData)
