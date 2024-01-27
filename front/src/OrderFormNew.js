@@ -418,7 +418,7 @@ function OrderForm({ loggedInUserInfo }) {
             <fieldset>
                 <legend>주문 정보</legend>
                 <div className="orderinfo_row orderinfo_row1">주문서 번호: {orderInfo.orderNumber}</div>
-                <div className="orderinfo_row">작성자 * :<input
+                <div className="orderinfo_row">작성자 * : <input
                     type="text"
                     placeholder='    작성자를 입력하세요.'
                     value={orderInfo.creator}
@@ -445,9 +445,12 @@ function OrderForm({ loggedInUserInfo }) {
                 <legend>고객 정보</legend>
                 <div className="orderer-info-table">
                     <table >
-                        <tbody>
-                            {/* 주문자 이름 */}
+                        <tbody className="orderer-info-table-container">
                             <tr>
+                                <td colSpan="3"><hr className="table-cell" /></td>
+                            </tr>
+                            {/* 주문자 이름 */}
+                            <tr className="orderer-info-table-row orderer-info-table-row1">
                                 <td>주문자 이름:</td>
                                 <td>
                                     <input
@@ -467,7 +470,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-                            <tr>
+                            <tr className="orderer-info-table-row">
                                 <td>주문자 소속:</td>
                                 <td>
                                     <input
@@ -483,11 +486,11 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
                 <div className="orderer-info-table">
                     <table >
-                        <tbody>
+                        <tbody className="orderer-info-table-container">
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
-                            <tr>
+                            <tr className="orderer-info-table-row orderer-info-table-row1">
                                 <td>배우자 이름:</td>
                                 <td>
                                     <input
@@ -507,7 +510,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-                            <tr>
+                            <tr className="orderer-info-table-row">
                                 <td>배우자 소속:</td>
                                 <td>
                                     <input
@@ -572,7 +575,7 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 턱시도 섹션 */}
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             <tr>
                                 <td colSpan="4"><strong>턱시도</strong></td>
@@ -620,7 +623,7 @@ function OrderForm({ loggedInUserInfo }) {
 
                             {/* 드레스 섹션 */}
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             <tr>
                                 <td colSpan="4"><strong>드레스</strong></td>
@@ -687,7 +690,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             {/* 결제 총액 */}
                             <tr>
@@ -703,7 +706,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>원</td>
                             </tr>
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             {/* 선수금 결제일 입력 필드 */}
                             <tr>
@@ -826,7 +829,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             {/* 선수금 총액 */}
                             <tr>
@@ -842,7 +845,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>원</td>
                             </tr>
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             {/* 잔금 결제일 입력 필드 */}
                             <tr>
@@ -978,7 +981,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>원</td>
                             </tr>
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1075,7 +1078,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan="3"><hr /></td>
+                                <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             <tr>
                                 <td>수령 방법:</td>

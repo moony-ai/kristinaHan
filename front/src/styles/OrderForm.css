@@ -12,10 +12,10 @@
     border-radius: 8px;
     background-color: #E6E8F4;
     box-sizing: border-box;
+    overflow-x: hidden;
 
     fieldset {
         display: block;
-        justify-content: center;
         width: 88vw;
         max-width: 880px;
         margin-bottom: 20px; 
@@ -43,22 +43,61 @@
         border-top: none;
         border-left: none;
         border-right: none;
+        border-radius: 0;
+        border-color: #06407A;
+    }
+
+    input:focus {
+        outline: 1px solid rgba(0, 0, 0, 0.5);
+        outline-offset: 1px;
+        border-radius: 3px;
+    }
+
+    .table-cell {
+        padding: 0;
+        border: 0;
     }
 
     .orderinfo_row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 15px 0px;
+        margin: 15px 0px 15px 10px;
     }
 
     .orderinfo_row1 {
-        margin: 10px 0px 18px 0px;
+        margin: 8px 0px 18px 10px;
+    }
+
+    .orderer-info-table-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .orderer-info-table-row {
+        flex-grow: 1;
+        box-sizing: border-box;
+        padding: 10px 0px;
+        border: none;
+    }
+
+    .orderer-info-table-row td {
+        padding: 0 10px 0 0;
+    }
+
+    @media (min-width: 640px) {
+        .orderer-info-table-row1 {
+            flex-grow: 2;
+            box-sizing: border-box;
+        }
     }
 }
 
 .print-container {
     display: none;
+}
+
+@media (max-width: 640px){
+    .form-container {
+        overflow-x: auto;
+    }
 }
 
 @media print {
