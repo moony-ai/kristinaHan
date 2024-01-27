@@ -418,7 +418,7 @@ function OrderForm({ loggedInUserInfo }) {
             <fieldset>
                 <legend>주문 정보</legend>
                 <div>주문서 번호: {orderInfo.orderNumber}</div>
-                <div>작성자*: <input
+                <div>작성자 * : <input
                     type="text"
                     placeholder='작성자를 입력하세요.'
                     value={orderInfo.creator}

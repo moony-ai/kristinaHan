@@ -1,23 +1,65 @@
 /* OrderForm.css */
 .form-container {
-    height: 210mm;
-    width: 297mm;
-    margin: auto;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1000px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
-}
+    background-color: #E6E8F4;
+    box-sizing: border-box;
 
-@media screen {
-    .form-container {
-        padding: 10mm 5mm 5mm 5mm;
+    fieldset {
+        display: block;
+        padding: 10px;
+        padding-left: 20px;
+        margin-bottom: 20px; 
+        border: 1px groove #9BB2CA;
+        border-radius: 5px;
+        background-color: #FFFFFF;
+    }
+        
+    legend {
+        background-color: none;
+        padding: 0 10px;
+        color: #06407A;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    div {
+        color: #06407A;
+        font-size: medium;
+    }
+
+    input {
+        font-size: medium;
     }
 }
 
+.print-container {
+    display: none;
+}
+
 @media print {
-    .form-container {
-        padding: 0mm;
+    .print-container {
+        display: block;
+        position: fixed;
+        top: -9999px;
+        left: -9999px;
+        width: 210mm;
+        height: 297mm;
+        padding: 20mm;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #fff;
     }
 }
 
