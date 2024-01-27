@@ -1,11 +1,24 @@
 /* OrderForm.css */
 .form-container {
-    max-width: 600px;
+    height: 210mm;
+    width: 297mm;
     margin: auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
+}
+
+@media screen {
+    .form-container {
+        padding: 10mm 5mm 5mm 5mm;
+    }
+}
+
+@media print {
+    .form-container {
+        padding: 0mm;
+    }
 }
 
 .form-label {
