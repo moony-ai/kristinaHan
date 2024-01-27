@@ -1,9 +1,11 @@
 /* OrderForm.css */
 .form-container {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     margin: 0 auto;
-    width: 100%;
+    width: 100vw;
     max-width: 1000px;
     padding: 20px;
     border: 1px solid #ccc;
@@ -13,8 +15,9 @@
 
     fieldset {
         display: block;
-        padding: 10px;
-        padding-left: 20px;
+        justify-content: center;
+        width: 88vw;
+        max-width: 880px;
         margin-bottom: 20px; 
         border: 1px groove #9BB2CA;
         border-radius: 5px;
@@ -26,16 +29,31 @@
         padding: 0 10px;
         color: #06407A;
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 800;
     }
 
     div {
+        font-weight: 600;
         color: #06407A;
         font-size: medium;
     }
 
     input {
         font-size: medium;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+    }
+
+    .orderinfo_row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0px;
+    }
+
+    .orderinfo_row1 {
+        margin: 10px 0px 18px 0px;
     }
 }
 

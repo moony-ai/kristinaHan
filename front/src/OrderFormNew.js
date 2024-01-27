@@ -417,15 +417,15 @@ function OrderForm({ loggedInUserInfo }) {
             {/* 주문 정보 */}
             <fieldset>
                 <legend>주문 정보</legend>
-                <div>주문서 번호: {orderInfo.orderNumber}</div>
-                <div>작성자 * : <input
+                <div className="orderinfo_row orderinfo_row1">주문서 번호: {orderInfo.orderNumber}</div>
+                <div className="orderinfo_row">작성자 * :<input
                     type="text"
-                    placeholder='작성자를 입력하세요.'
+                    placeholder='    작성자를 입력하세요.'
                     value={orderInfo.creator}
                     onChange={handleCreatorChange}
                 /></div>
-                <div>
-                    주문 상태:
+                <div className="orderinfo_row">
+                     주문 상태: 
                     {orderStatusOptions.map((status, index) => (
                         <label key={index}>
                             <input
