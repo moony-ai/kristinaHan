@@ -444,7 +444,7 @@ function OrderForm({ loggedInUserInfo }) {
             <fieldset>
                 <legend>고객 정보</legend>
                 <div className="orderer-info-table">
-                    <table >
+                    <table>
                         <tbody className="orderer-info-table-container">
                             <tr>
                                 <td colSpan="3"><hr className="table-cell" /></td>
@@ -528,14 +528,14 @@ function OrderForm({ loggedInUserInfo }) {
             {/* 제품정보 */}
             <fieldset>
                 <legend>제품 정보</legend>
-                <div>
+                <div className="clothes-info-table">
                     <table>
-                        <tbody>
+                        <tbody className="clothes-info-table-container">
                             {/* 예물 섹션 */}
-                            <tr>
+                            <tr className="clothes-info-table-row clothes-info-table-row1">
                                 <td colSpan="4"><strong>예물</strong></td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row">
                                 <td>남성 반지 사이즈:</td>
                                 <td>
                                     <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
@@ -555,7 +555,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row">
                                 <td>목걸이 사이즈:</td>
                                 <td>
                                     <select name="necklaceSize" value={productInfo.necklaceSize} onChange={productInfoHandleChange}>
@@ -577,10 +577,10 @@ function OrderForm({ loggedInUserInfo }) {
                             <tr>
                                 <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row clothes-info-table-row1">
                                 <td colSpan="4"><strong>턱시도</strong></td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row">
                                 <td>턱시도 유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
@@ -600,7 +600,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row">
                                 <td>팬츠 사이즈:</td>
                                 <td>
                                     <select name="pantsSize" value={productInfo.pantsSize} onChange={productInfoHandleChange}>
@@ -625,10 +625,10 @@ function OrderForm({ loggedInUserInfo }) {
                             <tr>
                                 <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row clothes-info-table-row3 no-border">
                                 <td colSpan="4"><strong>드레스</strong></td>
                             </tr>
-                            <tr>
+                            <tr className="clothes-info-table-row no-border">
                                 <td>드레스 타입:</td>
                                 <td>
                                     <select name="dressType" value={productInfo.dressType} onChange={productInfoHandleChange}>

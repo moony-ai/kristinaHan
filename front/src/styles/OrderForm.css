@@ -13,6 +13,7 @@
     background-color: #E6E8F4;
     box-sizing: border-box;
     overflow-x: hidden;
+    overflow-y: auto;
 
     fieldset {
         display: block;
@@ -79,7 +80,7 @@
     }
 
     .orderer-info-table-row td {
-        padding: 0 10px 0 0;
+        padding: 0 15px 0 0;
     }
 
     @media (min-width: 640px) {
@@ -88,6 +89,37 @@
             box-sizing: border-box;
         }
     }
+
+    .clothes-info-table-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .clothes-info-table-row {
+        flex-grow: 1;
+        box-sizing: border-box;
+        padding: 10px 0px;
+        border: none;
+        border-bottom: 2px solid #06407A;
+    }
+
+    .clothes-info-table-row td {
+        padding: 0 15px 0 0;
+        justify-content: flex-end;
+    }
+
+    @media (min-width: 640px) {
+        .clothes-info-table-row1 {
+            flex-grow: 2;
+            box-sizing: border-box;
+        }
+    }
+
+    .clothes-info-table-row1 td {
+        font-weight: 800;
+    }
+
 }
 
 .print-container {
