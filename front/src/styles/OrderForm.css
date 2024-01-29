@@ -1,4 +1,6 @@
 /* OrderForm.css */
+
+/* 웹페이지용 전체 포맷 */
 .form-container {
     display: flex;
     flex-direction: column;
@@ -20,7 +22,8 @@
         width: 88vw;
         max-width: 880px;
         margin-bottom: 20px; 
-        border: 1px groove #9BB2CA;
+        padding-bottom: 9px;
+        border: 1.5px groove #06407A;
         border-radius: 5px;
         background-color: #FFFFFF;
     }
@@ -41,11 +44,11 @@
 
     input {
         font-size: medium;
+        border: 1.5px groove #06407A;
         border-top: none;
         border-left: none;
         border-right: none;
         border-radius: 0;
-        border-color: #06407A;
     }
 
     input:focus {
@@ -59,14 +62,16 @@
         border: 0;
     }
 
+    /* 주문 정보칸 포맷 */
     .orderinfo_row {
-        margin: 15px 0px 15px 10px;
+        margin: 14px 0px 7px 10px;
     }
 
     .orderinfo_row1 {
-        margin: 8px 0px 18px 10px;
+        margin: 7px 0px 14px 10px;
     }
 
+    /* 고객 정보칸 포맷 */
     .orderer-info-table-container {
         display: flex;
         flex-wrap: wrap;
@@ -75,7 +80,7 @@
     .orderer-info-table-row {
         flex-grow: 1;
         box-sizing: border-box;
-        padding: 10px 0px;
+        padding: 9x 0px 10px 0px;
         border: none;
     }
 
@@ -90,6 +95,7 @@
         }
     }
 
+    /* 제품 정보칸 포맷*/
     .clothes-info-table-container {
         display: flex;
         flex-wrap: wrap;
@@ -99,14 +105,27 @@
     .clothes-info-table-row {
         flex-grow: 1;
         box-sizing: border-box;
-        padding: 10px 0px;
-        border: none;
-        border-bottom: 2px solid #06407A;
+        padding: 8px 0px;
+        border-bottom: 1.4px solid #06407A;
+        margin: 1px 0px;
     }
 
-    .clothes-info-table-row td {
-        padding: 0 15px 0 0;
-        justify-content: flex-end;
+    .clothes-info-table-row1 {
+        padding-top: 0px;
+    }
+
+    .clothes-info-table-row3 {
+        margin-bottom: none;
+        border: none;
+        padding-bottom: 0px;
+    }
+
+    .clothes-info-table-row td{
+        padding-right: 8px;
+    }
+
+    .clothes-info-table-row td:first-child{
+        padding-right: 6px;
     }
 
     @media (min-width: 640px) {
@@ -116,10 +135,8 @@
         }
     }
 
-    .clothes-info-table-row1 td {
-        font-weight: 800;
-    }
-
+    /* 결제 정보칸 포맷*/
+    
 }
 
 .print-container {

@@ -527,15 +527,13 @@ function OrderForm({ loggedInUserInfo }) {
             </fieldset>
             {/* 제품정보 */}
             <fieldset>
-                <legend>제품 정보</legend>
+                <legend className="clothes-info">제품 정보</legend>
                 <div className="clothes-info-table">
                     <table>
                         <tbody className="clothes-info-table-container">
                             {/* 예물 섹션 */}
                             <tr className="clothes-info-table-row clothes-info-table-row1">
-                                <td colSpan="4"><strong>예물</strong></td>
-                            </tr>
-                            <tr className="clothes-info-table-row">
+                                <td colSpan="4"><strong>예물 -</strong></td>
                                 <td>남성 반지 사이즈:</td>
                                 <td>
                                     <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
@@ -554,8 +552,6 @@ function OrderForm({ loggedInUserInfo }) {
                                         ))}
                                     </select>
                                 </td>
-                            </tr>
-                            <tr className="clothes-info-table-row">
                                 <td>목걸이 사이즈:</td>
                                 <td>
                                     <select name="necklaceSize" value={productInfo.necklaceSize} onChange={productInfoHandleChange}>
@@ -577,10 +573,8 @@ function OrderForm({ loggedInUserInfo }) {
                             <tr>
                                 <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
-                            <tr className="clothes-info-table-row clothes-info-table-row1">
-                                <td colSpan="4"><strong>턱시도</strong></td>
-                            </tr>
-                            <tr className="clothes-info-table-row">
+                            <tr className="clothes-info-table-row clothes-info-table-row2">
+                                <td colSpan="4"><strong>턱시도 -</strong></td>
                                 <td>턱시도 유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
@@ -599,8 +593,6 @@ function OrderForm({ loggedInUserInfo }) {
                                         <option value="">구매안함</option>
                                     </select>
                                 </td>
-                            </tr>
-                            <tr className="clothes-info-table-row">
                                 <td>팬츠 사이즈:</td>
                                 <td>
                                     <select name="pantsSize" value={productInfo.pantsSize} onChange={productInfoHandleChange}>
@@ -625,10 +617,8 @@ function OrderForm({ loggedInUserInfo }) {
                             <tr>
                                 <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
-                            <tr className="clothes-info-table-row clothes-info-table-row3 no-border">
-                                <td colSpan="4"><strong>드레스</strong></td>
-                            </tr>
-                            <tr className="clothes-info-table-row no-border">
+                            <tr className="clothes-info-table-row clothes-info-table-row3">
+                                <td colSpan="4"><strong>드레스 -</strong></td>
                                 <td>드레스 타입:</td>
                                 <td>
                                     <select name="dressType" value={productInfo.dressType} onChange={productInfoHandleChange}>
@@ -654,7 +644,7 @@ function OrderForm({ loggedInUserInfo }) {
             </fieldset>
             {/* 결제정보 */}
             <fieldset>
-                <legend>결제 정보</legend>
+                <legend className="payment-info">결제 정보</legend>
                 <div>
                     <table className="payment-info-table">
                         <tbody>
@@ -669,10 +659,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         onChange={paymentInfoHandleChange}
                                     />
                                 </td>
-                            </tr>
-
-                            {/* 주문자와의 관계 */}
-                            <tr>
+                                {/* 주문자와의 관계 */}
                                 <td>주문자와의 관계:</td>
                                 <td>
                                     <select
@@ -688,12 +675,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         <option value="기타">기타</option>
                                     </select>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
-                            {/* 결제 총액 */}
-                            <tr>
+                                {/* 결제 총액 */}
                                 <td>결제 총액:</td>
                                 <td>
                                     <input
@@ -861,6 +843,9 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 잔금 지급액 (원화) */}
                             <tr>
+                                <td colSpan="3"><hr className="table-cell" /></td>
+                            </tr>
+                            <tr>
                                 <td>잔금 지급액 (원화):</td>
                                 <td>
                                     <input
@@ -969,7 +954,7 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 잔금 */}
                             <tr>
-                                <td>잔금:</td>
+                                <td>잔금 총액:</td>
                                 <td>
                                     <input
                                         type="text"
