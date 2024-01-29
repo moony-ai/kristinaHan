@@ -57,6 +57,10 @@
         border-radius: 3px;
     }
 
+    .bold {
+        font-weight: bold;
+    }
+
     .table-cell {
         padding: 0;
         border: 0;
@@ -136,7 +140,56 @@
     }
 
     /* 결제 정보칸 포맷*/
+    .payment-info-table {
+        display: flex;
+        flex-direction: column;
+    }
     
+    .payment-info-table__row {
+        display: flex;
+    }
+        
+    .payment-info-table__row td > input {
+        width: 140px;
+    }
+    
+    .payment-info-table__row2,
+    .payment-info-table__row3 {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin: 5px 5px 5px 0px;
+    }
+        
+    .payment-info-table__row1 {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .payment-info-table__row td {
+        margin: 5px 5px 8px 5px;
+    }
+
+    .pair2 {
+        padding-right: 30px;
+    }
+
+    .pair3 {
+        padding-right: 5px;
+    }
+
+    .pair4 {
+        padding-right: 20px;
+    }
+
+    .pair5 {
+        padding-left: 30px;
+    }
+
+    .pair6 {
+        padding-right: 15px; /* Adjust as needed */
+    }
 }
 
 .print-container {
