@@ -9,4 +9,5 @@ urlpatterns = [
     path('deleted/', views.DeletedList.as_view(), name='deleted-list'),
     path('deleted/<int:pk>', views.DeletedDetail.as_view(), name='deleted-detail'),
     path('updategs/', views.UpdateSheetView.as_view(), name='update-sheet'),
+    path('latest/', views.LatestOrderView.as_view(), name='latest-order'),
 ]

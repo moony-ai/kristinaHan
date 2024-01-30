@@ -3,10 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderForm.css';
 
-import OrdererInformationForm from '../src/components/OrdererInformationForm';
-import ProductInformationForm from './components/ProductInformationForm';
-import PaymentInformationForm from '../src/components/PaymentInformationForm';
-import AlterationInformationForm from '../src/components/AlterationInformationForm';
+import OrdererInformationForm from '../components/OrdererInformationForm';
+import ProductInformationForm from '../components/ProductInformationForm';
+import PaymentInformationForm from '../components/PaymentInformationForm';
+import AlterationInformationForm from '../components/AlterationInformationForm';
 
 function OrderForm({ loggedInUserInfo }) {
 

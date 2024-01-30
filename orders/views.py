@@ -123,6 +123,13 @@ class UpdateSheetView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class LatestOrderView(APIView):
+    def get(self, request, format=None):
+        latest_order = Order.objects.filter(is_deleted=False).order_by('-creationTime').first()
+        if latest_order:
+            serializer = OrderDetailSerializer(latest_order)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 # 필요한 패키지 임포트
 from openpyxl import Workbook

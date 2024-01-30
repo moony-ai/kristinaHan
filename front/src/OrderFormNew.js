@@ -443,7 +443,7 @@ function OrderForm({ loggedInUserInfo }) {
             {/* 고객 정보 */}
             <fieldset>
                 <legend>고객 정보</legend>
-                <div className="orderer-info-table">
+                <div>
                     <table >
                         <tbody>
                             {/* 주문자 이름 */}
@@ -481,7 +481,7 @@ function OrderForm({ loggedInUserInfo }) {
                         </tbody>
                     </table>
                 </div>
-                <div className="orderer-info-table">
+                <div>
                     <table >
                         <tbody>
                             <tr>
@@ -653,7 +653,7 @@ function OrderForm({ loggedInUserInfo }) {
             <fieldset>
                 <legend>결제 정보</legend>
                 <div>
-                    <table className="payment-info-table">
+                    <table>
                         <tbody>
                             {/* 결제자 이름 */}
                             <tr>
@@ -1074,9 +1074,14 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-                            <tr>
-                                <td colSpan="3"><hr /></td>
-                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div>
+                    <table>
+                        <tbody>
                             <tr>
                                 <td>수령 방법:</td>
                                 <td>
@@ -1096,6 +1101,7 @@ function OrderForm({ loggedInUserInfo }) {
                                             name="address"
                                             value={ordererInfo.address}
                                             onChange={ordererInfoHandleChange}
+                                            style={{ width: '400px' }}
                                         />
                                     </td>
                                 </tr>

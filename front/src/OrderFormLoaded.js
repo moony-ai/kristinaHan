@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../src/styles/OrderForm.css';
+import '../src/styles/OrderForm.css'; // CSS
 
 function OrderForm({ loggedInUserInfo }) {
 
@@ -327,13 +327,13 @@ function OrderForm({ loggedInUserInfo }) {
             payerName: data.payerName,
             relationToOrderer: data.relationToOrderer,
             totalAmount: data.totalAmount,
-            depositKRW: data.depositKRW,
-            depositJPY: data.depositJPY,
-            depositUSD: data.depositUSD,
+            depositKRW: formatNumberWithComma(data.depositKRW), //변환할때 다시 포멧 수정
+            depositJPY: formatNumberWithComma(data.depositJPY),
+            depositUSD: formatNumberWithComma(data.depositUSD),
             totalDeposit: data.totalDeposit,
-            balanceKRW: data.balanceKRW,
-            balanceJPY: data.balanceJPY,
-            balanceUSD: data.balanceUSD,
+            balanceKRW: formatNumberWithComma(data.balanceKRW),
+            balanceJPY: formatNumberWithComma(data.balanceJPY),
+            balanceUSD: formatNumberWithComma(data.balanceUSD),
             balance: data.balance,
             depositDate: data.depositDate,
             balanceDate: data.balanceDate,
@@ -457,12 +457,12 @@ function OrderForm({ loggedInUserInfo }) {
             paymentMethodBalanceKRW: paymentInfo.paymentMethodBalanceKRW,
             paymentMethodBalanceJPY: paymentInfo.paymentMethodBalanceJPY,
             paymentMethodBalanceUSD: paymentInfo.paymentMethodBalanceUSD,
-            depositKRW: paymentInfo.depositKRW,
-            depositJPY: paymentInfo.depositJPY,
-            depositUSD: paymentInfo.depositUSD,
-            balanceKRW: paymentInfo.balanceKRW,
-            balanceJPY: paymentInfo.balanceJPY,
-            balanceUSD: paymentInfo.balanceUSD,
+            depositKRW: depositKRW,
+            depositJPY: depositJPY,
+            depositUSD: depositUSD,
+            balanceKRW: balanceKRW,
+            balanceJPY: balanceJPY,
+            balanceUSD: balanceUSD,
             totalBalance: paymentInfo.totalBalance,
             totalDeposit: paymentInfo.totalDeposit,
             balance: paymentInfo.balance,
@@ -1160,9 +1160,14 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-                            <tr>
-                                <td colSpan="3"><hr /></td>
-                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div>
+                    <table>
+                        <tbody>
                             <tr>
                                 <td>수령 방법:</td>
                                 <td>
@@ -1182,6 +1187,7 @@ function OrderForm({ loggedInUserInfo }) {
                                             name="address"
                                             value={ordererInfo.address}
                                             onChange={ordererInfoHandleChange}
+                                            style={{ width: '400px' }}
                                         />
                                     </td>
                                 </tr>
@@ -1190,7 +1196,6 @@ function OrderForm({ loggedInUserInfo }) {
                     </table>
                 </div>
             </fieldset>
-
             <button className="form-button" type="submit"> 주문 수정</button>
         </form>
     );
