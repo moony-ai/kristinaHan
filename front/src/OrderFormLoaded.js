@@ -1149,7 +1149,7 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 기장 메모 */}
                             <tr>
-                                <td>기장 메모:</td>
+                                <td>메모:</td>
                                 <td colSpan="5">
                                     <textarea
                                         name="alterationMemo"
