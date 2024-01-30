@@ -1,10 +1,333 @@
 /* OrderForm.css */
+
+/* 웹페이지용 전체 포맷 */
 .form-container {
-    max-width: 600px; 
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin: 0 auto;
+    width: 100vw;
+    max-width: 1000px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: #E6E8F4;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    fieldset {
+        display: block;
+        width: 88vw;
+        max-width: 880px;
+        margin-bottom: 20px; 
+        padding-bottom: 9px;
+        border: 1.5px groove #06407A;
+        border-radius: 5px;
+        background-color: #FFFFFF;
+    }
+        
+    legend {
+        background-color: none;
+        padding: 0 10px;
+        color: #06407A;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    div {
+        font-weight: 600;
+        color: #06407A;
+        font-size: medium;
+    }
+
+    input {
+        font-size: medium;
+        border: 1.5px groove #06407A;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+    }
+
+    input:focus {
+        outline: 1px solid rgba(0, 0, 0, 0.5);
+        outline-offset: 1px;
+        border-radius: 3px;
+    }
+
+    .bold {
+        font-weight: 800;
+    }
+
+    .regular{
+        font-weight: 500;
+    }
+
+    .table-cell {
+        padding: 0;
+        border: 0;
+    }
+
+    /* 주문 정보칸 포맷 */
+    .orderinfo_row {
+        margin: 14px 0px 7px 10px;
+    }
+
+    .orderinfo_row1 {
+        margin: 7px 0px 14px 10px;
+    }
+
+    /* 고객 정보칸 포맷 */
+    .orderer-info-table-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .orderer-info-table-row {
+        flex-grow: 1;
+        box-sizing: border-box;
+        padding: 9x 0px 10px 0px;
+        border: none;
+    }
+
+    .orderer-info-table-row td {
+        padding: 0 15px 0 0;
+    }
+
+    @media (min-width: 640px) {
+        .orderer-info-table-row1 {
+            flex-grow: 2;
+            box-sizing: border-box;
+        }
+    }
+
+    /* 제품 정보칸 포맷*/
+    .clothes-info-table-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .clothes-info-table-row {
+        flex-grow: 1;
+        box-sizing: border-box;
+        padding: 8px 0px;
+        border-bottom: 1.4px solid #06407A;
+        margin: 1px 0px;
+    }
+
+    .clothes-info-table-row1 {
+        padding-top: 0px;
+    }
+
+    .clothes-info-table-row3 {
+        margin-bottom: none;
+        border: none;
+        padding-bottom: 0px;
+    }
+
+    .clothes-info-table-row td{
+        padding-right: 8px;
+    }
+
+    .clothes-info-table-row td:first-child{
+        padding-right: 6px;
+    }
+
+    @media (min-width: 640px) {
+        .clothes-info-table-row1 {
+            flex-grow: 2;
+            box-sizing: border-box;
+        }
+    }
+
+    /* 결제 정보칸 포맷*/
+    .payment-info-table {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .payment-info-table__row {
+        display: flex;
+    }
+        
+    .payment-info-table__row td > input {
+        width: 140px;
+    }
+    
+    .payment-info-table__row2,
+    .payment-info-table__row3 {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin: 5px 5px 5px 0px;
+    }
+        
+    .payment-info-table__row1 {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding-bottom: 8px;
+    }
+
+    .payment-info-table__row td {
+        margin: 5px 5px 8px 5px;
+    }
+
+    .payment-info-table__row2 td:first-child,
+    .payment-info-table__row3 td:first-child{
+        padding-bottom: 7px;
+    }
+
+    .payment-info-table__row2 td:last-child,
+    .payment-info-table__row3 td:last-child{
+        padding-top: 7px;
+    }
+
+    .pair2 {
+        padding-right: 40px;
+    }
+
+    .pair3 {
+        padding-right: 0px;
+    }
+
+    .pair4 {
+        padding-right: 20px;
+    }
+
+    .pair5 {
+        padding-left: 100px;
+    }
+
+    .pair6 {
+        padding-right: 30px; /* Adjust as needed */
+    }
+
+    /* 수선 정보칸 포맷*/
+    .alteration-info-table-container {
+        display: flex;
+        flex-direction: column;
+        padding-left: 5px;
+    }
+    
+    .alteration-info-table-row {
+        display: flex;
+    }
+    
+    .alteration-info-table-row1{
+        margin-top: 6px;
+    }
+
+    .alteration-info-table-row1,
+    .alteration-info-table-row2{
+        margin-bottom: 6px;
+    }
+
+    .alteration-info-table-row3{
+        margin-bottom: 15px;
+    }
+
+    .alteration-info-table-row4{
+        display: inline-block;
+        justify-content: center;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(2),
+    .alteration-info-table-row1 > td:nth-child(4),
+    .alteration-info-table-row2 > td:nth-child(2),
+    .alteration-info-table-row2 > td:nth-child(4),
+    .alteration-info-table-row3 > td:nth-child(2),
+    .alteration-info-table-row3 > td:nth-child(4){
+        margin-left: 10px;
+    }
+
+    .alteration-info-table-row2 > td:nth-child(1),
+    .alteration-info-table-row3 > td:nth-child(1){
+        padding-right: 15px;
+    }
+
+    .alteration-info-table-row2 > td:nth-child(3),
+    .alteration-info-table-row3 > td:nth-child(3){
+        padding-right: 15px;
+        margin-left: 93px;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(3){
+        margin-left: 93px;
+    }
+
+
+    .alteration-info-table-row4 > td:first-child{
+        padding-right: 8px;
+    }
+
+    .alteration-info-table-row5{
+        padding-top: 10px;
+    }
+
+    .alteration-info-table-row5 td:first-child{
+        padding-right: 12px;
+    }
+
+    .alteration-info-table-row5 td:nth-child(2){
+        padding-right: 100px;
+    }
 }
 
+@media (max-width: 640px){
+    .form-container {
+        overflow-x: auto;
+    }
+}
+
+.print-container {
+    display: none;
+}
+
+@media print {
+    .print-container {
+        display: block;
+        position: fixed;
+        top: -9999px;
+        left: -9999px;
+        width: 210mm;
+        height: 297mm;
+        padding: 20mm;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #fff;
+        
+    }
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-button {
+    width: 100%;
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
