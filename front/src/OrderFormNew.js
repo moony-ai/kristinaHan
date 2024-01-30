@@ -286,23 +286,55 @@ function OrderForm({ loggedInUserInfo }) {
     }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount,
     paymentInfo.balanceKRW, paymentInfo.balanceJPY, paymentInfo.balanceUSD, exchangeRates]);
 
-    // 고유 ID 생성 함수
-    const generateUniqueID = () => {
-        // "100K"로 시작하고 뒤에 12자리 랜덤 숫자를 붙임
-        return "100K" + Math.floor(Math.random() * 1e12).toString().padStart(12, '0');
+    // 고유 ID생성을 위해 가장 최근 data불러오기
+    const [lastOrderNumber, setLastOrderNumber] = useState(0);
+
+    useEffect(() => {
+        fetchLatestOrderData();
+    }, []);
+
+    const fetchLatestOrderData = async () => {
+        try {
+            const response = await axios.get('https://server-6kol.onrender.com/api/v1/orders/latest/');
+            const latestOrder = response.data;
+            const latestOrderDate = new Date(latestOrder.creationTime).toLocaleDateString();
+            const currentDate = new Date().toLocaleDateString();
+
+            if (latestOrderDate !== currentDate) {
+                return 1;
+            } else {
+                const lastNumber = parseInt(latestOrder.orderNumber.split('-').pop(), 10);
+                return lastNumber + 1;
+            }
+        } catch (error) {
+            console.error('최근 주문 데이터 가져오기 실패:', error);
+            return 1; // 오류 발생 시 0001로 시작
+        }
     };
 
     // 저장요청 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
         orderInfo.creationTime = currentTime
 
-        // 12자리 무작위 문자열 생성
+        // fetchLatestOrderData 함수를 동기적으로 호출
+        const lastOrderNumber = await fetchLatestOrderData();
+
+        // 고유 ID 생성 함수
+        const generateUniqueID = () => {
+            const today = new Date().toISOString().slice(2, 10).replace(/-/g, '');
+            const formattedNumber = lastOrderNumber.toString().padStart(4, '0');
+            return `K${today}-${formattedNumber}`;
+        };
+
+        // 주문번호 생성
         if (!orderInfo.orderNumber) {
             orderInfo.orderNumber = generateUniqueID();
         }
+
+        console.log(orderInfo.orderNumber)
 
         const depositKRW = parseInt(paymentInfo.depositKRW.replace(/,/g, '')) || 0; // 쉽표제거후 숫자로 변환
         const depositJPY = parseInt(paymentInfo.depositJPY.replace(/,/g, '')) || 0;
