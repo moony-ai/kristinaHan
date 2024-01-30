@@ -58,7 +58,11 @@
     }
 
     .bold {
-        font-weight: bold;
+        font-weight: 800;
+    }
+
+    .regular{
+        font-weight: 500;
     }
 
     .table-cell {
@@ -165,18 +169,29 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
+        padding-bottom: 8px;
     }
 
     .payment-info-table__row td {
         margin: 5px 5px 8px 5px;
     }
 
+    .payment-info-table__row2 td:first-child,
+    .payment-info-table__row3 td:first-child{
+        padding-bottom: 7px;
+    }
+
+    .payment-info-table__row2 td:last-child,
+    .payment-info-table__row3 td:last-child{
+        padding-top: 7px;
+    }
+
     .pair2 {
-        padding-right: 30px;
+        padding-right: 40px;
     }
 
     .pair3 {
-        padding-right: 5px;
+        padding-right: 0px;
     }
 
     .pair4 {
@@ -184,22 +199,92 @@
     }
 
     .pair5 {
-        padding-left: 30px;
+        padding-left: 100px;
     }
 
     .pair6 {
-        padding-right: 15px; /* Adjust as needed */
+        padding-right: 30px; /* Adjust as needed */
     }
-}
 
-.print-container {
-    display: none;
+    /* 수선 정보칸 포맷*/
+    .alteration-info-table-container {
+        display: flex;
+        flex-direction: column;
+        padding-left: 5px;
+    }
+    
+    .alteration-info-table-row {
+        display: flex;
+    }
+    
+    .alteration-info-table-row1{
+        margin-top: 6px;
+    }
+
+    .alteration-info-table-row1,
+    .alteration-info-table-row2{
+        margin-bottom: 6px;
+    }
+
+    .alteration-info-table-row3{
+        margin-bottom: 15px;
+    }
+
+    .alteration-info-table-row4{
+        display: inline-block;
+        justify-content: center;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(2),
+    .alteration-info-table-row1 > td:nth-child(4),
+    .alteration-info-table-row2 > td:nth-child(2),
+    .alteration-info-table-row2 > td:nth-child(4),
+    .alteration-info-table-row3 > td:nth-child(2),
+    .alteration-info-table-row3 > td:nth-child(4){
+        margin-left: 10px;
+    }
+
+    .alteration-info-table-row2 > td:nth-child(1),
+    .alteration-info-table-row3 > td:nth-child(1){
+        padding-right: 15px;
+    }
+
+    .alteration-info-table-row2 > td:nth-child(3),
+    .alteration-info-table-row3 > td:nth-child(3){
+        padding-right: 15px;
+        margin-left: 93px;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(3){
+        margin-left: 93px;
+    }
+
+
+    .alteration-info-table-row4 > td:first-child{
+        padding-right: 8px;
+    }
+
+    .alteration-info-table-row5{
+        padding-top: 10px;
+    }
+
+    .alteration-info-table-row5 td:first-child{
+        padding-right: 12px;
+    }
+
+    .alteration-info-table-row5 td:nth-child(2){
+        padding-right: 100px;
+    }
 }
 
 @media (max-width: 640px){
     .form-container {
         overflow-x: auto;
     }
+}
+
+.print-container {
+    display: none;
 }
 
 @media print {
@@ -219,6 +304,7 @@
 
     body {
         background-color: #fff;
+        
     }
 }
 

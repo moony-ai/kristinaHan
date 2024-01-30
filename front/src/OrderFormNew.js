@@ -677,7 +677,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         </td>
                                     {/* 결제 총액 */}
                                         <td className="pair5 bold">결제 총액:</td>
-                                        <td className="pair6">
+                                        <td className="pair6 bold">
                                             <input
                                                 type="text"
                                                 name="totalAmount"
@@ -920,97 +920,89 @@ function OrderForm({ loggedInUserInfo }) {
             {/* 수선정보 */}
             <fieldset>
                 <legend>수선 정보</legend>
-                <div>
+                <div className="alteration-info-table">
                     <table>
-                        <tbody>
+                        <tbody className="alteration-info-table-container">
                             {/* 드레스 뒷품 */}
-                            <tr>
+                            <tr className="alteration-info-table-row alteration-info-table-row1">
                                 <td>드레스 뒷품:</td>
-                                <td>
+                                <td className="regular">
                                     <input
                                         type="text"
                                         name="dressBackWidth"
                                         value={alterationInfo.dressBackWidth}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                </td>
-                                <td>CM</td>
+                                CM</td>
                                 <td>드레스 기장:</td>
-                                <td>
+                                <td className="regular">
                                     <input
                                         type="text"
                                         name="dressLength"
                                         value={alterationInfo.dressLength}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                </td>
-                                <td>CM</td>
+                                CM</td>
                             </tr>
 
                             {/* 자켓 소매 */}
-                            <tr>
+                            <tr className="alteration-info-table-row alteration-info-table-row2">
                                 <td>자켓 소매:</td>
-                                <td>
+                                <td className="regular">
                                     <input
                                         type="text"
                                         name="jacketSleeveLength"
                                         value={alterationInfo.jacketSleeveLength}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                </td>
-                                <td>CM</td>
+                                CM</td>
                                 <td>자켓 기장:</td>
-                                <td>
+                                <td className="regular">
                                     <input
                                         type="text"
                                         name="jacketLength"
                                         value={alterationInfo.jacketLength}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                </td>
-                                <td>CM</td>
+                                CM</td>
                             </tr>
 
                             {/* 바지 허리 */}
-                            <tr>
+                            <tr className="alteration-info-table-row alteration-info-table-row3">
                                 <td>바지 허리:</td>
-                                <td>
+                                <td className="regular">
                                     <input
                                         type="text"
                                         name="pantsWaistLength"
                                         value={alterationInfo.pantsWaistLength}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                </td>
-                                <td>CM</td>
+                                CM</td>
                                 <td>바지 기장:</td>
-                                <td>
+                                <td className="regular">
                                     <input
                                         type="text"
                                         name="pantsLength"
                                         value={alterationInfo.pantsLength}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                </td>
-                                <td>CM</td>
+                                CM</td>
                             </tr>
                             {/* 기장 메모 */}
-                            <tr>
+                            <tr className="alteration-info-table-row alteration-info-table-row4">
                                 <td>기장 메모:</td>
                                 <td colSpan="5">
                                     <textarea
                                         name="alterationMemo"
                                         value={alterationInfo.alterationMemo}
                                         onChange={alterationInfoHandleChange}
-                                        rows="4"
+                                        rows="3"
+                                        cols="70"
                                         style={{ width: '100%' }}
                                     />
                                 </td>
                             </tr>
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
-                            <tr>
+                            <tr className="alteration-info-table-row alteration-info-table-row5">
                                 <td>수령 방법:</td>
                                 <td>
                                     <select name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
@@ -1019,11 +1011,10 @@ function OrderForm({ loggedInUserInfo }) {
                                         <option value="방문수령">매장 수령</option>
                                     </select>
                                 </td>
-                            </tr>
-                            {orderInfo.deliveryMethod === "배송" && (
-                                <tr>
-                                    <td>배송지 주소:</td>
-                                    <td>
+                                {orderInfo.deliveryMethod === "배송" && (
+                                    <>
+                                        <td>배송지 주소:</td>
+                                        <td>
                                         <input
                                             type="text"
                                             name="address"
@@ -1031,8 +1022,9 @@ function OrderForm({ loggedInUserInfo }) {
                                             onChange={ordererInfoHandleChange}
                                         />
                                     </td>
-                                </tr>
+                                </>
                             )}
+                            </tr>
                         </tbody>
                     </table>
                 </div>
