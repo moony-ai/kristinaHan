@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderForm.css';
+import '../src/styles/Print.css';
 
 function OrderForm({ loggedInUserInfo }) {
 
@@ -421,10 +422,10 @@ function OrderForm({ loggedInUserInfo }) {
                     <span>주문서 번호: </span>{orderInfo.orderNumber}
                 </div>
                 <div className="orderinfo_row orderinfo_row2">
-                    <span>작성자 * :</span>
+                    <span>작성자 *  :</span>
                     <input
                     type="text"
-                    placeholder='    작성자를 입력하세요.'
+                    placeholder='작성자를 입력하세요.'
                     value={orderInfo.creator}
                     onChange={handleCreatorChange}
                     />
@@ -538,8 +539,8 @@ function OrderForm({ loggedInUserInfo }) {
                         <tbody className="clothes-info-table-container">
                             {/* 예물 섹션 */}
                             <tr className="clothes-info-table-row clothes-info-table-row1">
-                                <td colSpan="4"><strong>예물 -</strong></td>
-                                <td>남성 반지 사이즈:</td>
+                                <td colSpan="4"><strong>예물</strong></td>
+                                <td>반지 (남):</td>
                                 <td>
                                     <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
                                         <option value="">구매안함</option>
@@ -548,7 +549,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         ))}
                                     </select>
                                 </td>
-                                <td>여성 반지 사이즈:</td>
+                                <td>반지 (여):</td>
                                 <td>
                                     <select name="ringSizeWomen" value={productInfo.ringSizeWomen} onChange={productInfoHandleChange}>
                                         <option value="">구매안함</option>
@@ -579,8 +580,8 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             <tr className="clothes-info-table-row clothes-info-table-row2">
-                                <td colSpan="4"><strong>턱시도 -</strong></td>
-                                <td>턱시도 유형:</td>
+                                <td colSpan="4"><strong>턱시도</strong></td>
+                                <td>유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
                                         <option value="자켓 (R-Peaked)">자켓 (R-Peaked)</option>
@@ -623,7 +624,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td colSpan="3"><hr className="table-cell" /></td>
                             </tr>
                             <tr className="clothes-info-table-row clothes-info-table-row3">
-                                <td colSpan="4"><strong>드레스 -</strong></td>
+                                <td colSpan="4"><strong>드레스</strong></td>
                                 <td>드레스 타입:</td>
                                 <td>
                                     <select name="dressType" value={productInfo.dressType} onChange={productInfoHandleChange}>

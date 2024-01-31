@@ -42,6 +42,11 @@
         font-size: medium;
     }
 
+    .form-button {
+        font-weight: 600;
+        font-size: medium;
+    }
+
     input {
         font-size: medium;
         border: 1.5px groove #06407A;
@@ -49,6 +54,10 @@
         border-left: none;
         border-right: none;
         border-radius: 0;
+    }
+
+    input:not([type="radio"]) {
+        width: 150px;
     }
 
     input:focus {
@@ -108,13 +117,6 @@
 
     .orderer-info-table-row td {
         padding: 0 15px 0 0;
-    }
-
-    @media (min-width: 640px) {
-        .orderer-info-table-row1 {
-            flex-grow: 2;
-            box-sizing: border-box;
-        }
     }
 
     /* 제품 정보칸 포맷*/
@@ -289,7 +291,7 @@
     }
 
     .pair6 {
-        padding-right: 30px; /* Adjust as needed */
+        padding-right: 30px;
     }
 
     /* 수선 정보칸 포맷*/
@@ -360,37 +362,6 @@
 
     .alteration-info-table-row5 td:nth-child(2){
         padding-right: 100px;
-    }
-}
-
-@media (max-width: 640px){
-    .form-container {
-        overflow-x: auto;
-    }
-}
-
-.print-container {
-    display: none;
-}
-
-@media print {
-    .print-container {
-        display: block;
-        position: fixed;
-        top: -9999px;
-        left: -9999px;
-        width: 210mm;
-        height: 297mm;
-        padding: 20mm;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #fff;
-        box-sizing: border-box;
-    }
-
-    body {
-        background-color: #fff;
-        
     }
 }
 

@@ -1,0 +1,190 @@
+@media print {
+    .form-container {
+    width: 210mm;
+    height: 297mm;
+    background-color: #E5E8F4;
+
+    fieldset {
+        display: block;
+        width: 80vw;
+        max-width: 800px;
+        margin-bottom: 10px; 
+        padding-bottom: 4px;
+    }
+
+    legend {
+        background-color: none;
+        padding: 0 10px;
+        color: #06407A;
+        font-size: 18px;
+        font-weight: 800;
+    }
+    
+    /* 주문 정보칸 포맷 */
+    .orderinfo_row {
+        margin: 8px 0px 8px 10px;
+    }
+
+    .orderinfo_row1 {
+        margin: 3px 0px 2px 10px;
+    }
+
+    .orderinfo_row2 input{
+        width: 180px;
+        padding-bottom: 2px;
+    }
+
+    .orderinfo_row2 span{
+        padding-top: 2px;
+    }
+
+    /* 고객 정보칸 포맷 */
+    .orderer-info-table-container {
+    display: flex;
+    flex-wrap: wrap;
+    }
+
+    .orderer-info-table-row {
+    padding: 2x 0px 3px 0px;
+    }
+
+    .orderer-info-table-row td {
+        padding: 0 5px 0 0;
+    }
+
+    .orderer-info-table-row input {
+        width: 100px;
+    }
+
+    /* 제품 정보칸 포맷*/
+    .clothes-info-table-container {
+        padding: none;
+        font-size: smaller;
+    }
+
+    .clothes-info-table-container input{
+        width: 4px;
+        height: 1px;
+        padding: none;
+    }
+    
+    .clothes-info-table-row {
+        padding: none;
+    }
+
+    .clothes-info-table-row1 {
+        font-size: small;
+        padding-top: 0px;
+        margin-bottom: none;
+    }
+    
+    .clothes-info-table-row1,
+    .clothes-info-table-row2 {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .clothes-info-table-row3 {
+        margin-left: none;
+        margin-bottom: none;
+        border: none;
+        padding: 0px;
+    }
+
+    .clothes-info-table-row td{
+        padding-right: 0px;
+    }
+
+    .clothes-info-table-row1 td:nth-child(2){
+        padding-left: 8px;
+    }
+
+    .clothes-info-table-row2 td:nth-child(2){
+        padding-left: 8px;
+        padding-right: 0;
+    }
+
+    .clothes-info-table-row3 td:first-child{
+        margin-left: none;
+    }
+    /* 결제 정보칸 포맷*/
+    .payment-info-table__row td > input {
+        width: 100px;
+    }
+    
+    .payment-info-table__row1,
+    .payment-info-table__row2,
+    .payment-info-table__row3 {
+        margin: 0px 5px 0px 0px;
+    }
+
+    .payment-info-table__row1,
+    .payment-info-table__row2{
+        margin-bottom: 5px;
+    }
+
+    .payment-info-table__row td {
+        margin: 0px 5px 5px 5px;
+    }
+
+    .payment-info-table__row2 td:first-child,
+    .payment-info-table__row3 td:first-child{
+        padding-bottom: 0px;
+    }
+
+    .payment-info-table__row2 td:last-child,
+    .payment-info-table__row3 td:last-child{
+        padding-top: 7px;
+    }
+    /* 선수금 */
+    .payment-info-table__row2 td:first-child > span,
+    .payment-info-table__row2 td:nth-child(2) > span,
+    .payment-info-table__row2 td:nth-child(3) > span,
+    .payment-info-table__row2 td:nth-child(4) > span,
+    .payment-info-table__row2 td:last-child > span {
+        padding-right: 20px;
+    }
+
+    .payment-info-table__row2 td:first-child > input,
+    .payment-info-table__row2 td:nth-child(2) > input,
+    .payment-info-table__row2 td:nth-child(3) > input,
+    .payment-info-table__row2 td:nth-child(4) > input,
+    .payment-info-table__row2 td:last-child > input {
+        margin-right: 5px;
+    }
+
+    .payment-info-table__row2 td:last-child > input {
+        margin-left: 12px;
+    }
+
+    .payment-info-table__row2 td:nth-child(2) > label,
+    .payment-info-table__row2 td:nth-child(3) > label,
+    .payment-info-table__row2 td:nth-child(4) > label {
+        margin: 0 15px;
+    }
+
+    .payment-info-table__row2 td:nth-child(2) label:nth-child(3),
+    .payment-info-table__row2 td:nth-child(3) label:nth-child(3){
+        padding-left: 13px;
+    }
+    /* 잔금 */
+    .pair2 {
+        padding-right: 5px;
+    }
+
+    .pair4 {
+        padding-right: 5px;
+    }
+
+    .pair5 {
+        padding-left: 5px;
+    }
+
+    .pair6 {
+        padding-right: 5px;
+    }
+
+    
+    }
+}
