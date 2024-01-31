@@ -6,9 +6,10 @@
 
     fieldset {
         display: block;
-        width: 80vw;
-        max-width: 800px;
-        margin-bottom: 10px; 
+        width: 88vw;
+        max-width: 880px;
+        margin-top: 10px;
+        margin-bottom: 20px; 
         padding-bottom: 4px;
     }
 
@@ -184,6 +185,18 @@
 
     .alteration-info-table-row1 > td:nth-child(3){
         margin-left: 80px;
+    }
+
+    .alteration-info-table-row4 > td:first-child{
+        padding-right: 8px;
+    }
+
+    .alteration-info-table-row5 > td:nth-child(3){
+        margin-right: 8px;
+    }
+
+    .alteration-info-table-row5 > td:nth-child(4) > input{
+        width: 200px
     }
     }
 

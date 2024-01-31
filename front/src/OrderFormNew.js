@@ -1029,16 +1029,16 @@ function OrderForm({ loggedInUserInfo }) {
                                     </select>
                                 </td>
                                 {orderInfo.deliveryMethod === "배송" && (
-                                    <>
-                                        <td>배송지 주소:</td>
-                                        <td>
+                                <>
+                                <td>배송지 주소:</td>
+                                <td>
                                         <input
                                             type="text"
                                             name="address"
                                             value={ordererInfo.address}
                                             onChange={ordererInfoHandleChange}
                                         />
-                                    </td>
+                                </td>
                                 </>
                             )}
                             </tr>
