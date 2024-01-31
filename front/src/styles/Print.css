@@ -137,54 +137,57 @@
     .payment-info-table__row3 td:last-child{
         padding-top: 7px;
     }
-    /* 선수금 */
-    .payment-info-table__row2 td:first-child > span,
-    .payment-info-table__row2 td:nth-child(2) > span,
-    .payment-info-table__row2 td:nth-child(3) > span,
-    .payment-info-table__row2 td:nth-child(4) > span,
-    .payment-info-table__row2 td:last-child > span {
-        padding-right: 20px;
-    }
-
-    .payment-info-table__row2 td:first-child > input,
-    .payment-info-table__row2 td:nth-child(2) > input,
-    .payment-info-table__row2 td:nth-child(3) > input,
-    .payment-info-table__row2 td:nth-child(4) > input,
-    .payment-info-table__row2 td:last-child > input {
-        margin-right: 5px;
-    }
-
-    .payment-info-table__row2 td:last-child > input {
-        margin-left: 12px;
-    }
-
-    .payment-info-table__row2 td:nth-child(2) > label,
-    .payment-info-table__row2 td:nth-child(3) > label,
-    .payment-info-table__row2 td:nth-child(4) > label {
-        margin: 0 15px;
-    }
-
-    .payment-info-table__row2 td:nth-child(2) label:nth-child(3),
-    .payment-info-table__row2 td:nth-child(3) label:nth-child(3){
-        padding-left: 13px;
-    }
     /* 잔금 */
-    .pair2 {
-        padding-right: 5px;
-    }
-
-    .pair4 {
+    .pair2, .pair4, .pair6 {
         padding-right: 5px;
     }
 
     .pair5 {
         padding-left: 5px;
     }
-
-    .pair6 {
-        padding-right: 5px;
+    /* 수선 정보칸 포맷*/
+    .alteration-info-table-row1{
+        margin-top: 0px;
     }
 
-    
+    .alteration-info-table-row1,
+    .alteration-info-table-row2{
+        margin-bottom: 0px;
+    }
+
+    .alteration-info-table-row3{
+        margin-bottom: 5px;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(2),
+    .alteration-info-table-row1 > td:nth-child(4),
+    .alteration-info-table-row2 > td:nth-child(2),
+    .alteration-info-table-row2 > td:nth-child(4),
+    .alteration-info-table-row3 > td:nth-child(2),
+    .alteration-info-table-row3 > td:nth-child(4){
+        margin-left: 5px;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(2) > input,
+    .alteration-info-table-row1 > td:nth-child(4) > input,
+    .alteration-info-table-row2 > td:nth-child(2) > input,
+    .alteration-info-table-row2 > td:nth-child(4) > input,
+    .alteration-info-table-row3 > td:nth-child(2) > input,
+    .alteration-info-table-row3 > td:nth-child(4) > input{
+        width: 140px
+    }
+
+    .alteration-info-table-row2 > td:nth-child(3),
+    .alteration-info-table-row3 > td:nth-child(3){
+        margin-left: 80px;
+    }
+
+    .alteration-info-table-row1 > td:nth-child(3){
+        margin-left: 80px;
+    }
+    }
+
+    .form-button {
+        display: none;
     }
 }
