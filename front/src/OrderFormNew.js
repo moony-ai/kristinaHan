@@ -1014,7 +1014,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         value={alterationInfo.alterationMemo}
                                         onChange={alterationInfoHandleChange}
                                         rows="3"
-                                        cols="70"
+                                        cols="65"
                                         style={{ width: '100%' }}
                                     />
                                 </td>

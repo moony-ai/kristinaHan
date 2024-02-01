@@ -2,15 +2,15 @@
     .form-container {
     width: 210mm;
     height: 297mm;
+    -webkit-print-color-adjust: exact;
     background-color: #E5E8F4;
 
     fieldset {
         display: block;
         width: 88vw;
         max-width: 880px;
-        margin-top: 10px;
-        margin-bottom: 20px; 
-        padding-bottom: 4px;
+        margin-top: 8px;
+        margin-bottom: 8px; 
     }
 
     legend {
@@ -54,7 +54,7 @@
     }
 
     .orderer-info-table-row input {
-        width: 100px;
+        width: 120px;
     }
 
     /* 제품 정보칸 포맷*/
@@ -68,10 +68,6 @@
         height: 1px;
         padding: none;
     }
-    
-    .clothes-info-table-row {
-        padding: none;
-    }
 
     .clothes-info-table-row1 {
         font-size: small;
@@ -81,16 +77,23 @@
     
     .clothes-info-table-row1,
     .clothes-info-table-row2 {
-        padding-top: 0px;
-        padding-bottom: 0px;
         margin-top: 0px;
+        padding: 5px 0;
+    }
+
+    .clothes-info-table-row1 td:nth-child(even){
+        padding: 0 4px;
+    }
+
+    .clothes-info-table-row1 input{
+        padding-right: 10px;
     }
 
     .clothes-info-table-row3 {
         margin-left: none;
         margin-bottom: none;
         border: none;
-        padding: 0px;
+        padding: 2px 0;
     }
 
     .clothes-info-table-row td{
@@ -102,7 +105,10 @@
     }
 
     .clothes-info-table-row2 td:nth-child(2){
-        padding-left: 8px;
+        padding-left: 4px;
+    }
+
+    .clothes-info-table-row2 td:first-child{
         padding-right: 0;
     }
 
@@ -111,7 +117,7 @@
     }
     /* 결제 정보칸 포맷*/
     .payment-info-table__row td > input {
-        width: 100px;
+        width: 120px;
     }
     
     .payment-info-table__row1,
@@ -175,7 +181,7 @@
     .alteration-info-table-row2 > td:nth-child(4) > input,
     .alteration-info-table-row3 > td:nth-child(2) > input,
     .alteration-info-table-row3 > td:nth-child(4) > input{
-        width: 140px
+        width: 160px
     }
 
     .alteration-info-table-row2 > td:nth-child(3),
@@ -189,6 +195,10 @@
 
     .alteration-info-table-row4 > td:first-child{
         padding-right: 8px;
+    }
+
+    .alteration-info-table-row4 > td:nth-child(2){
+        padding-top: 6px;
     }
 
     .alteration-info-table-row5 > td:nth-child(3){
