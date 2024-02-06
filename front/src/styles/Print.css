@@ -4,13 +4,39 @@
     height: 297mm;
     -webkit-print-color-adjust: exact;
     background-color: #E5E8F4;
+    padding: 30px;
 
     fieldset {
-        display: block;
-        width: 88vw;
-        max-width: 880px;
+        display: inline-block;
+        width: 90vw;
+        max-width: 900px;
         margin-top: 8px;
-        margin-bottom: 8px; 
+        margin-bottom: 8px;
+        margin-bottom: 10px; 
+        padding-bottom: 3px;
+        border: 1.5px groove #06407A;
+        border-radius: 10px;
+        background-color: #FFFFFF;
+    }
+
+    .orderinfo {
+        height: 10vh;
+    }
+
+    .orderer-info {
+        height: 7vh;
+    }
+
+    .clothesinfo {
+        height: 10vh;
+    }
+
+    .paymentinfo {
+        height: 35vh;
+    }
+
+    .alteration-info {
+        height: 16vh;
     }
 
     legend {
@@ -23,11 +49,7 @@
     
     /* 주문 정보칸 포맷 */
     .orderinfo_row {
-        margin: 8px 0px 8px 10px;
-    }
-
-    .orderinfo_row1 {
-        margin: 3px 0px 2px 10px;
+        margin: 10px 0px 10px 10px;
     }
 
     .orderinfo_row2 input{
@@ -36,7 +58,30 @@
     }
 
     .orderinfo_row2 span{
-        padding-top: 2px;
+        padding-right: 12px;
+    }
+
+    .orderinfo_row1 span:not(:last-child){
+        padding-right: 40px;
+    }
+
+    .orderinfo_row2 input{
+        margin-right: 165px;
+    }
+
+    .orderinfo_row3 {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+      }
+
+    .orderinfo_row3 span{
+        padding-right: 11px;
+    }
+
+    .orderinfo_row3 label {
+        margin-right: 10px; /* Adjust spacing between radio buttons */
+        margin-bottom: 5px;
     }
 
     /* 고객 정보칸 포맷 */
@@ -54,7 +99,8 @@
     }
 
     .orderer-info-table-row input {
-        width: 120px;
+        width: 110px;
+        padding-right: 30px;
     }
 
     /* 제품 정보칸 포맷*/
@@ -72,21 +118,11 @@
     .clothes-info-table-row1 {
         font-size: small;
         padding-top: 0px;
-        margin-bottom: none;
-    }
-    
-    .clothes-info-table-row1,
-    .clothes-info-table-row2 {
-        margin-top: 0px;
-        padding: 5px 0;
+        border: 2px groove #06407A;
     }
 
-    .clothes-info-table-row1 td:nth-child(even){
-        padding: 0 4px;
-    }
-
-    .clothes-info-table-row1 input{
-        padding-right: 10px;
+    .clothes-info-table-row td:first-child {
+        padding-right: 0;
     }
 
     .clothes-info-table-row3 {
@@ -98,10 +134,11 @@
 
     .clothes-info-table-row td{
         padding-right: 0px;
+        padding-bottom: 10px;
     }
 
     .clothes-info-table-row1 td:nth-child(2){
-        padding-left: 8px;
+        padding-left: 5px;
     }
 
     .clothes-info-table-row2 td:nth-child(2){
@@ -113,22 +150,49 @@
     }
 
     .clothes-info-table-row3 td:first-child{
-        margin-left: none;
+        padding-right: 7px;
     }
     /* 결제 정보칸 포맷*/
+    .payment-info-table-container {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .payment-info-table__row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .payment-info-table__row {
+        padding-top: 12px;
+    }
+
+    .payment-info-table__row2,
+    .payment-info-table__row3 {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .payment-info-table-container div tr td input {
+        margin-right: 5px;
+    }
+
     .payment-info-table__row td > input {
         width: 120px;
     }
-    
-    .payment-info-table__row1,
-    .payment-info-table__row2,
-    .payment-info-table__row3 {
-        margin: 0px 5px 0px 0px;
+
+    .payment-info-table__row td > span {
+        padding-right: 8px;
     }
 
-    .payment-info-table__row1,
+    .payment-info-table__row1{
+        margin-bottom: 5px;
+    }
+
     .payment-info-table__row2{
         margin-bottom: 5px;
+        padding-bottom: 16px;
     }
 
     .payment-info-table__row td {
@@ -142,17 +206,27 @@
 
     .payment-info-table__row2 td:last-child,
     .payment-info-table__row3 td:last-child{
-        padding-top: 7px;
+        padding-top: 10px;
     }
-    /* 잔금 */
-    .pair2, .pair4, .pair6 {
-        padding-right: 5px;
+
+    .payment-info-table__row1 td:nth-child(even) {
+        padding-right: 40px;
+        padding-left: 3px;
+    }
+
+    .payment-info-table__row2 td label,
+    .payment-info-table__row3 td label {
+        padding-left: 8px;
     }
 
     .pair5 {
         padding-left: 5px;
     }
     /* 수선 정보칸 포맷*/
+    .alteration-info div table tbody tr td input {
+        margin-right: 5px;
+    }
+
     .alteration-info-table-row1{
         margin-top: 0px;
     }

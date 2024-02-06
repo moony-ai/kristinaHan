@@ -416,13 +416,13 @@ function OrderForm({ loggedInUserInfo }) {
     return (
         <form className="form-container" onSubmit={handleSubmit}>
             {/* 주문 정보 */}
-            <fieldset>
+            <fieldset className="orderinfo">
                 <legend>주문 정보</legend>
                 <div className="orderinfo_row orderinfo_row1">
                     <span>주문서 번호: </span>{orderInfo.orderNumber}
                 </div>
                 <div className="orderinfo_row orderinfo_row2">
-                    <span>작성자 *  :</span>
+                    <span>작성자 * :</span>
                     <input
                     type="text"
                     placeholder='작성자를 입력하세요.'
@@ -435,30 +435,26 @@ function OrderForm({ loggedInUserInfo }) {
                     {orderStatusOptions.map((status, index) => (
                         <label key={index}>
                             <input
-                                type="radio"
-                                name="orderStatus"
-                                value={status}
-                                checked={orderInfo.orderStatus === status}
-                                onChange={orderInfoHandleChange}
-                            />
+                            type="radio"
+                            name="orderStatus"
+                            value={status}
+                            checked={orderInfo.orderStatus === status}
+                            onChange={orderInfoHandleChange}/>
                             {status}
                         </label>
                     ))}
                 </div>
             </fieldset>
             {/* 고객 정보 */}
-            <fieldset>
+            <fieldset className="orderer-info">
                 <legend>고객 정보</legend>
                 <div className="orderer-info-table">
                     <table>
                         <tbody className="orderer-info-table-container">
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
                             {/* 주문자 이름 */}
-                            <tr className="orderer-info-table-row">
+                            <tr className="orderer-info-table-row orderer-info-table-row-half">
                                 <td>주문자 이름:</td>
-                                <td>
+                                <td className="orderer-info-table-row-half-first">
                                     <input
                                         type="text"
                                         name="ordererName"
@@ -476,8 +472,9 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
+                            {/* 소속 */}
                             <tr className="orderer-info-table-row">
-                                <td>주문자 소속:</td>
+                                <td className="orderer-info-table-row-third">주문자 소속:</td>
                                 <td>
                                     <input
                                         type="text"
@@ -493,12 +490,9 @@ function OrderForm({ loggedInUserInfo }) {
                 <div className="orderer-info-table">
                     <table >
                         <tbody className="orderer-info-table-container">
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
-                            <tr className="orderer-info-table-row">
+                            <tr className="orderer-info-table-row orderer-info-table-row-half">
                                 <td>배우자 이름:</td>
-                                <td>
+                                <td className="orderer-info-table-row-half-first">
                                     <input
                                         type="text"
                                         name="spouseName"
@@ -517,7 +511,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             <tr className="orderer-info-table-row">
-                                <td>배우자 소속:</td>
+                                <td className="orderer-info-table-row-third">배우자 소속:</td>
                                 <td>
                                     <input
                                         type="text"
@@ -532,7 +526,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
             {/* 제품정보 */}
-            <fieldset>
+            <fieldset className="clothesinfo">
                 <legend className="clothes-info">제품 정보</legend>
                 <div className="clothes-info-table">
                     <table>
@@ -540,7 +534,7 @@ function OrderForm({ loggedInUserInfo }) {
                             {/* 예물 섹션 */}
                             <tr className="clothes-info-table-row clothes-info-table-row1">
                                 <td colSpan="4"><strong>예물</strong></td>
-                                <td>반지 (남):</td>
+                                <td>반지 사이즈(남):</td>
                                 <td>
                                     <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
                                         <option value="">구매안함</option>
@@ -549,7 +543,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         ))}
                                     </select>
                                 </td>
-                                <td>반지 (여):</td>
+                                <td>반지 사이즈(여):</td>
                                 <td>
                                     <select name="ringSizeWomen" value={productInfo.ringSizeWomen} onChange={productInfoHandleChange}>
                                         <option value="">구매안함</option>
@@ -576,12 +570,9 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             {/* 턱시도 섹션 */}
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
                             <tr className="clothes-info-table-row clothes-info-table-row2">
                                 <td colSpan="4"><strong>턱시도</strong></td>
-                                <td>유형:</td>
+                                <td>턱시도 유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
                                         <option value="자켓 (R-Peaked)">자켓 (R-Peaked)</option>
@@ -620,12 +611,9 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
 
                             {/* 드레스 섹션 */}
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
                             <tr className="clothes-info-table-row clothes-info-table-row3">
-                                <td colSpan="4"><strong>드레스</strong></td>
-                                <td>드레스 타입:</td>
+                                <td colSpan="4"><strong>드레스 </strong></td>
+                                <td> 드레스 타입:</td>
                                 <td>
                                     <select name="dressType" value={productInfo.dressType} onChange={productInfoHandleChange}>
                                         <option value="드레스 (R)">드레스 (R)</option>
@@ -649,7 +637,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
             {/* 결제정보 */}
-            <fieldset>
+            <fieldset className="paymentinfo">
                 <legend className="payment-info">결제 정보</legend>
                 <div>
                     <table className="payment-info-table">
@@ -812,7 +800,7 @@ function OrderForm({ loggedInUserInfo }) {
                                             원</td>
                                     </tr>
                                 {/* 잔금 입력 필드 */}
-                                    <tr className=".payment-info-table__row payment-info-table__row3">
+                                    <tr className="payment-info-table__row3">
                                         <td>
                                             <span>잔금 결제일:</span>
                                             <input
@@ -935,7 +923,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
             {/* 수선정보 */}
-            <fieldset>
+            <fieldset className="alteration-info">
                 <legend>수선 정보</legend>
                 <div className="alteration-info-table">
                     <table>
@@ -1007,7 +995,7 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 기장 메모 */}
                             <tr className="alteration-info-table-row alteration-info-table-row4">
-                                <td>기장 메모:</td>
+                                <td>메모:</td>
                                 <td colSpan="5">
                                     <textarea
                                         name="alterationMemo"
