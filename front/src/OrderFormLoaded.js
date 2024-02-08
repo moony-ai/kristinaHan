@@ -196,6 +196,8 @@ function OrderForm({ loggedInUserInfo }) {
         if (productInfo.earringType) total += productPrices.earring;
         if (productInfo.bowtie) total += productPrices.bowtie;
 
+        console.log(total)
+        
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.totalDeposit || 0) - (prev.totalBalance) }));
     }, [productInfo]);
 
@@ -279,13 +281,15 @@ function OrderForm({ loggedInUserInfo }) {
         const balanceUSD = (Number((paymentInfo.balanceUSD || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.USD);
         const totalBalance = Math.round(balanceKRW + balanceJPY + balanceUSD);
 
+        console.log(totalBalance)
+
         setPaymentInfo(prev => ({
             ...prev,
             totalDeposit,
             balance: prev.totalAmount - totalDeposit - totalBalance
         }));
     }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount,
-    paymentInfo.balanceKRW, paymentInfo.balanceJPY, paymentInfo.balanceUSD, exchangeRates]);
+    paymentInfo.balanceKRW, paymentInfo.balanceJPY, paymentInfo.balanceUSD, exchangeRates, productInfo]);
 
     function setInfo(data) {
         // 각 상태 변수에 해당하는 데이터를 직접 대입합니다.
