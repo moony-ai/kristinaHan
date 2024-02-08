@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderForm.css';
+import '../src/styles/Print.css';
 
 function OrderForm({ loggedInUserInfo }) {
 
@@ -447,44 +448,45 @@ function OrderForm({ loggedInUserInfo }) {
     return (
         <form className="form-container" onSubmit={handleSubmit}>
             {/* 주문 정보 */}
-            <fieldset>
+            <fieldset className="orderinfo">
                 <legend>주문 정보</legend>
-                <div className="orderinfo_row orderinfo_row1">주문서 번호: {orderInfo.orderNumber}</div>
-                <div className="orderinfo_row">작성자 * : <input
+                <div className="orderinfo_row orderinfo_row1">
+                    <span>주문서 번호: </span>{orderInfo.orderNumber}
+                </div>
+                <div className="orderinfo_row orderinfo_row2">
+                    <span>작성자 * :</span>
+                    <input
                     type="text"
-                    placeholder='    작성자를 입력하세요.'
+                    placeholder='작성자를 입력하세요.'
                     value={orderInfo.creator}
                     onChange={handleCreatorChange}
-                /></div>
-                <div className="orderinfo_row">
-                     주문 상태: 
+                    />
+                </div>
+                <div className="orderinfo_row orderinfo_row3">
+                    <span>주문 상태:</span>
                     {orderStatusOptions.map((status, index) => (
                         <label key={index}>
                             <input
-                                type="radio"
-                                name="orderStatus"
-                                value={status}
-                                checked={orderInfo.orderStatus === status}
-                                onChange={orderInfoHandleChange}
-                            />
+                            type="radio"
+                            name="orderStatus"
+                            value={status}
+                            checked={orderInfo.orderStatus === status}
+                            onChange={orderInfoHandleChange}/>
                             {status}
                         </label>
                     ))}
                 </div>
             </fieldset>
             {/* 고객 정보 */}
-            <fieldset>
+            <fieldset className="orderer-info">
                 <legend>고객 정보</legend>
                 <div className="orderer-info-table">
                     <table>
                         <tbody className="orderer-info-table-container">
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
                             {/* 주문자 이름 */}
-                            <tr className="orderer-info-table-row orderer-info-table-row1">
+                            <tr className="orderer-info-table-row orderer-info-table-row-half">
                                 <td>주문자 이름:</td>
-                                <td>
+                                <td className="orderer-info-table-row-half-first">
                                     <input
                                         type="text"
                                         name="ordererName"
@@ -502,8 +504,9 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
+                            {/* 소속 */}
                             <tr className="orderer-info-table-row">
-                                <td>주문자 소속:</td>
+                                <td className="orderer-info-table-row-third">주문자 소속:</td>
                                 <td>
                                     <input
                                         type="text"
@@ -519,12 +522,9 @@ function OrderForm({ loggedInUserInfo }) {
                 <div>
                     <table >
                         <tbody className="orderer-info-table-container">
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
-                            <tr className="orderer-info-table-row orderer-info-table-row1">
+                            <tr className="orderer-info-table-row orderer-info-table-row-half">
                                 <td>배우자 이름:</td>
-                                <td>
+                                <td className="orderer-info-table-row-half-first">
                                     <input
                                         type="text"
                                         name="spouseName"
@@ -543,7 +543,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             <tr className="orderer-info-table-row">
-                                <td>배우자 소속:</td>
+                                <td className="orderer-info-table-row-third">배우자 소속:</td>
                                 <td>
                                     <input
                                         type="text"
@@ -558,15 +558,15 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
             {/* 제품정보 */}
-            <fieldset>
+            <fieldset className="clothesinfo">
                 <legend className="clothes-info">제품 정보</legend>
                 <div className="clothes-info-table">
                     <table>
                         <tbody className="clothes-info-table-container">
                             {/* 예물 섹션 */}
                             <tr className="clothes-info-table-row clothes-info-table-row1">
-                                <td colSpan="4"><strong>예물 -</strong></td>
-                                <td>남성 반지 사이즈:</td>
+                                <td colSpan="4"><strong>예물</strong></td>
+                                <td>반지 사이즈(남):</td>
                                 <td>
                                     <select name="ringSizeMen" value={productInfo.ringSizeMen} onChange={productInfoHandleChange}>
                                         <option value="">구매안함</option>
@@ -575,7 +575,7 @@ function OrderForm({ loggedInUserInfo }) {
                                         ))}
                                     </select>
                                 </td>
-                                <td>여성 반지 사이즈:</td>
+                                <td>반지 사이즈(여):</td>
                                 <td>
                                     <select name="ringSizeWomen" value={productInfo.ringSizeWomen} onChange={productInfoHandleChange}>
                                         <option value="">구매안함</option>
@@ -602,11 +602,8 @@ function OrderForm({ loggedInUserInfo }) {
                                 </td>
                             </tr>
                             {/* 턱시도 섹션 */}
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
                             <tr className="clothes-info-table-row clothes-info-table-row2">
-                                <td colSpan="4"><strong>턱시도 -</strong></td>
+                                <td colSpan="4"><strong>턱시도</strong></td>
                                 <td>턱시도 유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
@@ -646,12 +643,9 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
 
                             {/* 드레스 섹션 */}
-                            <tr>
-                                <td colSpan="3"><hr className="table-cell" /></td>
-                            </tr>
                             <tr className="clothes-info-table-row clothes-info-table-row3">
-                                <td colSpan="4"><strong>드레스 -</strong></td>
-                                <td>드레스 타입:</td>
+                                <td colSpan="4"><strong>드레스 </strong></td>
+                                <td> 드레스 타입:</td>
                                 <td>
                                     <select name="dressType" value={productInfo.dressType} onChange={productInfoHandleChange}>
                                         <option value="드레스 (R)">드레스 (R)</option>
@@ -675,7 +669,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
             {/* 결제정보 */}
-            <fieldset>
+            <fieldset className="paymentinfo">
                 <legend className="payment-info">결제 정보</legend>
                 <div>
                     <table className="payment-info-table">
@@ -721,7 +715,9 @@ function OrderForm({ loggedInUserInfo }) {
                             <div className="payment-info-table__row">
                                 {/* 선수금 입력 필드 */}
                                     <tr className="payment-info-table__row2">
-                                        <td>선수금 결제일:<input
+                                        <td>
+                                            <span>선수금 결제일:</span>
+                                            <input
                                                 type="date"
                                                 name="depositDate"
                                                 value={paymentInfo.depositDate}
@@ -729,7 +725,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             />
                                         </td>
                                     {/* 선수금 (원화) */}
-                                        <td>선수금 (원화):
+                                        <td>
+                                            <span>선수금 (원화):</span>
                                             <input
                                                 type="text"
                                                 min="0"
@@ -760,7 +757,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             </label>
                                         </td>
                                     {/* 선수금 (엔화) */}
-                                        <td>선수금 (엔화):
+                                        <td>
+                                        <span>선수금 (엔화):</span>
                                             <input
                                                 type="text"
                                                 min="0"
@@ -791,7 +789,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             </label>
                                         </td>
                                     {/* 선수금 (달러) */}
-                                        <td>선수금 (달러):
+                                        <td>
+                                            <span>선수금 (달러):</span>
                                             <input
                                                 type="text"
                                                 min="0"
@@ -822,7 +821,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             </label>
                                         </td>
                                     {/* 선수금 총액 */}
-                                        <td className="bold">선수금 총액:
+                                        <td className="bold">
+                                            <span>선수금 총액:</span>
                                             <input
                                                 type="text"
                                                 name="totalDeposit"
@@ -833,7 +833,8 @@ function OrderForm({ loggedInUserInfo }) {
                                     </tr>
                                 {/* 잔금 입력 필드 */}
                                     <tr className="payment-info-table__row3">
-                                        <td>잔금 결제일:
+                                        <td>
+                                            <span>잔금 결제일:</span>
                                             <input
                                                 type="date"
                                                 name="balanceDate"
@@ -842,7 +843,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             />
                                         </td>
                                     {/* 잔금 지급액 (원화) */}
-                                        <td>잔금 지급액 (원화):
+                                        <td>
+                                            <span>잔금 지급액 (원화):</span>
                                             <input
                                                 type="text"
                                                 min="0"
@@ -873,7 +875,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             </label>
                                         </td>
                                     {/* 잔금 지급액 (엔화) */}
-                                        <td>잔금 지급액 (엔화):
+                                        <td>
+                                            <span>잔금 지급액 (엔화):</span>
                                             <input
                                                 type="text"
                                                 min="0"
@@ -881,7 +884,7 @@ function OrderForm({ loggedInUserInfo }) {
                                                 value={paymentInfo.balanceJPY}
                                                 onChange={handleBalanceChange}
                                             />
-                                            원
+                                            엔
                                             <label>
                                                 <input
                                                     type="radio"
@@ -904,7 +907,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             </label>
                                         </td>
                                     {/* 잔금 지급액 (달러) */}
-                                        <td>잔금 지급액 (달러):
+                                        <td>
+                                            <span>잔금 지급액 (달러):</span>
                                             <input
                                                 type="text"
                                                 min="0"
@@ -912,7 +916,7 @@ function OrderForm({ loggedInUserInfo }) {
                                                 value={paymentInfo.balanceUSD}
                                                 onChange={handleBalanceChange}
                                             />
-                                            원
+                                            달러
                                             <label>
                                                 <input
                                                     type="radio"
@@ -935,7 +939,8 @@ function OrderForm({ loggedInUserInfo }) {
                                             </label>
                                         </td>
                                     {/* 잔금 */}
-                                        <td className="bold">잔금 총액:
+                                        <td className="bold">
+                                            <span>잔금 총액:</span>
                                             <input
                                                 type="text"
                                                 name="balance"
@@ -950,7 +955,7 @@ function OrderForm({ loggedInUserInfo }) {
                 </div>
             </fieldset>
             {/* 수선정보 */}
-            <fieldset>
+            <fieldset className="alteration-info">
                 <legend>수선 정보</legend>
                 <div className="alteration-info-table">
                     <table>
@@ -1022,14 +1027,14 @@ function OrderForm({ loggedInUserInfo }) {
                             </tr>
                             {/* 기장 메모 */}
                             <tr className="alteration-info-table-row alteration-info-table-row4">
-                                <td>기장 메모:</td>
+                                <td>메모:</td>
                                 <td colSpan="5">
                                     <textarea
                                         name="alterationMemo"
                                         value={alterationInfo.alterationMemo}
                                         onChange={alterationInfoHandleChange}
                                         rows="3"
-                                        cols="70"
+                                        cols="65"
                                         style={{ width: '100%' }}
                                     />
                                 </td>
@@ -1044,9 +1049,9 @@ function OrderForm({ loggedInUserInfo }) {
                                     </select>
                                 </td>
                                 {orderInfo.deliveryMethod === "배송" && (
-                                    <>
-                                        <td>배송지 주소:</td>
-                                        <td>
+                                <>
+                                <td>배송지 주소:</td>
+                                <td>
                                         <input
                                             type="text"
                                             name="address"
@@ -1054,7 +1059,7 @@ function OrderForm({ loggedInUserInfo }) {
                                             onChange={ordererInfoHandleChange}
                                             style={{ width: '400px' }}
                                         />
-                                    </td>
+                                </td>
                                 </>
                             )}
                             </tr>
