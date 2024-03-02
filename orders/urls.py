@@ -10,4 +10,7 @@ urlpatterns = [
     path('deleted/<int:pk>', views.DeletedDetail.as_view(), name='deleted-detail'),
     path('updategs/', views.UpdateSheetView.as_view(), name='update-sheet'),
     path('latest/', views.LatestOrderView.as_view(), name='latest-order'),
+    
+    path('new/', views.NewOrderList.as_view(), name='new-order-list'),
+    path('new/<int:pk>/', views.NewOrderDetail.as_view(), name='new-order-detail'),
 ]

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../src/styles/OrderForm.css';
+import '../src/styles/OrderFormNew.css';
 import '../src/styles/Print.css';
 
-function OrderForm({ loggedInUserInfo }) {
+function NewOrderFormLoaded({ loggedInUserInfo }) {
 
+    const { orderNumber } = useParams(); // URL에서 주문 번호 추출
     const navigate = useNavigate(); // 끝나고 목록으로 돌어가기 위해.
 
     // 주문 정보 상태
     const [orderInfo, SetOrderInfo] = useState({
-        creator: '',            // 작성자
+        creator: '작성자',            // 작성자
         creationTime: null,       // 최초 작성 시간
         lastModifiedTime: null,   // 최근 수정 시간
         modifier: null,           // 수정자
@@ -23,11 +24,11 @@ function OrderForm({ loggedInUserInfo }) {
         SetOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
     };
 
-    const handleCreatorChange = (event) => {
-        const newCreator = event.target.value; // 입력된 새로운 작성자 이름
+    const handleModifierChange = (event) => {
+        const newModifier = event.target.value; // 입력된 새로운 작성자 이름
         SetOrderInfo({
             ...orderInfo, // 기존 데이터를 복사
-            creator: newCreator // 새로운 작성자 이름으로 업데이트
+            modifier: newModifier // 새로운 작성자 이름으로 업데이트
         });
     };
 
@@ -37,7 +38,7 @@ function OrderForm({ loggedInUserInfo }) {
         contact: null,
         affiliation: null,
         address: null,
-        spouseName: null,
+        spouseName: null, //배우자 이름
         spouseContact: null,
         spouseAffiliation: null,
     });
@@ -79,10 +80,20 @@ function OrderForm({ loggedInUserInfo }) {
 
             return newState;
         });
+
+        console.log("턱시도 타입 : ", productInfo.tuxedoType, getPantsShirtSizeOptions())
     };
 
     const getPantsShirtSizeOptions = () => {
-        return productInfo.tuxedoType.includes("S-Peaked") ? "S" : "R";
+        if (productInfo.tuxedoType.includes("(맞춤)")) {
+            return productInfo.tuxedoType.includes("(맞춤)") ? " (맞춤)" : "";
+        }
+        else if (productInfo.tuxedoType.includes("(S-Peaked)")) {
+            return productInfo.tuxedoType.includes("(S-Peaked)") ? " (S)" : " (R)";
+        }
+        else {
+            return ""
+        }
     };
 
     // 결제 정보 상태
@@ -100,7 +111,7 @@ function OrderForm({ loggedInUserInfo }) {
         balanceJPY: "0",
         balanceUSD: "0",
         totalBalance: "0",
-        balance: "0",         // 최종잔금
+        balance: "0",
 
         depositDate: null, // 선수금 결제일
         balanceDate: null, // 잔금 결제일
@@ -120,12 +131,13 @@ function OrderForm({ loggedInUserInfo }) {
 
     // 수선 정보 상태
     const [alterationInfo, setAlterationInfo] = useState({
-        dressBackWidth: '', // 드레스 뒷품
-        dressLength: '',    // 드레스 기장
-        jacketSleeveLength: '',   // 자켓 소매
-        jacketLength: '',   // 자켓 기장
-        pantsWaistLength: '',     // 바지 허리
-        pantsLength: '',     // 바지 기장
+        alteration1: '', // 드레스 뒷품
+        alteration2: '', // 드레스 기장
+        alteration3: '', // 자켓 소매
+        alteration4: '', // 자켓 기장
+        alteration5: '', // 자켓 폼
+        alteration6: '', // 셔츠 목
+        alteration7: '', // 셔츠 소매 
         alterationMemo: '' // 기장 메모
     });
 
@@ -147,6 +159,14 @@ function OrderForm({ loggedInUserInfo }) {
         "셔츠 (R)": ["*85", "*90", "95", "100", "105", "110", "*115"],
         "팬츠 (S)": ["28", "29", "30", "31", "33", "35", "37", "39"],
         "셔츠 (S)": ["85", "90", "95", "100", "105", "110", "115"],
+        "자켓 Peaked": ["100", "105", "110", "*115", "*120"],
+        "자켓 Shawl": ["*85", "90", "95", "100", "*105", "*110", "*115", "*120"],
+        "자켓 Peaked (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
+        "자켓 Shawl (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
+        "팬츠": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "*40"],
+        "팬츠 (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
+        "셔츠": ["85", "90", "95", "100", "105", "110", "115"],
+        "셔츠 (맞춤)": ["46", "48", "50", "52", "54", "56"],
         "드레스 (R)": ["*44", "55", "66", "77", "88"],
         "드레스 (S)": ["43", "44", "54", "55", "65", "76"],
         "드레스 (Rw)": ["*44", "*55", "*55반", "66", "77", "88", "99", "100", "105", "110"],
@@ -158,6 +178,9 @@ function OrderForm({ loggedInUserInfo }) {
     // 가격 정보
     const productPrices = {
         jacket: 480000,
+        jacketFit: 950000,
+        jacketOG: 950000,
+        jacketAB: 1200000,
         pants: 240000,
         shirt: 80000,
         dress: 700000,
@@ -165,7 +188,6 @@ function OrderForm({ loggedInUserInfo }) {
         ringWomen: 750000,
         necklace: 800000,
         earring: 500000,
-        // bowtie: 40000,
     };
 
     //환율 정보
@@ -173,7 +195,6 @@ function OrderForm({ loggedInUserInfo }) {
         USD: 800000 / 620, // 원/달러 초기값
         JPY: 80 / 9,  // 원/엔 초기값
     });
-
 
     //천단위 
     const formatNumberWithComma = (num) => {
@@ -186,7 +207,17 @@ function OrderForm({ loggedInUserInfo }) {
     //결제 총액 자동계
     useEffect(() => {
         let total = 0;
-        if (productInfo.jacketSize) total += productPrices.jacket;
+        if (productInfo.jacketSize) {
+            if (productInfo.tuxedoType.includes("맞춤")) {
+                total += productPrices.jacketFit
+            } else if (productInfo.tuxedoType.includes("OG")) {
+                total += productPrices.jacketOG
+            } else if (productInfo.tuxedoType.includes("AB")) {
+                total += productPrices.jacketAB
+            } else {
+                total += productPrices.jacket
+            }
+        }
         if (productInfo.pantsSize) total += productPrices.pants;
         if (productInfo.shirtSize) total += productPrices.shirt;
         if (productInfo.dressSize) total += productPrices.dress;
@@ -195,6 +226,8 @@ function OrderForm({ loggedInUserInfo }) {
         if (productInfo.necklaceSize) total += productPrices.necklace;
         if (productInfo.earringType) total += productPrices.earring;
         if (productInfo.bowtie) total += productPrices.bowtie;
+
+        console.log(total)
 
         setPaymentInfo(prev => ({ ...prev, totalAmount: total, balance: total - (prev.totalDeposit || 0) - (prev.totalBalance) }));
     }, [productInfo]);
@@ -279,63 +312,112 @@ function OrderForm({ loggedInUserInfo }) {
         const balanceUSD = (Number((paymentInfo.balanceUSD || '0').replace(/,/g, '')) || 0) * Number(exchangeRates.USD);
         const totalBalance = Math.round(balanceKRW + balanceJPY + balanceUSD);
 
+        console.log(totalBalance)
+
         setPaymentInfo(prev => ({
             ...prev,
             totalDeposit,
             balance: prev.totalAmount - totalDeposit - totalBalance
         }));
     }, [paymentInfo.depositKRW, paymentInfo.depositJPY, paymentInfo.depositUSD, paymentInfo.totalAmount,
-    paymentInfo.balanceKRW, paymentInfo.balanceJPY, paymentInfo.balanceUSD, exchangeRates]);
+    paymentInfo.balanceKRW, paymentInfo.balanceJPY, paymentInfo.balanceUSD, exchangeRates, productInfo]);
 
-    // 고유 ID생성을 위해 가장 최근 data불러오기
-    const [lastOrderNumber, setLastOrderNumber] = useState(0);
+    function setInfo(data) {
+        // 각 상태 변수에 해당하는 데이터를 직접 대입합니다.
+        SetOrderInfo({
+            creator: data.creator,
+            creationTime: data.creationTime,
+            lastModifiedTime: data.lastModifiedTime,
+            modifier: data.modifier,
+            orderNumber: data.orderNumber,
+            orderStatus: data.orderStatus,
+            deliveryMethod: data.deliveryMethod,
+        });
 
+        setOrdererInfo({
+            ordererName: data.ordererName,
+            contact: data.contact,
+            affiliation: data.affiliation,
+            address: data.address,
+            spouseName: data.spouseName,
+            spouseContact: data.spouseContact,
+            spouseAffiliation: data.spouseAffiliation,
+        });
+
+        setProductInfo({
+            tuxedoType: data.tuxedoType,
+            jacketSize: data.jacketSize,
+            pantsSize: data.pantsSize,
+            shirtSize: data.shirtSize,
+            dressType: data.dressType,
+            dressSize: data.dressSize,
+            ringSizeMen: data.ringSizeMen,
+            ringSizeWomen: data.ringSizeWomen,
+            necklaceSize: data.necklaceSize,
+            earringType: data.earringType,
+            bowtie: data.bowtie,
+        });
+
+        setPaymentInfo({
+            payerName: data.payerName,
+            relationToOrderer: data.relationToOrderer,
+            totalAmount: data.totalAmount,
+            depositKRW: formatNumberWithComma(data.depositKRW), //변환할때 다시 포멧 수정
+            depositJPY: formatNumberWithComma(data.depositJPY),
+            depositUSD: formatNumberWithComma(data.depositUSD),
+            totalDeposit: data.totalDeposit,
+            balanceKRW: formatNumberWithComma(data.balanceKRW),
+            balanceJPY: formatNumberWithComma(data.balanceJPY),
+            balanceUSD: formatNumberWithComma(data.balanceUSD),
+            balance: data.balance,
+            depositDate: data.depositDate,
+            balanceDate: data.balanceDate,
+            paymentMethodDepositKRW: data.paymentMethodDepositKRW,
+            paymentMethodDepositJPY: data.paymentMethodDepositJPY,
+            paymentMethodDepositUSD: data.paymentMethodDepositUSD,
+            paymentMethodBalanceKRW: data.paymentMethodBalanceKRW,
+            paymentMethodBalanceJPY: data.paymentMethodBalanceJPY,
+            paymentMethodBalanceUSD: data.paymentMethodBalanceUSD,
+        });
+
+        setAlterationInfo({
+            alteration1: data.alteration1,
+            alteration2: data.alteration2,
+            alteration3: data.alteration3,
+            alteration4: data.alteration4,
+            alteration5: data.alteration5,
+            alteration6: data.alteration6,
+            alteration7: data.alteration7,
+            alterationMemo: data.alterationMemo,
+        });
+    }
+
+    // DB 불러오기
     useEffect(() => {
-        fetchLatestOrderData();
-    }, []);
-
-    const fetchLatestOrderData = async () => {
-        try {
-            const response = await axios.get('https://server-6kol.onrender.com/api/v1/orders/latest/');
-            const latestOrder = response.data;
-            const latestOrderDate = new Date(latestOrder.creationTime).toLocaleDateString();
-            const currentDate = new Date().toLocaleDateString();
-
-            if (latestOrderDate !== currentDate) {
-                return 1;
-            } else {
-                const lastNumber = parseInt(latestOrder.orderNumber.split('-').pop(), 10);
-                return lastNumber + 1;
-            }
-        } catch (error) {
-            console.error('최근 주문 데이터 가져오기 실패:', error);
-            return 1; // 오류 발생 시 0001로 시작
+        // 주문 번호가 존재하면 서버에서 주문 데이터 불러오기
+        if (orderNumber) {
+            axios.get(`https://server-6kol.onrender.com/api/v1/orders/new/${orderNumber}/`)
+                .then(response => {
+                    const data = response.data;
+                    console.log("이게 data")
+                    console.log(orderNumber)
+                    console.log(data)
+                    // 데이터 넣기
+                    setInfo(data)
+                })
+                .catch(error => {
+                    console.error('주문 데이터 불러오기 실패:', error);
+                });
         }
-    };
+    }, [orderNumber]);
 
-    // 저장요청 
-    const handleSubmit = async (e) => {
+    // 수정요청 
+    const handleSubmit = (e) => {
         e.preventDefault();
         // 현재 시간을 ISO 형식으로 가져오기
         const currentTime = new Date().toISOString();
-        orderInfo.creationTime = currentTime
 
-        // fetchLatestOrderData 함수를 동기적으로 호출
-        const lastOrderNumber = await fetchLatestOrderData();
-
-        // 고유 ID 생성 함수
-        const generateUniqueID = () => {
-            const today = new Date().toISOString().slice(2, 10).replace(/-/g, '');
-            const formattedNumber = lastOrderNumber.toString().padStart(4, '0');
-            return `K${today}-${formattedNumber}`;
-        };
-
-        // 주문번호 생성
-        if (!orderInfo.orderNumber) {
-            orderInfo.orderNumber = generateUniqueID();
-        }
-
-        console.log(orderInfo.orderNumber)
+        orderInfo.lastModifiedTime = currentTime
 
         const depositKRW = parseInt(paymentInfo.depositKRW.replace(/,/g, '')) || 0; // 쉽표제거후 숫자로 변환
         const depositJPY = parseInt(paymentInfo.depositJPY.replace(/,/g, '')) || 0;
@@ -350,7 +432,7 @@ function OrderForm({ loggedInUserInfo }) {
             'ordererInfo.affiliation': '소속',
             'ordererInfo.contact': '연락처',
             'orderInfo.creator': '작성자',
-            'paymentInfo.payerName': '결제자 이름',
+            'orderInfo.modifier': '수정자',
         };
 
         // 필수 항목 검사
@@ -386,9 +468,9 @@ function OrderForm({ loggedInUserInfo }) {
             spouseAffiliation: ordererInfo.spouseAffiliation,
             orderStatus: orderInfo.orderStatus,
             orderNumber: orderInfo.orderNumber,
-            creator: orderInfo.creator, // 필수
+            creator: orderInfo.creator,
             creationTime: orderInfo.creationTime,
-            modifier: orderInfo.modifier,
+            modifier: orderInfo.modifier, // 필수
             lastModifiedTime: orderInfo.lastModifiedTime,
             deliveryMethod: orderInfo.deliveryMethod,
             tuxedoType: productInfo.tuxedoType,
@@ -402,9 +484,9 @@ function OrderForm({ loggedInUserInfo }) {
             necklaceSize: productInfo.necklaceSize,
             earringType: productInfo.earringType,
             bowtie: productInfo.bowtie,
-            payerName: paymentInfo.payerName, // 필수
-            relationToOrderer: paymentInfo.relationToOrderer, // 필수
-            totalAmount: paymentInfo.totalAmount, // 필수
+            payerName: paymentInfo.payerName,
+            relationToOrderer: paymentInfo.relationToOrderer,
+            totalAmount: paymentInfo.totalAmount,
             paymentMethodDepositKRW: paymentInfo.paymentMethodDepositKRW,
             paymentMethodDepositJPY: paymentInfo.paymentMethodDepositJPY,
             paymentMethodDepositUSD: paymentInfo.paymentMethodDepositUSD,
@@ -417,30 +499,33 @@ function OrderForm({ loggedInUserInfo }) {
             balanceKRW: balanceKRW,
             balanceJPY: balanceJPY,
             balanceUSD: balanceUSD,
+            totalBalance: paymentInfo.totalBalance,
             totalDeposit: paymentInfo.totalDeposit,
-            balance: paymentInfo.balance, // 필수
+            balance: paymentInfo.balance,
             depositDate: paymentInfo.depositDate,
             balanceDate: paymentInfo.balanceDate,
-            dressBackWidth: alterationInfo.dressBackWidth,
-            dressLength: alterationInfo.dressLength,
-            jacketSleeveLength: alterationInfo.jacketSleeveLength,
-            jacketLength: alterationInfo.jacketLength,
-            pantsWaistLength: alterationInfo.pantsWaistLength,
-            pantsLength: alterationInfo.pantsLength,
+            // 수선정보 alterationInfo 
+            alteration1: alterationInfo.alteration1,
+            alteration2: alterationInfo.alteration2,
+            alteration3: alterationInfo.alteration3,
+            alteration4: alterationInfo.alteration4,
+            alteration5: alterationInfo.alteration5,
+            alteration6: alterationInfo.alteration6,
+            alteration7: alterationInfo.alteration7,
             alterationMemo: alterationInfo.alterationMemo,
         };
 
-        console.log("제출된 데이터", mappedData)
+        console.log(mappedData)
 
-        // 서버에 POST 요청 보내기
-        axios.post('https://server-6kol.onrender.com/api/v1/orders/', mappedData)
+        // 서버에 PUT 요청 보내기
+        axios.put(`https://server-6kol.onrender.com/api/v1/orders/new/${orderNumber}/`, mappedData)
             .then(response => {
-                alert('주문이 성공적으로 제출되었습니다:', response.data);
+                alert('주문이 성공적으로 수정되었습니다:', response.data);
                 // 성공적인 제출 후 처리 로직
                 navigate('/');
             })
             .catch(error => {
-                alert('주문 제출 중 오류 발생:', error);
+                alert('주문 수정 중 오류 발생:', error);
                 // 오류 처리 로직
             });
     };
@@ -448,30 +533,31 @@ function OrderForm({ loggedInUserInfo }) {
     return (
         <form className="form-container" onSubmit={handleSubmit}>
             {/* 주문 정보 */}
+            <div className="orderinfo"> 신규양식 미혼자용 </div>
             <fieldset className="orderinfo">
                 <legend>주문 정보</legend>
                 <div className="orderinfo_row orderinfo_row1">
-                    <span>주문서 번호: </span>{orderInfo.orderNumber}
+                    <span>주문서 번호: {orderInfo.orderNumber}</span>
+                    <span>작성자: {orderInfo.creator}</span>
+                    <span>최초 작성 시간: {orderInfo.creationTime}</span>
                 </div>
                 <div className="orderinfo_row orderinfo_row2">
-                    <span>작성자 * :</span>
-                    <input
-                    type="text"
-                    placeholder='작성자를 입력하세요.'
-                    value={orderInfo.creator}
-                    onChange={handleCreatorChange}
-                    />
+                    수정자: <input
+                        type="text"
+                        value={orderInfo.modifier}
+                        onChange={handleModifierChange} />
+                    <span>최근 수정 시간: {orderInfo.lastModifiedTime}</span>
                 </div>
                 <div className="orderinfo_row orderinfo_row3">
-                    <span>주문 상태:</span>
+                    주문 상태:
                     {orderStatusOptions.map((status, index) => (
                         <label key={index}>
                             <input
-                            type="radio"
-                            name="orderStatus"
-                            value={status}
-                            checked={orderInfo.orderStatus === status}
-                            onChange={orderInfoHandleChange}/>
+                                type="radio"
+                                name="orderStatus"
+                                value={status}
+                                checked={orderInfo.orderStatus === status}
+                                onChange={orderInfoHandleChange} />
                             {status}
                         </label>
                     ))}
@@ -519,8 +605,8 @@ function OrderForm({ loggedInUserInfo }) {
                         </tbody>
                     </table>
                 </div>
-                <div>
-                    <table >
+                <div className="orderer-info-table">
+                    <table>
                         <tbody className="orderer-info-table-container">
                             <tr className="orderer-info-table-row orderer-info-table-row-half">
                                 <td>배우자 이름:</td>
@@ -607,9 +693,10 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>턱시도 유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
-                                        <option value="자켓 (R-Peaked)">자켓 (R-Peaked)</option>
-                                        <option value="자켓 (R-Shawl)">자켓 (R-Shawl)</option>
-                                        <option value="자켓 (S-Peaked)">자켓 (S-Peaked)</option>
+                                        <option value="자켓 Peaked">자켓 Peaked</option>
+                                        <option value="자켓 Shawl">자켓 Shawl</option>
+                                        <option value="자켓 Peaked (맞춤)">자켓 Peaked (맞춤)</option>
+                                        <option value="자켓 Shawl (맞춤)">자켓 Shawl (맞춤)</option>
                                         <option value="구매안함">구매안함</option>
                                     </select>
                                 </td>
@@ -625,7 +712,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>팬츠 사이즈:</td>
                                 <td>
                                     <select name="pantsSize" value={productInfo.pantsSize} onChange={productInfoHandleChange}>
-                                        {(productInfo.tuxedoType === "구매안함" ? "" : sizeOptions[`팬츠 (${getPantsShirtSizeOptions()})`].map(size => (
+                                        {(productInfo.tuxedoType === "구매안함" ? "" : sizeOptions[`팬츠${getPantsShirtSizeOptions()}`].map(size => (
                                             <option key={size} value={size}>{size}</option>
                                         )))}
                                         <option value="">구매안함</option>
@@ -634,7 +721,7 @@ function OrderForm({ loggedInUserInfo }) {
                                 <td>셔츠 사이즈:</td>
                                 <td>
                                     <select name="shirtSize" value={productInfo.shirtSize} onChange={productInfoHandleChange}>
-                                        {(productInfo.tuxedoType === "구매안함" ? "" : sizeOptions[`셔츠 (${getPantsShirtSizeOptions()})`].map(size => (
+                                        {(productInfo.tuxedoType === "구매안함" ? "" : sizeOptions[`셔츠${getPantsShirtSizeOptions()}`].map(size => (
                                             <option key={size} value={size}>{size}</option>
                                         )))}
                                         <option value="">구매안함</option>
@@ -644,8 +731,8 @@ function OrderForm({ loggedInUserInfo }) {
 
                             {/* 드레스 섹션 */}
                             <tr className="clothes-info-table-row clothes-info-table-row3">
-                                <td colSpan="4"><strong>드레스 </strong></td>
-                                <td> 드레스 타입:</td>
+                                <td colSpan="4"><strong>드레스</strong></td>
+                                <td>드레스 타입:</td>
                                 <td>
                                     <select name="dressType" value={productInfo.dressType} onChange={productInfoHandleChange}>
                                         <option value="드레스 (R)">드레스 (R)</option>
@@ -676,279 +763,281 @@ function OrderForm({ loggedInUserInfo }) {
                         <tbody className="payment-info-table-container">
                             <div className="payment-info-table__row">
                                 {/* 결제자 이름 */}
-                                    <tr className="payment-info-table__row1">
-                                        <td className="pair1">결제자 이름:</td>
-                                        <td className="pair2"><input
-                                                type="text"
-                                                name="payerName"
-                                                value={paymentInfo.payerName}
-                                                onChange={paymentInfoHandleChange}
-                                            />
-                                        </td>
+                                <tr className="payment-info-table__row1">
+                                    <td className="pair1">결제자 이름:</td>
+                                    <td className="pair2"><input
+                                        type="text"
+                                        name="payerName"
+                                        value={paymentInfo.payerName}
+                                        onChange={paymentInfoHandleChange}
+                                        style={{ width: '100px' }}
+                                    />
+                                    </td>
                                     {/* 주문자와의 관계 */}
-                                        <td className="pair3">주문자와의 관계:</td>
-                                        <td className="pair4">
-                                            <select
-                                                name="relationToOrderer"
-                                                value={paymentInfo.relationToOrderer}
-                                                onChange={paymentInfoHandleChange}
-                                            >
-                                                <option value="본인">본인</option>
-                                                <option value="부">부</option>
-                                                <option value="모">모</option>
-                                                <option value="형제">형제</option>
-                                                <option value="배우자">배우자</option>
-                                                <option value="기타">기타</option>
-                                            </select>
-                                        </td>
+                                    <td className="pair3">주문자와의 관계:</td>
+                                    <td className="pair4">
+                                        <select
+                                            name="relationToOrderer"
+                                            value={paymentInfo.relationToOrderer}
+                                            onChange={paymentInfoHandleChange}
+                                        >
+                                            <option value="본인">본인</option>
+                                            <option value="부">부</option>
+                                            <option value="모">모</option>
+                                            <option value="형제">형제</option>
+                                            <option value="배우자">배우자</option>
+                                            <option value="기타">기타</option>
+                                        </select>
+                                    </td>
                                     {/* 결제 총액 */}
-                                        <td className="pair5 bold">결제 총액:</td>
-                                        <td className="pair6 bold">
-                                            <input
-                                                type="text"
-                                                name="totalAmount"
-                                                value={formatNumberWithComma(paymentInfo.totalAmount)}
-                                                readOnly/>
+                                    <td className="pair5 bold">결제 총액:</td>
+                                    <td className="pair6 bold">
+                                        <input
+                                            type="text"
+                                            name="totalAmount"
+                                            value={formatNumberWithComma(paymentInfo.totalAmount)}
+                                            style={{ width: '100px' }}
+                                            readOnly />
                                         원</td>
-                                    </tr>
+                                </tr>
                             </div>
                             <div className="payment-info-table__row">
                                 {/* 선수금 입력 필드 */}
-                                    <tr className="payment-info-table__row2">
-                                        <td>
-                                            <span>선수금 결제일:</span>
-                                            <input
-                                                type="date"
-                                                name="depositDate"
-                                                value={paymentInfo.depositDate}
-                                                onChange={paymentInfoHandleChange}
-                                            />
-                                        </td>
+                                <tr className="payment-info-table__row2">
+                                    <td>
+                                        <span>선수금 결제일:</span>
+                                        <input
+                                            type="date"
+                                            name="depositDate"
+                                            value={paymentInfo.depositDate}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                    </td>
                                     {/* 선수금 (원화) */}
-                                        <td>
-                                            <span>선수금 (원화):</span>
+                                    <td>
+                                        <span>선수금 (원화):</span>
+                                        <input
+                                            type="text"
+                                            min="0"
+                                            name="depositKRW"
+                                            value={paymentInfo.depositKRW}
+                                            onChange={handleDepositChange}
+                                        />
+                                        원
+                                        <label>
                                             <input
-                                                type="text"
-                                                min="0"
-                                                name="depositKRW"
-                                                value={paymentInfo.depositKRW}
-                                                onChange={handleDepositChange}
-                                            />
-                                            원
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodDepositKRW"
-                                                    value="현금"
-                                                    checked={paymentInfo.paymentMethodDepositKRW === "현금"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                현금
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodDepositKRW"
-                                                    value="신용카드"
-                                                    checked={paymentInfo.paymentMethodDepositKRW === "신용카드"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                신용카드
-                                            </label>
-                                        </td>
-                                    {/* 선수금 (엔화) */}
-                                        <td>
-                                        <span>선수금 (엔화):</span>
-                                            <input
-                                                type="text"
-                                                min="0"
-                                                name="depositJPY"
-                                                value={paymentInfo.depositJPY}
-                                                onChange={handleDepositChange}
-                                            />
-                                            엔
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodDepositJPY"
-                                                    value="현금"
-                                                    checked={paymentInfo.paymentMethodDepositJPY === "현금"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                현금
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodDepositJPY"
-                                                    value="신용카드"
-                                                    checked={paymentInfo.paymentMethodDepositJPY === "신용카드"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                신용카드
-                                            </label>
-                                        </td>
-                                    {/* 선수금 (달러) */}
-                                        <td>
-                                            <span>선수금 (달러):</span>
-                                            <input
-                                                type="text"
-                                                min="0"
-                                                name="depositUSD"
-                                                value={paymentInfo.depositUSD}
-                                                onChange={handleDepositChange}
-                                            />
-                                            달러
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodDepositUSD"
-                                                    value="현금"
-                                                    checked={paymentInfo.paymentMethodDepositUSD === "현금"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                현금
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodDepositUSD"
-                                                    value="신용카드"
-                                                    checked={paymentInfo.paymentMethodDepositUSD === "신용카드"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                신용카드
-                                            </label>
-                                        </td>
-                                    {/* 선수금 총액 */}
-                                        <td className="bold">
-                                            <span>선수금 총액:</span>
-                                            <input
-                                                type="text"
-                                                name="totalDeposit"
-                                                value={formatNumberWithComma(paymentInfo.totalDeposit)}
-                                                readOnly
-                                            />
-                                            원</td>
-                                    </tr>
-                                {/* 잔금 입력 필드 */}
-                                    <tr className="payment-info-table__row3">
-                                        <td>
-                                            <span>잔금 결제일:</span>
-                                            <input
-                                                type="date"
-                                                name="balanceDate"
-                                                value={paymentInfo.balanceDate}
+                                                type="radio"
+                                                name="paymentMethodDepositKRW"
+                                                value="현금"
+                                                checked={paymentInfo.paymentMethodDepositKRW === "현금"}
                                                 onChange={paymentInfoHandleChange}
                                             />
-                                        </td>
-                                    {/* 잔금 지급액 (원화) */}
-                                        <td>
-                                            <span>잔금 지급액 (원화):</span>
+                                            현금
+                                        </label>
+                                        <label>
                                             <input
-                                                type="text"
-                                                min="0"
-                                                name="balanceKRW"
-                                                value={paymentInfo.balanceKRW}
-                                                onChange={handleBalanceChange}
+                                                type="radio"
+                                                name="paymentMethodDepositKRW"
+                                                value="신용카드"
+                                                checked={paymentInfo.paymentMethodDepositKRW === "신용카드"}
+                                                onChange={paymentInfoHandleChange}
                                             />
-                                            원
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodBalanceKRW"
-                                                    value="현금"
-                                                    checked={paymentInfo.paymentMethodBalanceKRW === "현금"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                현금
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodBalanceKRW"
-                                                    value="신용카드"
-                                                    checked={paymentInfo.paymentMethodBalanceKRW === "신용카드"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                신용카드
-                                            </label>
-                                        </td>
-                                    {/* 잔금 지급액 (엔화) */}
-                                        <td>
-                                            <span>잔금 지급액 (엔화):</span>
+                                            신용카드
+                                        </label>
+                                    </td>
+                                    {/* 선수금 (엔화) */}
+                                    <td>
+                                        <span>선수금 (엔화):</span>
+                                        <input
+                                            type="text"
+                                            min="0"
+                                            name="depositJPY"
+                                            value={paymentInfo.depositJPY}
+                                            onChange={handleDepositChange}
+                                        />
+                                        엔
+                                        <label>
                                             <input
-                                                type="text"
-                                                min="0"
-                                                name="balanceJPY"
-                                                value={paymentInfo.balanceJPY}
-                                                onChange={handleBalanceChange}
+                                                type="radio"
+                                                name="paymentMethodDepositJPY"
+                                                value="현금"
+                                                checked={paymentInfo.paymentMethodDepositJPY === "현금"}
+                                                onChange={paymentInfoHandleChange}
                                             />
-                                            엔
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodBalanceJPY"
-                                                    value="현금"
-                                                    checked={paymentInfo.paymentMethodBalanceJPY === "현금"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                현금
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodBalanceJPY"
-                                                    value="신용카드"
-                                                    checked={paymentInfo.paymentMethodBalanceJPY === "신용카드"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                신용카드
-                                            </label>
-                                        </td>
-                                    {/* 잔금 지급액 (달러) */}
-                                        <td>
-                                            <span>잔금 지급액 (달러):</span>
+                                            현금
+                                        </label>
+                                        <label>
                                             <input
-                                                type="text"
-                                                min="0"
-                                                name="balanceUSD"
-                                                value={paymentInfo.balanceUSD}
-                                                onChange={handleBalanceChange}
+                                                type="radio"
+                                                name="paymentMethodDepositJPY"
+                                                value="신용카드"
+                                                checked={paymentInfo.paymentMethodDepositJPY === "신용카드"}
+                                                onChange={paymentInfoHandleChange}
                                             />
-                                            달러
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodBalanceUSD"
-                                                    value="현금"
-                                                    checked={paymentInfo.paymentMethodBalanceUSD === "현금"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                현금
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMethodBalanceUSD"
-                                                    value="신용카드"
-                                                    checked={paymentInfo.paymentMethodBalanceUSD === "신용카드"}
-                                                    onChange={paymentInfoHandleChange}
-                                                />
-                                                신용카드
-                                            </label>
-                                        </td>
-                                    {/* 잔금 */}
-                                        <td className="bold">
-                                            <span>잔금 총액:</span>
+                                            신용카드
+                                        </label>
+                                    </td>
+                                    {/* 선수금 (달러) */}
+                                    <td>
+                                        <span>선수금 (달러):</span>
+                                        <input
+                                            type="text"
+                                            min="0"
+                                            name="depositUSD"
+                                            value={paymentInfo.depositUSD}
+                                            onChange={handleDepositChange}
+                                        />
+                                        달러
+                                        <label>
                                             <input
-                                                type="text"
-                                                name="balance"
-                                                value={formatNumberWithComma(paymentInfo.balance)}
-                                                readOnly
+                                                type="radio"
+                                                name="paymentMethodDepositUSD"
+                                                value="현금"
+                                                checked={paymentInfo.paymentMethodDepositUSD === "현금"}
+                                                onChange={paymentInfoHandleChange}
                                             />
+                                            현금
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodDepositUSD"
+                                                value="신용카드"
+                                                checked={paymentInfo.paymentMethodDepositUSD === "신용카드"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            신용카드
+                                        </label>
+                                    </td>
+                                    {/* 선수금 총액 */}
+                                    <td className="bold">
+                                        <span>선수금 총액:</span>
+                                        <input
+                                            type="text"
+                                            name="totalDeposit"
+                                            value={formatNumberWithComma(paymentInfo.totalDeposit)}
+                                            readOnly
+                                        />
                                         원</td>
-                                    </tr>
+                                </tr>
+                                {/* 잔금 입력 필드 */}
+                                <tr className="payment-info-table__row3">
+                                    <td>
+                                        <span>잔금 결제일:</span>
+                                        <input
+                                            type="date"
+                                            name="balanceDate"
+                                            value={paymentInfo.balanceDate}
+                                            onChange={paymentInfoHandleChange}
+                                        />
+                                    </td>
+                                    {/* 잔금 지급액 (원화) */}
+                                    <td>
+                                        <span>잔금 지급액 (원화):</span>
+                                        <input
+                                            type="text"
+                                            min="0"
+                                            name="balanceKRW"
+                                            value={paymentInfo.balanceKRW}
+                                            onChange={handleBalanceChange}
+                                        />
+                                        원
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodBalanceKRW"
+                                                value="현금"
+                                                checked={paymentInfo.paymentMethodBalanceKRW === "현금"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            현금
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodBalanceKRW"
+                                                value="신용카드"
+                                                checked={paymentInfo.paymentMethodBalanceKRW === "신용카드"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            신용카드
+                                        </label>
+                                    </td>
+                                    {/* 잔금 지급액 (엔화) */}
+                                    <td>
+                                        <span>잔금 지급액 (엔화):</span>
+                                        <input
+                                            type="text"
+                                            min="0"
+                                            name="balanceJPY"
+                                            value={paymentInfo.balanceJPY}
+                                            onChange={handleBalanceChange}
+                                        />
+                                        엔
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodBalanceJPY"
+                                                value="현금"
+                                                checked={paymentInfo.paymentMethodBalanceJPY === "현금"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            현금
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodBalanceJPY"
+                                                value="신용카드"
+                                                checked={paymentInfo.paymentMethodBalanceJPY === "신용카드"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            신용카드
+                                        </label>
+                                    </td>
+                                    {/* 잔금 지급액 (달러) */}
+                                    <td>
+                                        <span>잔금 지급액 (달러):</span>
+                                        <input
+                                            type="text"
+                                            min="0"
+                                            name="balanceUSD"
+                                            value={paymentInfo.balanceUSD}
+                                            onChange={handleBalanceChange}
+                                        />
+                                        달러
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodBalanceUSD"
+                                                value="현금"
+                                                checked={paymentInfo.paymentMethodBalanceUSD === "현금"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            현금
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="paymentMethodBalanceUSD"
+                                                value="신용카드"
+                                                checked={paymentInfo.paymentMethodBalanceUSD === "신용카드"}
+                                                onChange={paymentInfoHandleChange}
+                                            />
+                                            신용카드
+                                        </label>
+                                    </td>
+                                    {/* 잔금 */}
+                                    <td className="bold">
+                                        <span>잔금 총액:</span>
+                                        <input
+                                            type="text"
+                                            name="balance"
+                                            value={formatNumberWithComma(paymentInfo.balance)}
+                                            readOnly
+                                        />
+                                        원</td>
+                                </tr>
                             </div>
                         </tbody>
                     </table>
@@ -961,72 +1050,81 @@ function OrderForm({ loggedInUserInfo }) {
                     <table>
                         <tbody className="alteration-info-table-container">
                             {/* 드레스 뒷품 */}
-                            <tr className="alteration-info-table-row alteration-info-table-row1">
+                            <tr className="alteration-info-table-row">
                                 <td>드레스 뒷품:</td>
-                                <td className="regular">
+                                <td>
                                     <input
                                         type="text"
                                         name="dressBackWidth"
-                                        value={alterationInfo.dressBackWidth}
+                                        value={alterationInfo.alteration1}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                CM</td>
+                                    inch</td>
                                 <td>드레스 기장:</td>
-                                <td className="regular">
+                                <td>
                                     <input
                                         type="text"
                                         name="dressLength"
-                                        value={alterationInfo.dressLength}
+                                        value={alterationInfo.alteration2}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                CM</td>
+                                    inch</td>
                             </tr>
 
                             {/* 자켓 소매 */}
-                            <tr className="alteration-info-table-row alteration-info-table-row2">
+                            <tr className="alteration-info-table-row">
                                 <td>자켓 소매:</td>
-                                <td className="regular">
+                                <td>
                                     <input
                                         type="text"
                                         name="jacketSleeveLength"
-                                        value={alterationInfo.jacketSleeveLength}
+                                        value={alterationInfo.alteration3}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                CM</td>
+                                    inch</td>
                                 <td>자켓 기장:</td>
-                                <td className="regular">
+                                <td>
                                     <input
                                         type="text"
                                         name="jacketLength"
-                                        value={alterationInfo.jacketLength}
+                                        value={alterationInfo.alteration4}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                CM</td>
+                                    inch</td>
+                                <td>자켓 폼:</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="jacketLength"
+                                        value={alterationInfo.alteration5}
+                                        onChange={alterationInfoHandleChange}
+                                    />
+                                    inch</td>
                             </tr>
 
                             {/* 바지 허리 */}
-                            <tr className="alteration-info-table-row alteration-info-table-row3">
-                                <td>바지 허리:</td>
-                                <td className="regular">
+                            <tr className="alteration-info-table-row">
+                                <td>셔츠 목:</td>
+                                <td>
                                     <input
                                         type="text"
                                         name="pantsWaistLength"
-                                        value={alterationInfo.pantsWaistLength}
+                                        value={alterationInfo.alteration6}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                CM</td>
-                                <td>바지 기장:</td>
-                                <td className="regular">
+                                    inch</td>
+                                <td>셔츠 소매:</td>
+                                <td>
                                     <input
                                         type="text"
                                         name="pantsLength"
-                                        value={alterationInfo.pantsLength}
+                                        value={alterationInfo.alteration7}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                CM</td>
+                                    inch</td>
                             </tr>
                             {/* 기장 메모 */}
-                            <tr className="alteration-info-table-row alteration-info-table-row4">
+                            <tr className="alteration-info-table-row">
                                 <td>메모:</td>
                                 <td colSpan="5">
                                     <textarea
@@ -1039,7 +1137,7 @@ function OrderForm({ loggedInUserInfo }) {
                                     />
                                 </td>
                             </tr>
-                            <tr className="alteration-info-table-row alteration-info-table-row5">
+                            <tr className="alteration-info-table-row">
                                 <td>수령 방법:</td>
                                 <td>
                                     <select name="deliveryMethod" value={orderInfo.deliveryMethod} onChange={orderInfoHandleChange}>
@@ -1049,29 +1147,28 @@ function OrderForm({ loggedInUserInfo }) {
                                     </select>
                                 </td>
                                 {orderInfo.deliveryMethod === "배송" && (
-                                <>
-                                <td>배송지 주소:</td>
-                                <td>
-                                        <input
-                                            type="text"
-                                            name="address"
-                                            value={ordererInfo.address}
-                                            onChange={ordererInfoHandleChange}
-                                            style={{ width: '400px' }}
-                                        />
-                                </td>
-                                </>
-                            )}
+                                    <>
+                                        <td>배송지 주소:</td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="address"
+                                                value={ordererInfo.address}
+                                                onChange={ordererInfoHandleChange}
+                                                style={{ width: '400px' }}
+                                            />
+                                        </td>
+                                    </>
+                                )}
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </fieldset>
-
-            <button className="form-button" type="submit"> 주문 제출</button>
+            <button className="form-button" type="submit"> 주문 수정</button>
         </form>
     );
 
 }
 
-export default OrderForm;
+export default NewOrderFormLoaded;

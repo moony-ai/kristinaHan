@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Order
-from .serializers import OrderListSerializer, OrderDetailSerializer
+from .models import Order, NewOrder
+from .serializers import OrderListSerializer, OrderDetailSerializer, NewOrderListSerializer, NewOrderDetailSerializer
 
 # 구글스프레드에 접근하기 위한 코드
 import gspread
@@ -50,6 +50,7 @@ def append_to_sheet(data, sheet_url=sheet_url, credentials=credentials):
     worksheet = sh.sheet1
     worksheet.append_row(data)
 
+# 기존 리스트 불러오기
 class OrderList(APIView):
     def get(self, request, format=None):
         orders = Order.objects.filter(is_deleted=False) # 소프트 삭제된 객체를 제외하고 쿼리
@@ -90,6 +91,48 @@ class OrderDetail(APIView):
         order.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# 신규 리스트 불러오기
+class NewOrderList(APIView):
+    def get(self, request, format=None):
+        orders = NewOrder.objects.filter(is_deleted=False) # 소프트 삭제된 객체를 제외하고 쿼리
+        serializer = NewOrderListSerializer(orders, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        serializer = NewOrderDetailSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # append_to_sheet(serializer.data.values()) # Google Sheets에 데이터 추가
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NewOrderDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return NewOrder.objects.get(pk=pk, is_deleted=False)
+        except NewOrder.DoesNotExist:
+            raise status.HTTP_404_NOT_FOUND
+
+    def get(self, request, pk, format=None):
+        order = self.get_object(pk) 
+        serializer = NewOrderDetailSerializer(order)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        order = self.get_object(pk)
+        serializer = NewOrderDetailSerializer(order, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        order = self.get_object(pk)
+        order.is_deleted = True # 소프트 삭제 
+        order.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# 삭제된 리스트 불러오기
 class DeletedList(APIView):
     def get(self, request, format=None):
         orders = Order.objects.filter(is_deleted=True) # 소프트 삭제된 객체를 제외하고 쿼리

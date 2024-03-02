@@ -518,6 +518,7 @@ function OrderForm({ loggedInUserInfo }) {
     return (
         <form className="form-container" onSubmit={handleSubmit}>
             {/* 주문 정보 */}
+            <div className="orderinfo"> 2025 입궁식(기혼용) </div>
             <fieldset className="orderinfo">
                 <legend>주문 정보</legend>
                 <div className="orderinfo_row orderinfo_row1">
