@@ -10,7 +10,7 @@ from django.conf import settings
 import json
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1JWVhe0TBAt024VKabqTXZX7VMDAESReu1GonVGJMVGU/edit?usp=drive_link"
-#credentials = json.loads(settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
+credentials = json.loads(settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
 
 def update_sheet_with_db(sheet_url=sheet_url, credentials=credentials):
     # Google Sheets API 인증
