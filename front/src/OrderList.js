@@ -26,7 +26,7 @@ class OrderList extends Component {
 
   // 기존목록
   fetchOrders() {
-    axios.get('http://127.0.0.1:8000/api/v1/orders/')
+    axios.get('https://server-6kol.onrender.com/api/v1/orders/')
       .then(response => {
         this.setState({ orders: response.data });
       })
@@ -37,7 +37,7 @@ class OrderList extends Component {
 
   // 월별 주문 목록
   fetchMonthlyOrders = (year, month) => {
-    axios.get(`http://127.0.0.1:8000/api/v1/orders/${year}/${month}/`)
+    axios.get(`https://server-6kol.onrender.com/api/v1/orders/${year}/${month}/`)
       .then(response => {
         this.setState({ orders: response.data });
       })
