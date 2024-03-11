@@ -21,6 +21,7 @@ GOOGLE_SHEETS_CREDENTIALS_FILE = os.getenv('GOOGLE_SHEETS_CREDENTIALS_FILE')
 DEBUG = "RENDER" not in os.environ
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     "localhost",
 ]
 

@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.OrderList.as_view(), name='order-list'),
+    path('<int:year>/<int:month>/', views.MonthlyOrderList.as_view(), name='monthly-order-list'),
     path('<int:pk>/', views.OrderDetail.as_view(), name='order-detail'),
     path('downloads/', views.export_orders_to_excel, name='export_orders_to_excel'),
     path('deleted/', views.DeletedList.as_view(), name='deleted-list'),

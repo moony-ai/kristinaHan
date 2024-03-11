@@ -10,7 +10,7 @@ from django.conf import settings
 import json
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1JWVhe0TBAt024VKabqTXZX7VMDAESReu1GonVGJMVGU/edit?usp=drive_link"
-credentials = json.loads(settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
+#credentials = json.loads(settings.GOOGLE_SHEETS_CREDENTIALS_FILE)
 
 def update_sheet_with_db(sheet_url=sheet_url, credentials=credentials):
     # Google Sheets API 인증
@@ -64,6 +64,17 @@ class OrderList(APIView):
             # append_to_sheet(serializer.data.values()) # Google Sheets에 데이터 추가
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# 월별 리스트 불러오기
+class MonthlyOrderList(APIView):
+    def get(self, request, year, month, format=None):
+        orders = Order.objects.filter(
+            creationTime__year=year,
+            creationTime__month=month,
+            is_deleted=False
+        )
+        serializer = OrderListSerializer(orders, many=True)
+        return Response(serializer.data)
 
 class OrderDetail(APIView):
     def get_object(self, pk):
@@ -173,6 +184,8 @@ class LatestOrderView(APIView):
             serializer = OrderDetailSerializer(latest_order)
             return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+
 
 # 필요한 패키지 임포트
 from openpyxl import Workbook

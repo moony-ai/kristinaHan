@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.custom-select, .custom-button {
+  font-size: 0.8rem; /* 글씨 크기 조정 */
+  padding: 0.375rem 0.75rem; /* 패딩 조정 */
+}
+
+.custom-button {
+  font-size: 1rem; /* 글씨 크기 조정 */
+  padding: 0.5rem 1rem; /* 패딩 조정 */
+  border-radius: 5px; /* 버튼의 모서리를 둥글게 */
+  border: none; /* 테두리 제거 */
+  color: white; /* 글씨 색상 */
+  background-color: #007bff; /* 배경 색상 */
+  transition: background-color 0.3s ease; /* 호버 효과 */
+}
+
+.custom-button:hover {
+  background-color: #0056b3; /* 버튼 호버 시 색상 변경 */
+}
+
+.custom-section button {
+  margin: 0 10px; /* 버튼 사이의 간격 */
+}
+
+.custom-header {
+  font-family: 'Noto Sans', sans-serif; /* 글꼴 변경 */
+  color: #333; /* 글씨 색상 */
+}
