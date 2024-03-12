@@ -179,10 +179,14 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
     const productPrices = {
         jacket: 480000,
         jacketFit: 950000,
-        jacketOG: 950000,
-        jacketAB: 1200000,
+        jacketOG: 570000,
+        jacketAB: 670000,
         pants: 240000,
+        pantsOG: 220000,
+        pantsAB: 320000,
         shirt: 80000,
+        shirtOG: 110000,
+        shirtAB: 110000,
         dress: 700000,
         ringMen: 750000,
         ringWomen: 750000,
@@ -218,8 +222,26 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
                 total += productPrices.jacket
             }
         }
-        if (productInfo.pantsSize) total += productPrices.pants;
-        if (productInfo.shirtSize) total += productPrices.shirt;
+        if (productInfo.pantsSize) {
+            if (productInfo.tuxedoType.includes("OG")){
+                total += productPrices.pantsOG;
+            } else if (productInfo.tuxedoType.includes("AB")) {
+                total += productPrices.pantsAB
+            } else {
+                total += productPrices.pants
+            }
+        }
+        if (productInfo.shirtSize) {
+            {
+                if (productInfo.tuxedoType.includes("OG")){
+                    total += productPrices.shirtOG;
+                } else if (productInfo.tuxedoType.includes("AB")) {
+                    total += productPrices.shirtAB
+                } else {
+                    total += productPrices.shirt
+                }
+            }
+        }
         if (productInfo.dressSize) total += productPrices.dress;
         if (productInfo.ringSizeMen) total += productPrices.ringMen;
         if (productInfo.ringSizeWomen) total += productPrices.ringWomen;
