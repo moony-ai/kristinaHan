@@ -979,20 +979,20 @@ function NewOrderForm({ loggedInUserInfo }) {
                                 <td>
                                     <input
                                         type="text"
-                                        name="dressBackWidth"
+                                        name="alteration1"
                                         value={alterationInfo.alteration1}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                                 <td>드레스 기장:</td>
                                 <td>
                                     <input
                                         type="text"
-                                        name="dressLength"
+                                        name="alteration2"
                                         value={alterationInfo.alteration2}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                             </tr>
 
                             {/* 자켓 소매 */}
@@ -1001,29 +1001,29 @@ function NewOrderForm({ loggedInUserInfo }) {
                                 <td>
                                     <input
                                         type="text"
-                                        name="jacketSleeveLength"
+                                        name="alteration3"
                                         value={alterationInfo.alteration3}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                                 <td>자켓 기장:</td>
                                 <td>
                                     <input
                                         type="text"
-                                        name="jacketLength"
+                                        name="alteration4"
                                         value={alterationInfo.alteration4}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                                 <td>자켓 폼:</td>
                                 <td>
                                     <input
                                         type="text"
-                                        name="jacketLength"
+                                        name="alteration5"
                                         value={alterationInfo.alteration5}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                             </tr>
 
                             {/* 바지 허리 */}
@@ -1032,20 +1032,20 @@ function NewOrderForm({ loggedInUserInfo }) {
                                 <td>
                                     <input
                                         type="text"
-                                        name="pantsWaistLength"
+                                        name="alteration6"
                                         value={alterationInfo.alteration6}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                                 <td>셔츠 소매:</td>
                                 <td>
                                     <input
                                         type="text"
-                                        name="pantsLength"
+                                        name="alteration7"
                                         value={alterationInfo.alteration7}
                                         onChange={alterationInfoHandleChange}
                                     />
-                                    cm</td>
+                                    inch</td>
                             </tr>
                             {/* 기장 메모 */}
                             <tr className="alteration-info-table-row">
