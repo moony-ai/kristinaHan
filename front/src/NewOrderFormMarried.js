@@ -172,7 +172,6 @@ function NewOrderForm({ loggedInUserInfo }) {
     // 가격 정보
     const productPrices = {
         jacket: 480000,
-        jacketFit: 950000,
         jacketOG: 570000,
         jacketAB: 670000,
         pants: 240000,
@@ -182,8 +181,8 @@ function NewOrderForm({ loggedInUserInfo }) {
         shirtOG: 110000,
         shirtAB: 110000,
         dress: 700000,
-        ringMen: 750000,
-        ringWomen: 750000,
+        ringMen: 800000,
+        ringWomen: 800000,
         necklace: 800000,
         earring: 500000,
     };
@@ -658,14 +657,10 @@ function NewOrderForm({ loggedInUserInfo }) {
                                 <td>턱시도 유형:</td>
                                 <td>
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
-                                        <option value="자켓 Peaked">자켓 Peaked</option>
-                                        <option value="자켓 Shawl">자켓 Shawl</option>
                                         <option value="자켓OG Peaked">자켓OG Peaked</option>
                                         <option value="자켓OG Shawl">자켓OG Shawl</option>
                                         <option value="자켓AB Peaked">자켓AB Peaked</option>
                                         <option value="자켓AB Shawl">자켓AB Shawl</option>
-                                        <option value="자켓 Peaked (맞춤)">자켓 Peaked (맞춤)</option>
-                                        <option value="자켓 Shawl (맞춤)">자켓 Shawl (맞춤)</option>
                                         <option value="구매안함">구매안함</option>
                                     </select>
                                 </td>

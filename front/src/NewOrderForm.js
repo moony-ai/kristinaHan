@@ -145,6 +145,10 @@ function NewOrderForm({ loggedInUserInfo }) {
     const sizeOptions = {
         "자켓 Peaked": ["100", "105", "110", "*115", "*120"],
         "자켓 Shawl": ["*85", "90", "95", "100", "*105", "*110", "*115", "*120"],
+        "자켓OG Peaked": ["100", "105", "110", "*115", "*120"],
+        "자켓OG Shawl": ["*85", "90", "95", "100", "*105", "*110", "*115", "*120"],
+        "자켓AB Peaked": ["100", "105", "110", "*115", "*120"],
+        "자켓AB Shawl": ["*85", "90", "95", "100", "*105", "*110", "*115", "*120"],
         "자켓 Peaked (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
         "자켓 Shawl (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
         "팬츠": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "*40"],
@@ -162,12 +166,17 @@ function NewOrderForm({ loggedInUserInfo }) {
     // 가격 정보
     const productPrices = {
         jacket: 480000,
-        jacketFit: 950000,
+        jacketOG: 570000,
+        jacketAB: 670000,
         pants: 240000,
+        pantsOG: 220000,
+        pantsAB: 320000,
         shirt: 80000,
+        shirtOG: 110000,
+        shirtAB: 110000,
         dress: 700000,
-        ringMen: 750000,
-        ringWomen: 750000,
+        ringMen: 800000,
+        ringWomen: 800000,
         necklace: 800000,
         earring: 500000,
     };
@@ -191,10 +200,36 @@ function NewOrderForm({ loggedInUserInfo }) {
     useEffect(() => {
         let total = 0;
         if (productInfo.jacketSize) {
-            productInfo.tuxedoType.includes("맞춤") ? total += productPrices.jacketFit : total += productPrices.jacket
+            if (productInfo.tuxedoType.includes("맞춤")) {
+                total += productPrices.jacketFit
+            } else if (productInfo.tuxedoType.includes("OG")) {
+                total += productPrices.jacketOG
+            } else if (productInfo.tuxedoType.includes("AB")) {
+                total += productPrices.jacketAB
+            } else {
+                total += productPrices.jacket
+            }
         }
-        if (productInfo.pantsSize) total += productPrices.pants;
-        if (productInfo.shirtSize) total += productPrices.shirt;
+        if (productInfo.pantsSize) {
+            if (productInfo.tuxedoType.includes("OG")) {
+                total += productPrices.pantsOG;
+            } else if (productInfo.tuxedoType.includes("AB")) {
+                total += productPrices.pantsAB
+            } else {
+                total += productPrices.pants
+            }
+        }
+        if (productInfo.shirtSize) {
+            {
+                if (productInfo.tuxedoType.includes("OG")) {
+                    total += productPrices.shirtOG;
+                } else if (productInfo.tuxedoType.includes("AB")) {
+                    total += productPrices.shirtAB
+                } else {
+                    total += productPrices.shirt
+                }
+            }
+        }
         if (productInfo.dressSize) total += productPrices.dress;
         if (productInfo.ringSizeMen) total += productPrices.ringMen;
         if (productInfo.ringSizeWomen) total += productPrices.ringWomen;
@@ -618,8 +653,10 @@ function NewOrderForm({ loggedInUserInfo }) {
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
                                         <option value="자켓 Peaked">자켓 Peaked</option>
                                         <option value="자켓 Shawl">자켓 Shawl</option>
-                                        <option value="자켓 Peaked (맞춤)">자켓 Peaked (맞춤)</option>
-                                        <option value="자켓 Shawl (맞춤)">자켓 Shawl (맞춤)</option>
+                                        <option value="자켓OG Peaked">자켓OG Peaked</option>
+                                        <option value="자켓OG Shawl">자켓OG Shawl</option>
+                                        <option value="자켓AB Peaked">자켓AB Peaked</option>
+                                        <option value="자켓AB Shawl"ㄹ>자켓AB Shawl</option>
                                         <option value="구매안함">구매안함</option>
                                     </select>
                                 </td>
