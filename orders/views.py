@@ -76,6 +76,7 @@ class MonthlyOrderList(APIView):
         serializer = OrderListSerializer(orders, many=True)
         return Response(serializer.data)
 
+#기존 등록
 class OrderDetail(APIView):
     def get_object(self, pk):
         try:
@@ -117,6 +118,7 @@ class NewOrderList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#신규 포맷 등록
 class NewOrderDetail(APIView):
     def get_object(self, pk):
         try:

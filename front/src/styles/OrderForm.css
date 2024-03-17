@@ -13,7 +13,7 @@
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 8px;
-        background-color: #E6E8F4;
+        /* background-color: #E6E8F4; */
         box-sizing: border-box;
         overflow-x: hidden;
         overflow-y: auto;
@@ -425,7 +425,7 @@
         padding: 40px;
         border: 1px solid #ccc;
         border-radius: 8px;
-        background-color: #E6E8F4;
+        /* background-color: #E6E8F4; */
         box-sizing: border-box;
         overflow-x: hidden;
         overflow-y: auto;

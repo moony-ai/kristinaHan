@@ -483,7 +483,7 @@ function NewOrderForm({ loggedInUserInfo }) {
         console.log("제출된 데이터", mappedData)
 
         // 서버에 POST 요청 보내기
-        axios.post('https://server-6kol.onrender.com/api/v1/orders/', mappedData)
+        axios.post('https://server-6kol.onrender.com/api/v1/orders/new', mappedData)
             .then(response => {
                 alert('주문이 성공적으로 제출되었습니다:', response.data);
                 // 성공적인 제출 후 처리 로직
