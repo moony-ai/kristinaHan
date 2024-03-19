@@ -152,21 +152,18 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
 
     // 사이즈 정보
     const sizeOptions = {
-        "자켓 (R-Peaked)": ["100", "105", "110", "*115", "*120"],
-        "자켓 (R-Shawl)": ["85", "90", "95", "100", "*105", "*110", "*115", "*120"],
-        "자켓 (S-Peaked)": ["85", "90", "95", "100", "105", "*115", "*120"],
-        "팬츠 (R)": ["*28", "30", "32", "34", "36", "38", "*40"],
-        "셔츠 (R)": ["*85", "*90", "95", "100", "105", "110", "*115"],
-        "팬츠 (S)": ["28", "29", "30", "31", "33", "35", "37", "39"],
-        "셔츠 (S)": ["85", "90", "95", "100", "105", "110", "115"],
         "자켓 Peaked": ["100", "105", "110", "*115", "*120"],
         "자켓 Shawl": ["*85", "90", "95", "100", "*105", "*110", "*115", "*120"],
-        "자켓 Peaked (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
-        "자켓 Shawl (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
+        "자켓OG Peaked": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
+        "자켓OG Shawl": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
+        "자켓AB Peaked": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
+        "자켓AB Shawl": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
+        "자켓 Peaked (맞춤)": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
+        "자켓 Shawl (맞춤)": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
         "팬츠": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "*40"],
-        "팬츠 (맞춤)": ["46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56"],
+        "팬츠 (맞춤)": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
         "셔츠": ["85", "90", "95", "100", "105", "110", "115"],
-        "셔츠 (맞춤)": ["46", "48", "50", "52", "54", "56"],
+        "셔츠 (맞춤)": ["44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58"],
         "드레스 (R)": ["*44", "55", "66", "77", "88"],
         "드레스 (S)": ["43", "44", "54", "55", "65", "76"],
         "드레스 (Rw)": ["*44", "*55", "*55반", "66", "77", "88", "99", "100", "105", "110"],
@@ -223,7 +220,7 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
             }
         }
         if (productInfo.pantsSize) {
-            if (productInfo.tuxedoType.includes("OG")){
+            if (productInfo.tuxedoType.includes("OG")) {
                 total += productPrices.pantsOG;
             } else if (productInfo.tuxedoType.includes("AB")) {
                 total += productPrices.pantsAB
@@ -233,7 +230,7 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
         }
         if (productInfo.shirtSize) {
             {
-                if (productInfo.tuxedoType.includes("OG")){
+                if (productInfo.tuxedoType.includes("OG")) {
                     total += productPrices.shirtOG;
                 } else if (productInfo.tuxedoType.includes("AB")) {
                     total += productPrices.shirtAB
@@ -717,8 +714,10 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
                                         <option value="자켓 Peaked">자켓 Peaked</option>
                                         <option value="자켓 Shawl">자켓 Shawl</option>
-                                        <option value="자켓 Peaked (맞춤)">자켓 Peaked (맞춤)</option>
-                                        <option value="자켓 Shawl (맞춤)">자켓 Shawl (맞춤)</option>
+                                        <option value="자켓OG Peaked">자켓OG Peaked</option>
+                                        <option value="자켓OG Shawl">자켓OG Shawl</option>
+                                        <option value="자켓AB Peaked">자켓AB Peaked</option>
+                                        <option value="자켓AB Shawl" ㄹ>자켓AB Shawl</option>
                                         <option value="구매안함">구매안함</option>
                                     </select>
                                 </td>
