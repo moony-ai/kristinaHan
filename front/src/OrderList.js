@@ -120,6 +120,17 @@ class OrderList extends Component {
       });
   }
 
+  deleteNewOrder = (orderId) => {
+    axios.delete(`https://server-6kol.onrender.com/api/v1/orders/new/${orderId}/`)
+      .then(response => {
+        // 삭제 후 주문 목록 업데이트
+        this.fetchOrders();
+      })
+      .catch(error => {
+        console.error('주문 삭제 중 오류 발생:', error);
+      });
+  }
+
   // sheet 업데이트
   handleUpdateSpreadsheet = () => {
     axios.get('https://server-6kol.onrender.com/api/v1/orders/updategs/')
@@ -241,7 +252,7 @@ class OrderList extends Component {
                 <div style={{ marginRight: '20px' }}>생성 시간: {order.creationTime}</div>
                 <div style={{ marginRight: '20px' }}>총액: {order.totalAmount}</div>
                 <div>잔액: {order.balance}</div>
-                <button onClick={() => this.deleteOrder(order.id)} style={{ marginLeft: '20px' }}>
+                <button className="btn btn-danger btn-sm" onClick={() => this.deleteNewOrder(order.id)} style={{ marginLeft: '20px' }}>
                   삭제
                 </button>
               </li>
@@ -264,7 +275,7 @@ class OrderList extends Component {
                 <div style={{ marginRight: '20px' }}>생성 시간: {order.creationTime}</div>
                 <div style={{ marginRight: '20px' }}>총액: {order.totalAmount}</div>
                 <div>잔액: {order.balance}</div>
-                <button onClick={() => this.deleteOrder(order.id)} style={{ marginLeft: '20px' }}>
+                <button className="btn btn-danger btn-sm" onClick={() => this.deleteNewOrder(order.id)} style={{ marginLeft: '20px' }}>
                   삭제
                 </button>
               </li>
