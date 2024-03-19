@@ -113,6 +113,7 @@ class OrderList extends Component {
     axios.delete(`https://server-6kol.onrender.com/api/v1/orders/${orderId}/`)
       .then(response => {
         // 삭제 후 주문 목록 업데이트
+        alert('주문 삭제 완료.');
         this.fetchOrders();
       })
       .catch(error => {
@@ -125,6 +126,7 @@ class OrderList extends Component {
       .then(response => {
         // 삭제 후 주문 목록 업데이트
         this.fetchOrders();
+        alert('주문 삭제 완료.');
       })
       .catch(error => {
         console.error('주문 삭제 중 오류 발생:', error);
