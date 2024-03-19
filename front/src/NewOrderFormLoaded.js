@@ -188,8 +188,8 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
         shirtOG: 110000,
         shirtAB: 110000,
         dress: 700000,
-        ringMen: 750000,
-        ringWomen: 750000,
+        ringMen: 800000,
+        ringWomen: 800000,
         necklace: 800000,
         earring: 500000,
     };
