@@ -653,10 +653,10 @@ function NewOrderForm({ loggedInUserInfo }) {
                                     <select name="tuxedoType" value={productInfo.tuxedoType} onChange={productInfoHandleChange}>
                                         <option value="자켓 Peaked">자켓 Peaked</option>
                                         <option value="자켓 Shawl">자켓 Shawl</option>
-                                        <option value="자켓OG Peaked">자켓OG Peaked</option>
-                                        <option value="자켓OG Shawl">자켓OG Shawl</option>
-                                        <option value="자켓AB Peaked">자켓AB Peaked</option>
-                                        <option value="자켓AB Shawl"ㄹ>자켓AB Shawl</option>
+                                        <option value="자켓OG Peaked (맞춤)">자켓OG Peaked (맞춤)</option>
+                                        <option value="자켓OG Shawl (맞춤)">자켓OG Shawl (맞춤)</option>
+                                        <option value="자켓AB Peaked (맞춤)">자켓AB Peaked (맞춤)</option>
+                                        <option value="자켓AB Shawl (맞춤)"ㄹ>자켓AB Shawl (맞춤)</option>
                                         <option value="구매안함">구매안함</option>
                                     </select>
                                 </td>
