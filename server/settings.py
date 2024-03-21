@@ -42,7 +42,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # ]
 
 # Application definition
-CUSTOM_APPS = ["orders", "rest_framework", "corsheaders"]
+CUSTOM_APPS = ["orders", "rest_framework", "corsheaders", "users"]
 
 SYSTEM_APPS = [
     "django.contrib.admin",
