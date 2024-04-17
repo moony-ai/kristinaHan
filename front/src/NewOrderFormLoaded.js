@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderFormNew.css';
-import '../src/styles/Print.css';
+// import '../src/styles/Print.css';
 
 function NewOrderFormLoaded({ loggedInUserInfo }) {
 
@@ -209,9 +209,7 @@ function NewOrderFormLoaded({ loggedInUserInfo }) {
     useEffect(() => {
         let total = 0;
         if (productInfo.jacketSize) {
-            if (productInfo.tuxedoType.includes("맞춤")) {
-                total += productPrices.jacketFit
-            } else if (productInfo.tuxedoType.includes("OG")) {
+            if (productInfo.tuxedoType.includes("OG")) {
                 total += productPrices.jacketOG
             } else if (productInfo.tuxedoType.includes("AB")) {
                 total += productPrices.jacketAB

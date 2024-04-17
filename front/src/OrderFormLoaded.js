@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../src/styles/OrderForm.css';
-import '../src/styles/Print.css';
+// import '../src/styles/Print.css';
 
 function OrderForm({ loggedInUserInfo }) {
 
